@@ -347,9 +347,9 @@
           p.x += p.vx;
           p.y += p.vy;
           
-          // apply damping to slow down particles faster
-          p.vx *= 0.94;
-          p.vy *= 0.94;
+          // apply stronger damping to bring particles to rest quicker
+          p.vx *= 0.88;
+          p.vy *= 0.88;
 
           if (p.x < -24) p.x = w + 24;
           if (p.x > w + 24) p.x = -24;
@@ -396,7 +396,7 @@
           const dx = p.x - mouse.x, dy = p.y - mouse.y;
           const d2 = dx*dx + dy*dy;
           if (d2 < 36000){
-            const f = 0.02 * (1 - d2/36000);
+            const f = 0.015 * (1 - d2/36000);
             p.vx += dx * f;
             p.vy += dy * f;
           }

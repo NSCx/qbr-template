@@ -49,7 +49,7 @@
       .deck{height:1440px}
       html,body{height:1440px}
     }
-    .slide{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;padding:clamp(1rem,3vw,2.5rem);opacity:0;transform:scale(.98);transition:opacity .45s ease,transform .45s cubic-bezier(.2,.9,.2,1);pointer-events:none}
+    .slide{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;padding:clamp(1rem,3vw,2.5rem);opacity:0;transform:scale(.98);transition:opacity .45s ease,transform .45s cu[...]
     .slide.active{opacity:1;transform:scale(1);pointer-events:auto}
     .content{width:100%;max-width:var(--page-max);z-index:6;padding:0 2rem}
 
@@ -79,7 +79,7 @@
     .blob.b3{animation: floatC 18s ease-in-out infinite}
 
     /* Particle canvas sits above background but below content */
-    #particleCanvas{position:absolute;inset:0;z-index:2;pointer-events:none}
+    #particleCanvas{position:absolute;inset:0;z-index:2;pointer-events:none;width:100%;height:100%;display:block}
 
     /* Title slide */
     .title-wrap{display:flex;flex-direction:column;align-items:center;gap:.6rem;text-align:center}
@@ -96,7 +96,7 @@
     .subtitle{color:var(--muted);font-size:clamp(.95rem,1.5vw,1.2rem);margin:0}
 
     /* Card styles */
-    .card{background:var(--glass);border:1px solid var(--glass-border);border-radius:var(--radius);padding:var(--card-pad);box-shadow:var(--shadow);backdrop-filter:blur(6px);transition:transform .32s ease,box-shadow .32s ease}
+    .card{background:var(--glass);border:1px solid var(--glass-border);border-radius:var(--radius);padding:var(--card-pad);box-shadow:var(--shadow);backdrop-filter:blur(6px);transition:transform .[...]
     .card:hover{transform:translateY(-8px) scale(1.005);box-shadow:0 30px 60px rgba(23,32,51,0.10)}
     .card:focus-within{outline:2px solid rgba(29,78,216,0.08);outline-offset:4px}
 
@@ -116,7 +116,7 @@
       position:fixed;left:50%;transform:translateX(-50%);bottom:22px;z-index:20;display:flex;align-items:center;gap:12px;
       background:rgba(255,255,255,0.7);padding:8px 12px;border-radius:999px;box-shadow:0 6px 18px rgba(17,24,39,0.06);backdrop-filter:blur(6px)
     }
-    .nav-btn{display:inline-flex;align-items:center;justify-content:center;width:44px;height:44px;border-radius:50%;border:none;background:transparent;color:var(--accent-1);cursor:pointer;font-weight:700}
+    .nav-btn{display:inline-flex;align-items:center;justify-content:center;width:44px;height:44px;border-radius:50%;border:none;background:transparent;color:var(--accent-1);cursor:pointer;font-we[...]
     .nav-btn:hover{background:rgba(29,78,216,0.04)}
     .nav-btn:focus-visible{outline:3px solid rgba(29,78,216,0.14);outline-offset:4px;border-radius:50%}
     .slide-dots{display:flex;gap:10px}
@@ -149,7 +149,7 @@
     </div>
 
     <!-- Particle network canvas -->
-    <canvas id="particleCanvas" aria-hidden="true" width="2560" height="150"style="width: 2560px; height: 1440px;"></canvas>
+    <canvas id="particleCanvas" aria-hidden="true"></canvas>
 
     <!-- Slide 1: Title -->
     <section class="slide active" data-slide="1" id="slide-1" aria-label="Title slide">
@@ -302,13 +302,17 @@
       const DPR = Math.min(2, window.devicePixelRatio || 1);
 
       function resizeCanvas(){
+        // use the canvas's layout size (CSS pixels)
         const w = canvas.clientWidth || window.innerWidth;
         const h = canvas.clientHeight || window.innerHeight;
+        // set backing store size for crisp rendering on high-DPR displays
         canvas.width = Math.floor(w * DPR);
         canvas.height = Math.floor(h * DPR);
+        // keep the canvas styled to fill its container
         canvas.style.width = w + 'px';
         canvas.style.height = h + 'px';
-        ctx.setTransform(DPR, 0, 0, DPR, 0, 0); // reset transform and scale for DPR exactly once
+        // reset transform & scale to DPR so drawing coordinates are in CSS pixels
+        ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
         return {w, h};
       }
 
@@ -336,6 +340,7 @@
       }
 
       function step(){
+        // clear using device-independent CSS pixel coords
         ctx.clearRect(0,0,w,h);
         // draw particles
         for (let p of particles){

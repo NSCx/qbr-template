@@ -13,18 +13,26 @@
 
   <style>
     :root{
+      /* palette */
       --bg: #faf8f5;
       --surface: #ffffff;
-      --text: #172033;
-      --muted: #6f7b91;
-      --accent-1: #1d4ed8;
-      --accent-2: #f97316;
-      --accent-3: #0f766e;
-      --glass: rgba(255,255,255,0.82);
+      --text: #111827;         /* slightly darker for better contrast */
+      --muted: #5b6576;        /* darker muted for readability */
+      --accent-1: #1d4ed8;     /* indigo */
+      --accent-2: #f97316;     /* orange */
+      --accent-3: #0f766e;     /* teal */
+      --glass: rgba(255,255,255,0.86);
       --glass-border: rgba(23,32,51,0.06);
       --shadow: 0 18px 45px rgba(23,32,51,0.06);
       --font-body: "DM Sans", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
       --font-display: "DM Serif Display", Georgia, serif;
+
+      /* layout tokens */
+      --page-max: 1180px;
+      --radius: 18px;
+      --space-sm: 0.6rem;
+      --space-md: 1.25rem;
+      --card-pad: 1.25rem;
     }
 
     /* Respect reduced motion */
@@ -36,22 +44,23 @@
     *{box-sizing:border-box}
     html,body{height:100%;margin:0;background:var(--bg);color:var(--text);font-family:var(--font-body);-webkit-font-smoothing:antialiased}
     .deck{position:relative;height:100vh;width:100vw;overflow:hidden}
-    .slide{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;padding:clamp(1rem,3vw,2.5rem);opacity:0;transform:scale(.98);transition:opacity .45s ease,transform .45s ease;pointer-events:none}
+    .slide{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;padding:clamp(1rem,3vw,2.5rem);opacity:0;transform:scale(.98);transition:opacity .45s ease,transform .45s cubic-bezier(.2,.9,.2,1);pointer-events:none}
     .slide.active{opacity:1;transform:scale(1);pointer-events:auto}
-    .content{width:100%;max-width:1180px;z-index:6}
+    .content{width:100%;max-width:var(--page-max);z-index:6;padding:0 1rem}
 
     /* Animated gradient background layer */
     .bg-animated{
       position:absolute;inset:0;z-index:0;overflow:hidden;pointer-events:none;
-      background: radial-gradient(400px 400px at 10% 20%, rgba(29,78,216,0.10), transparent 12%),
-                  radial-gradient(300px 300px at 85% 80%, rgba(249,115,22,0.08), transparent 12%),
-                  radial-gradient(260px 260px at 50% 50%, rgba(15,118,110,0.06), transparent 10%);
+      background: radial-gradient(420px 420px at 8% 18%, rgba(29,78,216,0.10), transparent 14%),
+                  radial-gradient(340px 340px at 86% 82%, rgba(249,115,22,0.08), transparent 12%),
+                  radial-gradient(280px 280px at 50% 52%, rgba(15,118,110,0.06), transparent 10%);
       transition:transform .25s ease;
     }
+
     /* Floating blobs with slow float animations */
     .blob{
-      position:absolute;border-radius:50%;filter:blur(64px);opacity:.14;transform-origin:center;
-      will-change:transform,opacity;
+      position:absolute;border-radius:50%;filter:blur(52px);opacity:.12;transform-origin:center;
+      will-change:transform,opacity;mix-blend-mode:screen;
     }
     .blob.b1{width:520px;height:520px;top:-120px;right:-120px;background:var(--accent-1)}
     .blob.b2{width:360px;height:360px;bottom:-120px;left:-80px;background:var(--accent-2)}
@@ -67,45 +76,58 @@
     #particleCanvas{position:absolute;inset:0;z-index:2;pointer-events:none}
 
     /* Title slide */
-    .title-wrap{display:flex;flex-direction:column;align-items:center;gap:.6rem}
-    .title{font-family:var(--font-display);font-size:clamp(2rem,6vw,4.6rem);line-height:1;color:linear-gradient(90deg,var(--accent-1),var(--accent-2));margin:0}
+    .title-wrap{display:flex;flex-direction:column;align-items:center;gap:.6rem;text-align:center}
+    .title{font-family:var(--font-display);font-size:clamp(2rem,6vw,4.6rem);line-height:1;margin:0}
     .title .gradient-text{
       background:linear-gradient(90deg,var(--accent-1),var(--accent-2),var(--accent-1));
       -webkit-background-clip:text;background-clip:text;color:transparent;
-      display:inline-block;
-      background-size:200% 100%;
-      animation: textShift 6s linear infinite;
-      font-weight:400;
+      display:inline-block;background-size:200% 100%;
+      animation: textShift 6s linear infinite;font-weight:400;
     }
     @keyframes textShift{ 0%{background-position:0%} 50%{background-position:100%} 100%{background-position:0%} }
 
-    .subtitle{color:var(--muted);font-size:clamp(.9rem,1.5vw,1.2rem);margin:0}
+    .subtitle{color:var(--muted);font-size:clamp(.95rem,1.5vw,1.2rem);margin:0}
 
     /* Card styles */
-    .card{background:var(--glass);border:1px solid var(--glass-border);border-radius:20px;padding:1.25rem;box-shadow:var(--shadow);backdrop-filter:blur(6px);transition:transform .32s cubic-bezier(.2,.9,.2,1),box-shadow .32s;will-change:transform}
-    .card:hover{transform:translateY(-8px) scale(1.01);box-shadow:0 30px 60px rgba(23,32,51,0.12)}
+    .card{background:var(--glass);border:1px solid var(--glass-border);border-radius:var(--radius);padding:var(--card-pad);box-shadow:var(--shadow);backdrop-filter:blur(6px);transition:transform .32s cubic-bezier(.2,.9,.2,1),box-shadow .32s ease}
+    .card:hover{transform:translateY(-8px) scale(1.005);box-shadow:0 30px 60px rgba(23,32,51,0.10)}
+    .card:focus-within{outline:2px solid rgba(29,78,216,0.08);outline-offset:4px}
 
     /* small utilities */
-    .small{font-size:.92rem;color:var(--muted)}
+    .small{font-size:.95rem;color:var(--muted)}
+    .text-lg{font-size:1.05rem}
+    .text-2xl{font-size:1.4rem}
     .grid-2{display:grid;grid-template-columns:repeat(2,1fr);gap:1rem}
     @media (max-width:840px){ .grid-2{grid-template-columns:1fr} }
 
     /* reveal animations */
-    .reveal{opacity:0;transform:translateY(16px);transition:opacity .5s ease,transform .5s cubic-bezier(.2,.9,.2,1)}
+    .reveal{opacity:0;transform:translateY(14px);transition:opacity .5s ease,transform .5s cubic-bezier(.2,.9,.2,1)}
     .reveal.show{opacity:1;transform:translateY(0)}
 
     /* nav controls */
-    .nav-controls{position:fixed;left:50%;transform:translateX(-50%);bottom:24px;z-index:20;display:flex;align-items:center;gap:12px;background:rgba(255,255,255,0.92);padding:8px 12px;border-radius:999px;backdrop-filter:blur(6px);border:1px solid rgba(23,32,51,0.04)}
-    .nav-btn{display:inline-flex;align-items:center;justify-content:center;width:40px;height:40px;border-radius:50%;border:none;background:transparent;color:var(--accent-1);cursor:pointer;font-weight:700}
-    .nav-btn:focus{outline:2px solid rgba(29,78,216,0.14);outline-offset:3px}
-    .slide-dots{display:flex;gap:8px}
-    .dot{width:10px;height:10px;border-radius:999px;background:rgba(23,32,51,0.12);cursor:pointer}
-    .dot.active{background:var(--accent-1);transform:scale(1.2)}
+    .nav-controls{
+      position:fixed;left:50%;transform:translateX(-50%);bottom:22px;z-index:20;display:flex;align-items:center;gap:12px;
+      background:rgba(255,255,255,0.7);padding:8px 12px;border-radius:999px;box-shadow:0 6px 18px rgba(17,24,39,0.06);backdrop-filter:blur(6px)
+    }
+    .nav-btn{display:inline-flex;align-items:center;justify-content:center;width:44px;height:44px;border-radius:50%;border:none;background:transparent;color:var(--accent-1);cursor:pointer;font-weight:700;font-size:1.05rem}
+    .nav-btn:hover{background:rgba(29,78,216,0.04)}
+    .nav-btn:focus-visible{outline:3px solid rgba(29,78,216,0.14);outline-offset:4px;border-radius:50%}
+    .slide-dots{display:flex;gap:10px}
+    .dot{width:12px;height:12px;border-radius:999px;background:rgba(23,32,51,0.12);cursor:pointer;border:0;padding:0}
+    .dot.active{background:var(--accent-1);transform:scale(1.25);box-shadow:0 6px 14px rgba(29,78,216,0.08)}
+    .dot:focus-visible{outline:2px solid rgba(29,78,216,0.12);outline-offset:3px}
 
     /* card tilt (will disable if reduced motion) */
     .tilt{transform-style:preserve-3d;transition:transform .18s ease}
     @media (prefers-reduced-motion: reduce){
       .blob, #particleCanvas, .title .gradient-text, .card:hover, .tilt { animation: none !important; transition: none !important; }
+    }
+
+    /* accessibility helpers */
+    :focus{outline: none}
+    @media (max-width:520px){
+      .nav-controls{left:12px;transform:none;right:auto;bottom:18px}
+      .nav-btn{width:40px;height:40px}
     }
   </style>
 </head>
@@ -120,7 +142,7 @@
     </div>
 
     <!-- Particle network canvas -->
-    <canvas id="particleCanvas" width="800" height="600" aria-hidden="true"></canvas>
+    <canvas id="particleCanvas" aria-hidden="true"></canvas>
 
     <!-- Slide 1: Title -->
     <section class="slide active" data-slide="1" id="slide-1" aria-label="Title slide">
@@ -208,7 +230,10 @@
 
       function updateUI(){
         slides.forEach((s,i) => s.classList.toggle('active', i === idx));
-        dots.forEach((d,i) => d.classList.toggle('active', i === idx));
+        dots.forEach((d,i) => {
+          d.classList.toggle('active', i === idx);
+          if (i === idx) d.setAttribute('aria-current', 'true'); else d.removeAttribute('aria-current');
+        });
         slideCounter.textContent = (idx + 1) + ' / ' + total;
 
         // reveal elements inside active slide (stagger)
@@ -266,18 +291,29 @@
       const canvas = document.getElementById('particleCanvas');
       if (!canvas) return;
       const ctx = canvas.getContext('2d');
-      let w = canvas.width = canvas.clientWidth;
-      let h = canvas.height = canvas.clientHeight;
-      const DPR = Math.min(2, window.devicePixelRatio || 1);
-      canvas.width = Math.floor(w * DPR);
-      canvas.height = Math.floor(h * DPR);
-      ctx.scale(DPR, DPR);
 
+      const DPR = Math.min(2, window.devicePixelRatio || 1);
+
+      function resizeCanvas(){
+        const w = canvas.clientWidth || window.innerWidth;
+        const h = canvas.clientHeight || window.innerHeight;
+        canvas.width = Math.floor(w * DPR);
+        canvas.height = Math.floor(h * DPR);
+        canvas.style.width = w + 'px';
+        canvas.style.height = h + 'px';
+        ctx.setTransform(DPR, 0, 0, DPR, 0, 0); // reset transform and scale for DPR exactly once
+        return {w, h};
+      }
+
+      let w = 0, h = 0;
       let particles = [];
-      const COUNT = Math.max(18, Math.round((w * h) / 60000)); // adapt to size
+      let COUNT = 0;
 
       function rand(min, max){ return Math.random() * (max - min) + min; }
       function init(){
+        const size = resizeCanvas();
+        w = size.w; h = size.h;
+        COUNT = Math.max(18, Math.round((w * h) / 60000)); // adapt to size
         particles = [];
         for (let i=0;i<COUNT;i++){
           particles.push({
@@ -286,23 +322,10 @@
             vx: rand(-0.35, 0.35),
             vy: rand(-0.25, 0.25),
             r: rand(1.6, 3.2),
-            alpha: rand(0.3, 0.9)
+            alpha: rand(0.28, 0.9)
           });
         }
       }
-
-      function resize(){
-        w = canvas.clientWidth; h = canvas.clientHeight;
-        canvas.width = Math.floor(w * DPR);
-        canvas.height = Math.floor(h * DPR);
-        ctx.scale(DPR, DPR);
-        init();
-      }
-      window.addEventListener('resize', () => {
-        // throttle
-        clearTimeout(window._pcResize);
-        window._pcResize = setTimeout(resize, 120);
-      });
 
       function step(){
         ctx.clearRect(0,0,w,h);
@@ -317,12 +340,12 @@
           if (p.y > h + 20) p.y = -20;
 
           ctx.beginPath();
-          ctx.fillStyle = `rgba(29,78,216,${p.alpha * 0.9})`;
+          ctx.fillStyle = `rgba(29,78,216,${(p.alpha * 0.9).toFixed(3)})`;
           ctx.arc(p.x, p.y, p.r, 0, Math.PI*2);
           ctx.fill();
         }
 
-        // connect close particles
+        // connect close particles (cheap threshold)
         for (let i=0;i<particles.length;i++){
           for (let j=i+1;j<particles.length;j++){
             const a = particles[i], b = particles[j];
@@ -331,7 +354,7 @@
             if (d2 < 22000){
               const t = 1 - (d2 / 22000);
               ctx.beginPath();
-              ctx.strokeStyle = `rgba(29,78,216,${t * 0.12})`;
+              ctx.strokeStyle = `rgba(29,78,216,${(t * 0.12).toFixed(3)})`;
               ctx.lineWidth = 1;
               ctx.moveTo(a.x, a.y);
               ctx.lineTo(b.x, b.y);
@@ -359,6 +382,15 @@
             p.vy += dy * f;
           }
         }
+      });
+
+      // handle resize with throttle
+      let _pcResize = null;
+      window.addEventListener('resize', () => {
+        clearTimeout(_pcResize);
+        _pcResize = setTimeout(() => {
+          init();
+        }, 120);
       });
     })();
 

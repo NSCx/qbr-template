@@ -49,7 +49,7 @@
       .deck{height:1440px}
       html,body{height:1440px}
     }
-    .slide{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;padding:clamp(1rem,3vw,2.5rem);opacity:0;transform:scale(.98);transition:opacity .45s ease,transform .45s cubic-bezier(.2,.9,.2,1)}
+    .slide{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;padding:clamp(1rem,3vw,2.5rem);opacity:0;transform:scale(.98);transition:opacity .45s ease,transform .45s cu[...]}
     .slide.active{opacity:1;transform:scale(1);pointer-events:auto}
     .content{width:100%;max-width:var(--page-max);z-index:6;padding:0 2rem}
 
@@ -96,7 +96,7 @@
     .subtitle{color:var(--muted);font-size:clamp(.95rem,1.5vw,1.2rem);margin:0}
 
     /* Card styles */
-    .card{background:var(--glass);border:1px solid var(--glass-border);border-radius:var(--radius);padding:var(--card-pad);box-shadow:var(--shadow);backdrop-filter:blur(6px);transition:transform .18s ease,box-shadow .18s ease}
+    .card{background:var(--glass);border:1px solid var(--glass-border);border-radius:var(--radius);padding:var(--card-pad);box-shadow:var(--shadow);backdrop-filter:blur(6px);transition:transform .[...]}
     .card:hover{transform:translateY(-8px) scale(1.005);box-shadow:0 30px 60px rgba(23,32,51,0.10)}
     .card:focus-within{outline:2px solid rgba(29,78,216,0.08);outline-offset:4px}
 
@@ -116,7 +116,7 @@
       position:fixed;left:50%;transform:translateX(-50%);bottom:22px;z-index:20;display:flex;align-items:center;gap:12px;
       background:rgba(255,255,255,0.7);padding:8px 12px;border-radius:999px;box-shadow:0 6px 18px rgba(17,24,39,0.06);backdrop-filter:blur(6px)
     }
-    .nav-btn{display:inline-flex;align-items:center;justify-content:center;width:44px;height:44px;border-radius:50%;border:none;background:transparent;color:var(--accent-1);cursor:pointer;font-weight:500;font-size:1.2rem;transition:background .18s ease}
+    .nav-btn{display:inline-flex;align-items:center;justify-content:center;width:44px;height:44px;border-radius:50%;border:none;background:transparent;color:var(--accent-1);cursor:pointer;font-weight:[...]}
     .nav-btn:hover{background:rgba(29,78,216,0.04)}
     .nav-btn:focus-visible{outline:3px solid rgba(29,78,216,0.14);outline-offset:4px;border-radius:50%}
     .slide-dots{display:flex;gap:10px}
@@ -346,6 +346,10 @@
         for (let p of particles){
           p.x += p.vx;
           p.y += p.vy;
+          
+          // apply damping to slow down particles faster
+          p.vx *= 0.94;
+          p.vy *= 0.94;
 
           if (p.x < -24) p.x = w + 24;
           if (p.x > w + 24) p.x = -24;
@@ -392,7 +396,7 @@
           const dx = p.x - mouse.x, dy = p.y - mouse.y;
           const d2 = dx*dx + dy*dy;
           if (d2 < 36000){
-            const f = 0.04 * (1 - d2/36000);
+            const f = 0.02 * (1 - d2/36000);
             p.vx += dx * f;
             p.vy += dy * f;
           }

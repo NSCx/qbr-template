@@ -14,60 +14,84 @@
   <style>
     :root{
       /* palette */
-      --bg: #faf8f5;
-      --surface: #ffffff;
-      --text: #111827;         /* slightly darker for better contrast */
-      --muted: #5b6576;        /* darker muted for readability */
-      --accent-1: #1d4ed8;     /* indigo */
-      --accent-2: #f97316;     /* orange */
-      --accent-3: #0f766e;     /* teal */
-      --glass: rgba(255,255,255,0.86);
-      --glass-border: rgba(23,32,51,0.06);
-      --shadow: 0 18px 45px rgba(23,32,51,0.06);
+      --bg: #f4f1eb;
+      --surface: rgba(255,255,255,0.82);
+      --text: #0f172a;
+      --muted: #5f6878;
+      --accent-1: #1d4ed8;
+      --accent-2: #f97316;
+      --accent-3: #0f766e;
+      --glass: rgba(255,255,255,0.84);
+      --glass-border: rgba(15,23,42,0.08);
+      --shadow: 0 24px 60px rgba(15,23,42,0.10);
       --font-body: "DM Sans", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
       --font-display: "DM Serif Display", Georgia, serif;
 
       /* layout tokens */
-      --page-max: 2200px; /* increased for ultra-wide displays */
-      --radius: 18px;
+      --page-max: 2200px;
+      --radius: 24px;
       --space-sm: 0.6rem;
       --space-md: 1.25rem;
-      --card-pad: 1.25rem;
+      --card-pad: 1.6rem;
     }
 
-    /* Respect reduced motion */
     @media (prefers-reduced-motion: reduce) {
       :root { --reduce-motion: 1; }
     }
 
-    /* Reset and layout */
     *{box-sizing:border-box}
-    html,body{height:100%;margin:0;background:var(--bg);color:var(--text);font-family:var(--font-body);-webkit-font-smoothing:antialiased}
+    html,body{
+      height:100%;
+      margin:0;
+      color:var(--text);
+      font-family:var(--font-body);
+      -webkit-font-smoothing:antialiased;
+      background:
+        radial-gradient(circle at top left, rgba(29,78,216,0.08), transparent 30%),
+        radial-gradient(circle at bottom right, rgba(249,115,22,0.06), transparent 28%),
+        var(--bg);
+    }
     .deck{position:relative;height:100vh;width:100vw;overflow:hidden}
-    /* lock to 1440px height on very wide screens to match 2560x1440 preview */
     @media (min-width:2400px){
       .deck{height:1440px}
       html,body{height:1440px}
     }
-    .slide{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;padding:clamp(1rem,3vw,2.5rem);opacity:0;transform:scale(.98);transition:opacity .45s ease,transform .45s cu[...]}
+
+    .slide{
+      position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+      padding:clamp(1rem,3vw,2.5rem);opacity:0;transform:scale(.98);
+      transition:opacity .45s ease,transform .45s ease;
+      pointer-events:none;
+    }
     .slide.active{opacity:1;transform:scale(1);pointer-events:auto}
     .content{width:100%;max-width:var(--page-max);z-index:6;padding:0 2rem}
 
-    /* Animated gradient background layer */
+    .deck-frame{
+      position:fixed;left:24px;right:24px;top:18px;bottom:18px;
+      pointer-events:none;z-index:18;border:1px solid rgba(15,23,42,0.06);
+      border-radius:28px;
+    }
+    .deck-footnote{
+      position:fixed;left:28px;bottom:24px;z-index:19;pointer-events:none;
+      display:flex;flex-direction:column;gap:4px;color:var(--muted);
+    }
+    .deck-footnote strong{
+      color:var(--text);font-size:.82rem;letter-spacing:.08em;text-transform:uppercase;
+    }
+    .deck-footnote span{font-size:.78rem}
+
     .bg-animated{
       position:absolute;inset:0;z-index:0;overflow:hidden;pointer-events:none;
-      background: radial-gradient(900px 900px at 6% 18%, rgba(29,78,216,0.10), transparent 14%),
-                  radial-gradient(760px 760px at 92% 82%, rgba(249,115,22,0.08), transparent 12%),
-                  radial-gradient(520px 520px at 50% 52%, rgba(15,118,110,0.06), transparent 10%);
+      background: radial-gradient(900px 900px at 6% 18%, rgba(29,78,216,0.08), transparent 14%),
+                  radial-gradient(760px 760px at 92% 82%, rgba(249,115,22,0.06), transparent 12%),
+                  radial-gradient(520px 520px at 50% 52%, rgba(15,118,110,0.05), transparent 10%);
       transition:transform .25s ease;
     }
 
-    /* Floating blobs with slow float animations */
     .blob{
-      position:absolute;border-radius:50%;filter:blur(80px);opacity:.12;transform-origin:center;
+      position:absolute;border-radius:50%;filter:blur(80px);opacity:.10;transform-origin:center;
       will-change:transform,opacity;mix-blend-mode:screen;
     }
-    /* larger blobs / repositioned for ultra-wide canvas */
     .blob.b1{width:900px;height:900px;top:-260px;right:-260px;background:var(--accent-1)}
     .blob.b2{width:700px;height:700px;bottom:-260px;left:-220px;background:var(--accent-2)}
     .blob.b3{width:460px;height:460px;top:46%;left:8%;background:var(--accent-3)}
@@ -78,13 +102,17 @@
     .blob.b2{animation: floatB 22s ease-in-out infinite}
     .blob.b3{animation: floatC 18s ease-in-out infinite}
 
-    /* Particle canvas sits above background but below content */
     #particleCanvas{position:absolute;inset:0;z-index:2;pointer-events:none;width:100%;height:100%;display:block}
 
-    /* Title slide */
-    .title-wrap{display:flex;flex-direction:column;align-items:center;gap:.6rem;text-align:center}
-    /* slightly larger display font for wide displays */
-    .title{font-family:var(--font-display);font-size:clamp(3rem,4.8vw,6rem);line-height:1;margin:0}
+    .title-wrap{display:flex;flex-direction:column;align-items:center;gap:.75rem;text-align:center}
+    .title{
+      font-family:var(--font-display);
+      font-size:clamp(3rem,4.8vw,6.2rem);
+      line-height:1;
+      margin:0;
+      letter-spacing:-0.03em;
+      text-wrap:balance;
+    }
     .title .gradient-text{
       background:linear-gradient(90deg,var(--accent-1),var(--accent-2),var(--accent-1));
       -webkit-background-clip:text;background-clip:text;color:transparent;
@@ -93,45 +121,117 @@
     }
     @keyframes textShift{ 0%{background-position:0%} 50%{background-position:100%} 100%{background-position:0%} }
 
-    .subtitle{color:var(--muted);font-size:clamp(.95rem,1.5vw,1.2rem);margin:0}
+    .subtitle{
+      color:var(--muted);
+      font-size:clamp(.95rem,1.5vw,1.2rem);
+      margin:0;
+      max-width:52ch;
+      line-height:1.6;
+    }
 
-    /* Card styles */
-    .card{background:var(--glass);border:1px solid var(--glass-border);border-radius:var(--radius);padding:var(--card-pad);box-shadow:var(--shadow);backdrop-filter:blur(6px);transition:transform .[...]}
-    .card:hover{transform:translateY(-8px) scale(1.005);box-shadow:0 30px 60px rgba(23,32,51,0.10)}
-    .card:focus-within{outline:2px solid rgba(29,78,216,0.08);outline-offset:4px}
+    .card{
+      background:linear-gradient(180deg, rgba(255,255,255,0.92), rgba(255,255,255,0.78));
+      border:1px solid var(--glass-border);
+      border-radius:var(--radius);
+      padding:var(--card-pad);
+      box-shadow:var(--shadow);
+      backdrop-filter:blur(14px);
+      transition:transform .22s ease, box-shadow .22s ease, border-color .22s ease;
+    }
+    .card:hover{
+      transform:translateY(-6px);
+      box-shadow:0 30px 70px rgba(15,23,42,0.14);
+      border-color:rgba(29,78,216,0.16);
+    }
+    .card:focus-within{outline:2px solid rgba(29,78,216,0.10);outline-offset:4px}
 
-    /* small utilities */
     .small{font-size:.95rem;color:var(--muted)}
-    .text-lg{font-size:1.05rem}
-    .text-2xl{font-size:1.4rem}
+    .text-lg{font-size:1.05rem;line-height:1.65}
+    .text-2xl{font-size:1.4rem;line-height:1.35}
     .grid-2{display:grid;grid-template-columns:repeat(2,1fr);gap:1rem}
     @media (max-width:840px){ .grid-2{grid-template-columns:1fr} }
 
-    /* reveal animations */
     .reveal{opacity:0;transform:translateY(14px);transition:opacity .5s ease,transform .5s cubic-bezier(.2,.9,.2,1)}
     .reveal.show{opacity:1;transform:translateY(0)}
 
-    /* nav controls */
     .nav-controls{
-      position:fixed;left:50%;transform:translateX(-50%);bottom:22px;z-index:20;display:flex;align-items:center;gap:12px;
-      background:rgba(255,255,255,0.7);padding:8px 12px;border-radius:999px;box-shadow:0 6px 18px rgba(17,24,39,0.06);backdrop-filter:blur(6px)
+      position:fixed;left:50%;transform:translateX(-50%);bottom:22px;z-index:20;
+      display:flex;align-items:center;gap:12px;
+      background:rgba(255,255,255,0.84);
+      padding:8px 12px;border-radius:999px;
+      box-shadow:0 14px 35px rgba(15,23,42,0.10);
+      border:1px solid rgba(15,23,42,0.08);
+      backdrop-filter:blur(10px)
     }
-    .nav-btn{display:inline-flex;align-items:center;justify-content:center;width:44px;height:44px;border-radius:50%;border:none;background:transparent;color:var(--accent-1);cursor:pointer;font-weight:[...]}
-    .nav-btn:hover{background:rgba(29,78,216,0.04)}
+    .nav-btn{
+      display:inline-flex;align-items:center;justify-content:center;
+      width:44px;height:44px;border-radius:50%;
+      border:none;background:transparent;color:var(--accent-1);
+      cursor:pointer;font-weight:700;font-size:1rem;
+      transition:background .2s ease, transform .2s ease;
+    }
+    .nav-btn:hover{background:rgba(29,78,216,0.05);transform:translateY(-1px)}
     .nav-btn:focus-visible{outline:3px solid rgba(29,78,216,0.14);outline-offset:4px;border-radius:50%}
-    .slide-dots{display:flex;gap:10px}
-    .dot{width:12px;height:12px;border-radius:999px;background:rgba(23,32,51,0.12);cursor:pointer;border:0;padding:0}
-    .dot.active{background:var(--accent-1);transform:scale(1.25);box-shadow:0 6px 14px rgba(29,78,216,0.08)}
+    .slide-dots{display:flex;gap:10px;align-items:center}
+    .dot{
+      width:10px;height:10px;border-radius:999px;
+      background:rgba(23,32,51,0.12);
+      cursor:pointer;border:0;padding:0;
+      transition:transform .2s ease, background .2s ease, box-shadow .2s ease;
+      position:relative;
+    }
+    .dot.active{
+      background:var(--accent-1);
+      transform:scale(1.45);
+      box-shadow:0 0 0 6px rgba(29,78,216,0.10);
+    }
+    .dot:hover::after,
+    .dot:focus-visible::after{
+      content:attr(data-label);
+      position:absolute;bottom:22px;left:50%;transform:translateX(-50%);
+      background:#111827;color:#fff;font-size:.72rem;line-height:1;
+      padding:.35rem .5rem;border-radius:999px;white-space:nowrap;pointer-events:none;
+    }
     .dot:focus-visible{outline:2px solid rgba(29,78,216,0.12);outline-offset:3px}
 
-    /* card tilt (will disable if reduced motion) */
+    .nav-meta{
+      display:flex;flex-direction:column;align-items:center;min-width:120px;gap:3px;text-align:center;
+    }
+    .nav-progress{
+      width:120px;height:4px;border-radius:999px;background:rgba(23,32,51,0.10);overflow:hidden;
+    }
+    .nav-progress-bar{
+      width:0%;height:100%;border-radius:999px;
+      background:linear-gradient(90deg,var(--accent-1),var(--accent-3));
+      transition:width .25s ease;
+    }
+    .nav-label{
+      font-size:.78rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);
+    }
+
+    .slide-chip{
+      position:absolute;top:18px;right:18px;z-index:7;
+      display:inline-flex;align-items:center;gap:.4rem;
+      padding:.45rem .7rem;border-radius:999px;
+      background:rgba(255,255,255,0.74);
+      border:1px solid rgba(15,23,42,0.08);
+      box-shadow:0 8px 20px rgba(15,23,42,0.06);
+      backdrop-filter:blur(8px);
+      font-size:.78rem;color:var(--muted);font-weight:700;
+      letter-spacing:.04em;text-transform:uppercase;
+    }
+    .slide-chip b{color:var(--accent-1);font-weight:800}
+
     .tilt{transform-style:preserve-3d;transition:transform .18s ease}
     @media (prefers-reduced-motion: reduce){
       .blob, #particleCanvas, .title .gradient-text, .card:hover, .tilt { animation: none !important; transition: none !important; }
     }
 
-    /* accessibility helpers */
-    :focus{outline: none}
+    :focus{outline:none}
+    @media (max-width:840px){
+      .content{padding:0 1rem}
+      .grid-2{gap:.85rem}
+    }
     @media (max-width:520px){
       .nav-controls{left:12px;transform:none;right:auto;bottom:18px}
       .nav-btn{width:40px;height:40px}
@@ -140,79 +240,271 @@
 </head>
 <body>
   <div class="deck" id="deck" aria-roledescription="slide deck">
+    <div class="deck-frame" aria-hidden="true"></div>
+    <div class="deck-footnote" aria-hidden="true">
+      <strong>SCORPTEC</strong>
+      <span>Quarterly Business Review</span>
+    </div>
 
-    <!-- Animated background & blobs -->
     <div class="bg-animated" id="bg" aria-hidden="true">
       <div class="blob b1" aria-hidden="true"></div>
       <div class="blob b2" aria-hidden="true"></div>
       <div class="blob b3" aria-hidden="true"></div>
     </div>
 
-    <!-- Particle network canvas -->
     <canvas id="particleCanvas" aria-hidden="true"></canvas>
 
-    <!-- Slide 1: Title -->
     <section class="slide active" data-slide="1" id="slide-1" aria-label="Title slide">
+      <div class="slide-chip"><b>01</b> / 07</div>
       <div class="content title-wrap" role="group" aria-labelledby="main-title">
-        <h1 id="main-title" class="title reveal"><span class="gradient-text">SCORPTEC - Quarterly Business Review</span></h1>
-        <p class="subtitle reveal">Performance, key wins, and next-quarter priorities</p>
+        <div class="card reveal" style="padding:2.2rem 2.4rem;max-width:980px;text-align:center">
+          <div class="small" style="letter-spacing:.18em;text-transform:uppercase;font-weight:700;color:var(--accent-1);margin-bottom:.8rem">
+            SCORPTEC | FY26 QBR
+          </div>
+          <h1 id="main-title" class="title" style="margin-bottom:.55rem">
+            <span class="gradient-text">Quarterly Business Review</span>
+          </h1>
+          <p class="subtitle" style="margin:0 auto 1.4rem auto">
+            Performance, key wins, and next-quarter priorities
+          </p>
+          <div style="display:flex;justify-content:center;gap:.75rem;flex-wrap:wrap">
+            <div class="small" style="background:rgba(29,78,216,0.08);color:var(--accent-1);padding:.45rem .8rem;border-radius:999px;font-weight:700">Revenue ↑ 18%</div>
+            <div class="small" style="background:rgba(15,118,110,0.08);color:var(--accent-3);padding:.45rem .8rem;border-radius:999px;font-weight:700">Margin ↑ 4 pts</div>
+            <div class="small" style="background:rgba(249,115,22,0.10);color:var(--accent-2);padding:.45rem .8rem;border-radius:999px;font-weight:700">3 priority asks</div>
+          </div>
+        </div>
       </div>
     </section>
 
-    <!-- Slide 2: Cover details -->
     <section class="slide" data-slide="2" id="slide-2" aria-label="Cover details">
+      <div class="slide-chip"><b>02</b> / 07</div>
+      <div class="content">
+        <div class="grid-2" style="align-items:stretch">
+          <div class="card tilt reveal" tabindex="0" aria-label="Title card" style="display:flex;flex-direction:column;justify-content:space-between;min-height:260px">
+            <div>
+              <div class="small" style="text-transform:uppercase;letter-spacing:.14em;font-weight:700;color:var(--accent-1)">Business unit</div>
+              <div class="text-2xl" style="font-weight:800;margin-top:.45rem">Brand Performance Review – Q[ ] [Year]</div>
+              <p class="text-lg" style="margin:.8rem 0 0;color:var(--muted);max-width:34ch">A concise view of performance, channel momentum, and the main decisions needed this quarter.</p>
+            </div>
+            <div class="small" style="margin-top:1rem;color:var(--accent-3);font-weight:700">Presenter • Team • Date</div>
+          </div>
+          <div class="card tilt reveal" tabindex="0" aria-label="Subtitle card" style="display:flex;flex-direction:column;justify-content:space-between;min-height:260px">
+            <div>
+              <div class="small" style="text-transform:uppercase;letter-spacing:.14em;font-weight:700;color:var(--accent-2)">Executive theme</div>
+              <div class="text-lg" style="color:var(--text);margin-top:.45rem;font-weight:700;line-height:1.5">
+                Growth held steady, margin improved, and the next quarter is focused on conversion and distribution efficiency.
+              </div>
+            </div>
+            <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:.65rem;margin-top:1rem">
+              <div style="background:rgba(29,78,216,0.06);border-radius:14px;padding:.8rem;text-align:center">
+                <div class="small" style="font-size:.8rem">North Star</div>
+                <div style="font-weight:800;color:var(--accent-1);margin-top:.2rem">+18%</div>
+              </div>
+              <div style="background:rgba(15,118,110,0.06);border-radius:14px;padding:.8rem;text-align:center">
+                <div class="small" style="font-size:.8rem">Margin</div>
+                <div style="font-weight:800;color:var(--accent-3);margin-top:.2rem">+4 pts</div>
+              </div>
+              <div style="background:rgba(249,115,22,0.07);border-radius:14px;padding:.8rem;text-align:center">
+                <div class="small" style="font-size:.8rem">Focus</div>
+                <div style="font-weight:800;color:var(--accent-2);margin-top:.2rem">3 asks</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-slide="3" id="slide-3" aria-label="Executive summary">
+      <div class="slide-chip"><b>03</b> / 07</div>
+      <div class="content">
+        <div class="card reveal" style="padding:1.8rem 2rem">
+          <div class="small" style="text-transform:uppercase;letter-spacing:.14em;font-weight:700;color:var(--accent-1);margin-bottom:.55rem">Executive summary</div>
+          <div class="grid-2" style="gap:1.2rem;align-items:start">
+            <div>
+              <h2 style="margin:0 0 .75rem 0;font-weight:800;font-size:clamp(1.5rem,2vw,2rem)">A strong quarter with measurable progress</h2>
+              <p class="text-lg" style="margin:0;color:var(--muted)">
+                Revenue growth remained healthy, conversion improved in key channels, and operational execution supported better margin performance. The next quarter priorities are centered on scaling what worked and addressing the remaining bottlenecks.
+              </p>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr;gap:.8rem">
+              <div style="display:flex;justify-content:space-between;align-items:center;background:rgba(29,78,216,0.06);border-radius:16px;padding:.9rem 1rem">
+                <span class="small" style="font-weight:700;color:var(--text)">Revenue growth</span>
+                <strong style="color:var(--accent-1);font-size:1.1rem">+18%</strong>
+              </div>
+              <div style="display:flex;justify-content:space-between;align-items:center;background:rgba(15,118,110,0.06);border-radius:16px;padding:.9rem 1rem">
+                <span class="small" style="font-weight:700;color:var(--text)">Margin expansion</span>
+                <strong style="color:var(--accent-3);font-size:1.1rem">+4 pts</strong>
+              </div>
+              <div style="display:flex;justify-content:space-between;align-items:center;background:rgba(249,115,22,0.07);border-radius:16px;padding:.9rem 1rem">
+                <span class="small" style="font-weight:700;color:var(--text)">Priority asks</span>
+                <strong style="color:var(--accent-2);font-size:1.1rem">3</strong>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-slide="4" id="slide-4" aria-label="KPI scorecard">
+      <div class="slide-chip"><b>04</b> / 07</div>
+      <div class="content">
+        <div class="card reveal" style="padding:1.8rem 2rem">
+          <div class="small" style="text-transform:uppercase;letter-spacing:.14em;font-weight:700;color:var(--accent-2);margin-bottom:.55rem">KPI scorecard</div>
+          <div class="grid-2" style="gap:1rem">
+            <div style="display:grid;gap:1rem">
+              <div style="background:rgba(255,255,255,0.6);border:1px solid rgba(15,23,42,0.06);border-radius:18px;padding:1rem 1.1rem">
+                <div class="small" style="font-weight:700">Revenue</div>
+                <div style="display:flex;justify-content:space-between;align-items:end;margin-top:.4rem">
+                  <strong style="font-size:2rem;color:var(--accent-1)">+18%</strong>
+                  <span class="small" style="color:var(--accent-3);font-weight:700">vs. plan +3%</span>
+                </div>
+                <div style="height:10px;background:rgba(29,78,216,0.10);border-radius:999px;overflow:hidden;margin-top:.8rem">
+                  <div style="width:78%;height:100%;background:linear-gradient(90deg,var(--accent-1),#60a5fa);border-radius:999px"></div>
+                </div>
+              </div>
+              <div style="background:rgba(255,255,255,0.6);border:1px solid rgba(15,23,42,0.06);border-radius:18px;padding:1rem 1.1rem">
+                <div class="small" style="font-weight:700">Margin</div>
+                <div style="display:flex;justify-content:space-between;align-items:end;margin-top:.4rem">
+                  <strong style="font-size:2rem;color:var(--accent-3)">+4 pts</strong>
+                  <span class="small" style="color:var(--muted);font-weight:700">steady improvement</span>
+                </div>
+                <div style="height:10px;background:rgba(15,118,110,0.10);border-radius:999px;overflow:hidden;margin-top:.8rem">
+                  <div style="width:62%;height:100%;background:linear-gradient(90deg,var(--accent-3),#34d399);border-radius:999px"></div>
+                </div>
+              </div>
+            </div>
+            <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:1rem">
+              <div style="background:rgba(29,78,216,0.06);border-radius:18px;padding:1rem;text-align:center">
+                <div class="small">Conversion</div>
+                <div style="font-size:1.8rem;font-weight:800;color:var(--accent-1);margin-top:.35rem">+9%</div>
+              </div>
+              <div style="background:rgba(249,115,22,0.07);border-radius:18px;padding:1rem;text-align:center">
+                <div class="small">Pipeline</div>
+                <div style="font-size:1.8rem;font-weight:800;color:var(--accent-2);margin-top:.35rem">+12%</div>
+              </div>
+              <div style="grid-column:1 / -1;background:rgba(255,255,255,0.55);border:1px solid rgba(15,23,42,0.06);border-radius:18px;padding:1rem">
+                <div class="small" style="font-weight:700;margin-bottom:.6rem">Trend snapshot</div>
+                <div style="display:flex;align-items:end;gap:.45rem;height:84px">
+                  <div style="flex:1;height:42%;background:rgba(29,78,216,0.28);border-radius:10px 10px 4px 4px"></div>
+                  <div style="flex:1;height:58%;background:rgba(29,78,216,0.38);border-radius:10px 10px 4px 4px"></div>
+                  <div style="flex:1;height:66%;background:rgba(29,78,216,0.48);border-radius:10px 10px 4px 4px"></div>
+                  <div style="flex:1;height:74%;background:rgba(29,78,216,0.58);border-radius:10px 10px 4px 4px"></div>
+                  <div style="flex:1;height:86%;background:linear-gradient(180deg,var(--accent-1),#60a5fa);border-radius:10px 10px 4px 4px"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-slide="5" id="slide-5" aria-label="Roadmap timeline">
+      <div class="slide-chip"><b>05</b> / 07</div>
+      <div class="content">
+        <div class="card reveal" style="padding:1.8rem 2rem">
+          <div class="small" style="text-transform:uppercase;letter-spacing:.14em;font-weight:700;color:var(--accent-1);margin-bottom:.55rem">Roadmap</div>
+          <h2 style="margin:0 0 1rem 0;font-weight:800;font-size:clamp(1.5rem,2vw,2rem)">Next quarter focus areas</h2>
+          <div style="display:grid;gap:1rem">
+            <div style="display:grid;grid-template-columns:120px 1fr;gap:1rem;align-items:center">
+              <div class="small" style="font-weight:800;color:var(--accent-1)">Month 1</div>
+              <div style="background:rgba(29,78,216,0.06);border-radius:16px;padding:1rem 1.1rem">
+                <strong>Stabilize demand generation</strong>
+                <div class="small" style="margin-top:.35rem">Refine campaigns, improve conversion, and remove top funnel bottlenecks.</div>
+              </div>
+            </div>
+            <div style="display:grid;grid-template-columns:120px 1fr;gap:1rem;align-items:center">
+              <div class="small" style="font-weight:800;color:var(--accent-3)">Month 2</div>
+              <div style="background:rgba(15,118,110,0.06);border-radius:16px;padding:1rem 1.1rem">
+                <strong>Expand efficient channels</strong>
+                <div class="small" style="margin-top:.35rem">Scale the channels with the strongest ROI and keep CAC disciplined.</div>
+              </div>
+            </div>
+            <div style="display:grid;grid-template-columns:120px 1fr;gap:1rem;align-items:center">
+              <div class="small" style="font-weight:800;color:var(--accent-2)">Month 3</div>
+              <div style="background:rgba(249,115,22,0.07);border-radius:16px;padding:1rem 1.1rem">
+                <strong>Lock in operating cadence</strong>
+                <div class="small" style="margin-top:.35rem">Review performance, operationalize learnings, and prepare next-quarter planning.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-slide="6" id="slide-6" aria-label="Wins risks next steps">
+      <div class="slide-chip"><b>06</b> / 07</div>
       <div class="content">
         <div class="grid-2">
-          <div class="card tilt reveal" tabindex="0" aria-label="Title card">
-            <div class="small">Title</div>
-            <div class="text-2xl" style="font-weight:700;margin-top:.35rem">Brand Performance Review – Q[ ] [Year]</div>
-            <div class="small" style="margin-top:.6rem">Example: Brand Performance Review 2026</div>
+          <div class="card reveal" style="padding:1.8rem 2rem">
+            <div class="small" style="text-transform:uppercase;letter-spacing:.14em;font-weight:700;color:var(--accent-3);margin-bottom:.55rem">Wins</div>
+            <ul style="margin:.2rem 0 0;padding-left:1.1rem;color:var(--text);line-height:1.8">
+              <li>Revenue outperformed plan.</li>
+              <li>Margin improved through mix and efficiency.</li>
+              <li>Key channels showed stronger conversion.</li>
+            </ul>
           </div>
-          <div class="card tilt reveal" tabindex="0" aria-label="Subtitle card">
-            <div class="small">Subtitle block</div>
-            <div class="text-lg" style="color:var(--muted);margin-top:.35rem">Business unit, presenter, date, and one-line theme</div>
-            <div class="small" style="margin-top:.6rem">Example: Brand performance, sell-through trends, and next-quarter priorities</div>
+          <div class="card reveal" style="padding:1.8rem 2rem">
+            <div class="small" style="text-transform:uppercase;letter-spacing:.14em;font-weight:700;color:var(--accent-2);margin-bottom:.55rem">Risks</div>
+            <ul style="margin:.2rem 0 0;padding-left:1.1rem;color:var(--text);line-height:1.8">
+              <li>Funnel drop-off in one segment.</li>
+              <li>Potential supply constraints.</li>
+              <li>Channel mix may compress if not monitored.</li>
+            </ul>
+          </div>
+          <div class="card reveal" style="padding:1.8rem 2rem;grid-column:1 / -1">
+            <div class="small" style="text-transform:uppercase;letter-spacing:.14em;font-weight:700;color:var(--accent-1);margin-bottom:.55rem">Next steps</div>
+            <div class="grid-2">
+              <div>
+                <strong>1. Align on priorities</strong>
+                <p class="small" style="margin:.35rem 0 0">Confirm the top three initiatives for next quarter.</p>
+              </div>
+              <div>
+                <strong>2. Track weekly</strong>
+                <p class="small" style="margin:.35rem 0 0">Use a simple scorecard to monitor progress and risks.</p>
+              </div>
+            </div>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- Slide 3: Executive Summary -->
-    <section class="slide" data-slide="3" id="slide-3" aria-label="Executive summary">
-      <div class="content">
-        <div class="card reveal">
-          <h2 style="margin:0 0 .5rem 0;font-weight:700">Executive summary</h2>
-          <p class="small">One paragraph summary of performance, topline metrics, and key asks.</p>
+    <section class="slide" data-slide="7" id="slide-7" aria-label="Closing slide">
+      <div class="slide-chip"><b>07</b> / 07</div>
+      <div class="content title-wrap" role="group" aria-labelledby="closing-title">
+        <div class="card reveal" style="padding:2.2rem 2.4rem;max-width:920px;text-align:center">
+          <div class="small" style="text-transform:uppercase;letter-spacing:.18em;font-weight:700;color:var(--accent-2);margin-bottom:.8rem">
+            Thank you
+          </div>
+          <h2 id="closing-title" style="margin:0 0 .6rem 0;font-size:clamp(2rem,3vw,3rem);font-weight:800">
+            Questions, feedback, and next decisions
+          </h2>
+          <p class="subtitle" style="margin:0 auto 1.3rem auto">
+            Ready to align on the next quarter priorities and execution plan.
+          </p>
+          <div style="display:flex;justify-content:center;gap:.75rem;flex-wrap:wrap">
+            <div class="small" style="background:rgba(29,78,216,0.08);color:var(--accent-1);padding:.45rem .8rem;border-radius:999px;font-weight:700">Review outcomes</div>
+            <div class="small" style="background:rgba(15,118,110,0.08);color:var(--accent-3);padding:.45rem .8rem;border-radius:999px;font-weight:700">Confirm actions</div>
+            <div class="small" style="background:rgba(249,115,22,0.10);color:var(--accent-2);padding:.45rem .8rem;border-radius:999px;font-weight:700">Set owners</div>
+          </div>
         </div>
       </div>
     </section>
-
-    <!-- Slide 4: KPI placeholder -->
-    <section class="slide" data-slide="4" id="slide-4" aria-label="KPI scorecard">
-      <div class="content">
-        <div class="card reveal">
-          <h2 style="margin:0 0 .5rem 0;font-weight:700">KPI scorecard</h2>
-          <p class="small">Top KPIs and short trend summary. Replace with charts/tables as needed.</p>
-        </div>
-      </div>
-    </section>
-
-    <!-- Add more slides as needed following the pattern -->
-
   </div>
 
-  <!-- Navigation controls -->
   <div class="nav-controls" role="navigation" aria-label="Slide navigation">
     <button class="nav-btn" id="prevBtn" aria-label="Previous slide" title="Previous (←)">&larr;</button>
     <div class="slide-dots" id="dotsContainer" role="tablist" aria-label="Slide dots"></div>
-    <div id="slideCounter" class="small" aria-live="polite" style="min-width:56px;text-align:center">1 / 4</div>
+    <div class="nav-meta" aria-live="polite">
+      <div id="navLabel" class="nav-label">Title</div>
+      <div class="nav-progress" aria-hidden="true">
+        <div id="navProgressBar" class="nav-progress-bar"></div>
+      </div>
+      <div id="slideCounter" class="small" style="min-width:56px;text-align:center">1 / 7</div>
+    </div>
     <button class="nav-btn" id="nextBtn" aria-label="Next slide" title="Next (→)">&rarr;</button>
   </div>
 
   <script>
-    /* ---------------------------
-       Slide manager & reveals
-       --------------------------- */
     (function(){
       const slides = Array.from(document.querySelectorAll('.slide'));
       const total = slides.length;
@@ -223,13 +515,16 @@
       const nextBtn = document.getElementById('nextBtn');
       const dotsContainer = document.getElementById('dotsContainer');
       const slideCounter = document.getElementById('slideCounter');
+      const navLabel = document.getElementById('navLabel');
+      const navProgressBar = document.getElementById('navProgressBar');
+      const labels = ['Title','Cover','Summary','KPI Scorecard','Roadmap','Wins / Risks','Closing'];
 
-      // build dots
       slides.forEach((s, i) => {
         const btn = document.createElement('button');
         btn.className = 'dot';
         btn.setAttribute('aria-label', 'Go to slide ' + (i+1));
         btn.setAttribute('role','tab');
+        btn.setAttribute('data-label', labels[i] || ('Slide ' + (i+1)));
         btn.addEventListener('click', () => goTo(i));
         dotsContainer.appendChild(btn);
       });
@@ -242,16 +537,15 @@
           if (i === idx) d.setAttribute('aria-current', 'true'); else d.removeAttribute('aria-current');
         });
         slideCounter.textContent = (idx + 1) + ' / ' + total;
+        if (navLabel) navLabel.textContent = labels[idx] || ('Slide ' + (idx + 1));
+        if (navProgressBar) navProgressBar.style.width = ((idx + 1) / total * 100).toFixed(1) + '%';
 
-        // reveal elements inside active slide (stagger)
         const reveals = slides[idx].querySelectorAll('.reveal');
         reveals.forEach((el, i) => {
           el.classList.remove('show');
-          // small stagger
           setTimeout(() => el.classList.add('show'), 70 * i);
         });
 
-        // shift background subtly for depth
         const bg = document.getElementById('bg');
         if (bg) bg.style.transform = `translateY(${(idx - (total/2)) * 6}px)`;
       }
@@ -259,7 +553,6 @@
       function goTo(i){
         idx = Math.max(0, Math.min(total - 1, i));
         updateUI();
-        // focus slide for a11y
         slides[idx].setAttribute('tabindex','-1');
         slides[idx].focus({preventScroll:true});
       }
@@ -273,7 +566,6 @@
         if (ev.key === 'End') goTo(total - 1);
       });
 
-      // swipe support
       let startX = null;
       const deck = document.getElementById('deck');
       deck.addEventListener('touchstart', e => startX = e.changedTouches[0].clientX);
@@ -288,35 +580,24 @@
       updateUI();
     })();
 
-    /* ---------------------------
-       Particle network (canvas)
-       - lightweight, adaptive particle system with Perlin-like noise
-       --------------------------- */
     (function(){
-      if (matchMedia('(prefers-reduced-motion: reduce)').matches) return; // respect preference
-
+      if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
       const canvas = document.getElementById('particleCanvas');
       if (!canvas) return;
       const ctx = canvas.getContext('2d');
-
       const DPR = Math.min(2, window.devicePixelRatio || 1);
 
       function resizeCanvas(){
-        // use the canvas's layout size (CSS pixels)
         const w = canvas.clientWidth || window.innerWidth;
         const h = canvas.clientHeight || window.innerHeight;
-        // set backing store size for crisp rendering on high-DPR displays
         canvas.width = Math.floor(w * DPR);
         canvas.height = Math.floor(h * DPR);
-        // keep the canvas styled to fill its container
         canvas.style.width = w + 'px';
         canvas.style.height = h + 'px';
-        // reset transform & scale to DPR so drawing coordinates are in CSS pixels
         ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
         return {w, h};
       }
 
-      // Simple noise function for random but smooth motion
       function simplerNoise(x) {
         return Math.sin(x * 0.1) * Math.cos(x * 0.05) + Math.sin(x * 0.07);
       }
@@ -330,7 +611,6 @@
       function init(){
         const size = resizeCanvas();
         w = size.w; h = size.h;
-        // adapt particle count to area for 2560x1440 target
         COUNT = Math.max(22, Math.round((w * h) / 56000));
         particles = [];
         for (let i=0;i<COUNT;i++){
@@ -350,31 +630,25 @@
       }
 
       function step(){
-        // clear using device-independent CSS pixel coords
         ctx.clearRect(0,0,w,h);
-        
-        time += 0.005; // increment time for smooth randomness
-        
-        // draw particles
+        time += 0.005;
+
         for (let p of particles){
-          // use noise to generate smooth random motion
           const noiseX = simplerNoise(time * 2 + p.noiseOffsetX);
           const noiseY = simplerNoise(time * 1.8 + p.noiseOffsetY);
           const randomWalk = rand(-0.15, 0.15) * 0.3;
-          
+
           p.baseX += (noiseX * 0.3 + randomWalk);
           p.baseY += (noiseY * 0.3 + randomWalk);
-          
-          // wrap around screen
+
           if (p.baseX < -24) p.baseX = w + 24;
           if (p.baseX > w + 24) p.baseX = -24;
           if (p.baseY < -24) p.baseY = h + 24;
           if (p.baseY > h + 24) p.baseY = -24;
-          
+
           p.x = p.baseX + p.vx;
           p.y = p.baseY + p.vy;
-          
-          // apply damping to velocity from mouse interaction
+
           p.vx *= 0.91;
           p.vy *= 0.91;
 
@@ -384,7 +658,6 @@
           ctx.fill();
         }
 
-        // connect close particles (threshold increased for larger canvas)
         for (let i=0;i<particles.length;i++){
           for (let j=i+1;j<particles.length;j++){
             const a = particles[i], b = particles[j];
@@ -407,13 +680,11 @@
       init();
       requestAnimationFrame(step);
 
-      // gentle mouse repulse
       let mouse = {x:-9999,y:-9999};
       window.addEventListener('pointermove', e => {
         const rect = canvas.getBoundingClientRect();
         mouse.x = (e.clientX - rect.left) * (w / rect.width);
         mouse.y = (e.clientY - rect.top) * (h / rect.height);
-        // small repulsion on nearest particles
         for (let p of particles){
           const dx = p.x - mouse.x, dy = p.y - mouse.y;
           const d2 = dx*dx + dy*dy;
@@ -425,32 +696,23 @@
         }
       });
 
-      // handle resize with throttle
       let _pcResize = null;
       window.addEventListener('resize', () => {
         clearTimeout(_pcResize);
-        _pcResize = setTimeout(() => {
-          init();
-        }, 140);
+        _pcResize = setTimeout(() => { init(); }, 140);
       });
     })();
 
-    /* ---------------------------
-       Parallax background + blob follow pointer
-       --------------------------- */
     (function(){
       const bg = document.getElementById('bg');
       const blobs = document.querySelectorAll('.blob');
       if (!bg || !blobs.length) return;
-
-      // move background subtly based on pointer
       window.addEventListener('pointermove', (e) => {
         if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
         const cx = window.innerWidth/2, cy = window.innerHeight/2;
-        const dx = (e.clientX - cx) / cx; // -1 -> 1
+        const dx = (e.clientX - cx) / cx;
         const dy = (e.clientY - cy) / cy;
         bg.style.transform = `translate(${dx * 12}px, ${dy * 8}px)`;
-
         blobs.forEach((b, i) => {
           const depth = (i+1) * 10;
           const bx = dx * depth * (i%2 ? -1 : 1);
@@ -460,19 +722,16 @@
       });
     })();
 
-    /* ---------------------------
-       Card tilt interaction
-       --------------------------- */
     (function(){
       if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
       const tilts = document.querySelectorAll('.tilt');
       tilts.forEach(el => {
         el.addEventListener('pointermove', (ev) => {
           const r = el.getBoundingClientRect();
-          const px = (ev.clientX - r.left) / r.width; // 0..1
+          const px = (ev.clientX - r.left) / r.width;
           const py = (ev.clientY - r.top) / r.height;
-          const rx = (py - 0.5) * 6; // rotateX
-          const ry = (px - 0.5) * -8; // rotateY
+          const rx = (py - 0.5) * 6;
+          const ry = (px - 0.5) * -8;
           el.style.transform = `perspective(900px) rotateX(${rx}deg) rotateY(${ry}deg) translateZ(6px)`;
         });
         el.addEventListener('pointerleave', () => {
@@ -481,9 +740,6 @@
       });
     })();
 
-    /* ---------------------------
-       Small accessibility: IntersectionObserver reveals when slides enter viewport
-       --------------------------- */
     (function(){
       if (!('IntersectionObserver' in window)) {
         document.querySelectorAll('.reveal').forEach(el => el.classList.add('show'));
@@ -491,9 +747,7 @@
       }
       const io = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('show');
-          }
+          if (entry.isIntersecting) entry.target.classList.add('show');
         });
       }, {root: null, threshold: 0.15});
       document.querySelectorAll('.reveal').forEach(el => io.observe(el));

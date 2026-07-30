@@ -290,7 +290,7 @@
 
     /* ---------------------------
        Particle network (canvas)
-       - lightweight, adaptive particle system
+       - lightweight, adaptive particle system with Perlin-like noise
        --------------------------- */
     (function(){
       if (matchMedia('(prefers-reduced-motion: reduce)').matches) return; // respect preference
@@ -316,9 +316,15 @@
         return {w, h};
       }
 
+      // Simple noise function for random but smooth motion
+      function simplerNoise(x) {
+        return Math.sin(x * 0.1) * Math.cos(x * 0.05) + Math.sin(x * 0.07);
+      }
+
       let w = 0, h = 0;
       let particles = [];
       let COUNT = 0;
+      let time = 0;
 
       function rand(min, max){ return Math.random() * (max - min) + min; }
       function init(){
@@ -331,14 +337,12 @@
           particles.push({
             x: rand(0, w),
             y: rand(0, h),
-            baseX: rand(0, w),
-            baseY: rand(0, h),
             vx: 0,
             vy: 0,
-            floatOffsetX: rand(0, Math.PI * 2),
-            floatOffsetY: rand(0, Math.PI * 2),
-            floatSpeedX: rand(0.005, 0.015),
-            floatSpeedY: rand(0.005, 0.015),
+            baseX: rand(0, w),
+            baseY: rand(0, h),
+            noiseOffsetX: rand(0, 1000),
+            noiseOffsetY: rand(0, 1000),
             r: rand(1.8, 3.6),
             alpha: rand(0.32, 0.95)
           });
@@ -348,25 +352,31 @@
       function step(){
         // clear using device-independent CSS pixel coords
         ctx.clearRect(0,0,w,h);
+        
+        time += 0.005; // increment time for smooth randomness
+        
         // draw particles
         for (let p of particles){
-          // add gentle floating motion in both X and Y
-          p.floatOffsetX += p.floatSpeedX;
-          p.floatOffsetY += p.floatSpeedY;
-          const floatX = Math.sin(p.floatOffsetX) * 20;
-          const floatY = Math.sin(p.floatOffsetY) * 20;
+          // use noise to generate smooth random motion
+          const noiseX = simplerNoise(time * 2 + p.noiseOffsetX);
+          const noiseY = simplerNoise(time * 1.8 + p.noiseOffsetY);
+          const randomWalk = rand(-0.15, 0.15) * 0.3;
           
-          p.x = p.baseX + floatX + p.vx;
-          p.y = p.baseY + floatY + p.vy;
+          p.baseX += (noiseX * 0.3 + randomWalk);
+          p.baseY += (noiseY * 0.3 + randomWalk);
+          
+          // wrap around screen
+          if (p.baseX < -24) p.baseX = w + 24;
+          if (p.baseX > w + 24) p.baseX = -24;
+          if (p.baseY < -24) p.baseY = h + 24;
+          if (p.baseY > h + 24) p.baseY = -24;
+          
+          p.x = p.baseX + p.vx;
+          p.y = p.baseY + p.vy;
           
           // apply damping to velocity from mouse interaction
           p.vx *= 0.91;
           p.vy *= 0.91;
-
-          if (p.x < -24) { p.x = w + 24; p.baseX = w + 24; }
-          if (p.x > w + 24) { p.x = -24; p.baseX = -24; }
-          if (p.y < -24) { p.y = h + 24; p.baseY = h + 24; }
-          if (p.y > h + 24) { p.y = -24; p.baseY = -24; }
 
           ctx.beginPath();
           ctx.fillStyle = `rgba(29,78,216,${(p.alpha * 0.9).toFixed(3)})`;

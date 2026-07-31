@@ -1,3 +1,8 @@
+Done — to remove pages 2, 3, and 4, keep only Slide 1 inside `.deck`.
+
+Use this updated `index.html` (single-slide version):
+
+```html name=index.html url=https://github.com/NSCx/qbr-template/blob/main/index.html
 <!doctype html>
 <html lang="en">
 <head>
@@ -13,7 +18,6 @@
 
   <style>
     :root{
-      /* palette */
       --bg: #faf8f5;
       --surface: #ffffff;
       --text: #111827;
@@ -27,7 +31,6 @@
       --font-body: "DM Sans", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
       --font-display: "DM Serif Display", Georgia, serif;
 
-      /* layout tokens */
       --page-max: 2200px;
       --radius: 18px;
       --space-sm: 0.6rem;
@@ -46,6 +49,7 @@
       .deck{height:1440px}
       html,body{height:1440px}
     }
+
     .slide{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;padding:clamp(1rem,3vw,2.5rem);opacity:0;transform:scale(.98);transition:opacity .45s ease,transform .45s cubic-bezier(.2,.9,.2,1);pointer-events:none}
     .slide.active{opacity:1;transform:scale(1);pointer-events:auto}
     .content{width:100%;max-width:var(--page-max);z-index:6;padding:0 2rem}
@@ -86,40 +90,11 @@
 
     .subtitle{color:var(--muted);font-size:clamp(.95rem,1.5vw,1.2rem);margin:0}
 
-    .card{background:var(--glass);border:1px solid var(--glass-border);border-radius:var(--radius);padding:var(--card-pad);box-shadow:var(--shadow);backdrop-filter:blur(6px);transition:transform .2s ease,box-shadow .2s ease}
-    .card:hover{transform:translateY(-8px) scale(1.005);box-shadow:0 30px 60px rgba(23,32,51,0.10)}
-    .card:focus-within{outline:2px solid rgba(29,78,216,0.08);outline-offset:4px}
-
-    .small{font-size:.95rem;color:var(--muted)}
-    .text-lg{font-size:1.05rem}
-    .text-2xl{font-size:1.4rem}
-    .grid-2{display:grid;grid-template-columns:repeat(2,1fr);gap:1rem}
-    @media (max-width:840px){ .grid-2{grid-template-columns:1fr} }
-
     .reveal{opacity:0;transform:translateY(14px);transition:opacity .5s ease,transform .5s cubic-bezier(.2,.9,.2,1)}
     .reveal.show{opacity:1;transform:translateY(0)}
 
-    .nav-controls{
-      position:fixed;left:50%;transform:translateX(-50%);bottom:22px;z-index:20;display:flex;align-items:center;gap:12px;
-      background:rgba(255,255,255,0.7);padding:8px 12px;border-radius:999px;box-shadow:0 6px 18px rgba(17,24,39,0.06);backdrop-filter:blur(6px)
-    }
-    .nav-btn{display:inline-flex;align-items:center;justify-content:center;width:44px;height:44px;border-radius:50%;border:none;background:transparent;color:var(--accent-1);cursor:pointer;font-weight:700;font-size:1.15rem}
-    .nav-btn:hover{background:rgba(29,78,216,0.04)}
-    .nav-btn:focus-visible{outline:3px solid rgba(29,78,216,0.14);outline-offset:4px;border-radius:50%}
-    .slide-dots{display:flex;gap:10px}
-    .dot{width:12px;height:12px;border-radius:999px;background:rgba(23,32,51,0.12);cursor:pointer;border:0;padding:0}
-    .dot.active{background:var(--accent-1);transform:scale(1.25);box-shadow:0 6px 14px rgba(29,78,216,0.08)}
-    .dot:focus-visible{outline:2px solid rgba(29,78,216,0.12);outline-offset:3px}
-
-    .tilt{transform-style:preserve-3d;transition:transform .18s ease}
     @media (prefers-reduced-motion: reduce){
-      .blob, #particleCanvas, .title .gradient-text, .card:hover, .tilt { animation: none !important; transition: none !important; }
-    }
-
-    :focus{outline: none}
-    @media (max-width:520px){
-      .nav-controls{left:12px;transform:none;right:auto;bottom:18px}
-      .nav-btn{width:40px;height:40px}
+      .blob, #particleCanvas, .title .gradient-text { animation: none !important; transition: none !important; }
     }
   </style>
 </head>
@@ -133,152 +108,19 @@
 
     <canvas id="particleCanvas" aria-hidden="true"></canvas>
 
+    <!-- Slide 1 only -->
     <section class="slide active" data-slide="1" id="slide-1" aria-label="Title slide">
       <div class="content title-wrap" role="group" aria-labelledby="main-title">
         <h1 id="main-title" class="title reveal"><span class="gradient-text">SCORPTEC - Quarterly Business Review</span></h1>
         <p class="subtitle reveal">Performance, key wins, and next-quarter priorities</p>
       </div>
     </section>
-
-    <!-- Slide 2: YoY brand performance -->
-    <section class="slide" data-slide="2" id="slide-2" aria-label="YoY brand performance">
-      <div class="content">
-        <div class="card reveal">
-          <h2 style="margin:0 0 .9rem 0;font-weight:700">Synnex YoY Brand Performance Q1 Q2</h2>
-          <p class="small" style="margin:0 0 1rem 0;">Brands 2025/2026 Year on Year</p>
-
-          <div style="overflow:auto;">
-            <table style="width:100%;border-collapse:collapse;font-size:.98rem;">
-              <thead>
-                <tr>
-                  <th style="text-align:left;padding:.7rem;border-bottom:1px solid var(--glass-border);">Brand</th>
-                  <th style="text-align:right;padding:.7rem;border-bottom:1px solid var(--glass-border);">2025</th>
-                  <th style="text-align:right;padding:.7rem;border-bottom:1px solid var(--glass-border);">2026</th>
-                  <th style="text-align:right;padding:.7rem;border-bottom:1px solid var(--glass-border);">YoY %</th>
-                </tr>
-              </thead>
-              <tbody id="yoyTableBody">
-                <tr data-v2025="125000" data-v2026="138000"><td style="padding:.65rem;border-bottom:1px solid var(--glass-border);">HP</td><td class="v2025" style="padding:.65rem;text-align:right;border-bottom:1px solid var(--glass-border);"></td><td class="v2026" style="padding:.65rem;text-align:right;border-bottom:1px solid var(--glass-border);"></td><td class="yoy" style="padding:.65rem;text-align:right;border-bottom:1px solid var(--glass-border);font-weight:700;"></td></tr>
-                <tr data-v2025="117000" data-v2026="121000"><td style="padding:.65rem;border-bottom:1px solid var(--glass-border);">Lenovo</td><td class="v2025" style="padding:.65rem;text-align:right;border-bottom:1px solid var(--glass-border);"></td><td class="v2026" style="padding:.65rem;text-align:right;border-bottom:1px solid var(--glass-border);"></td><td class="yoy" style="padding:.65rem;text-align:right;border-bottom:1px solid var(--glass-border);font-weight:700;"></td></tr>
-                <tr data-v2025="89000" data-v2026="94000"><td style="padding:.65rem;border-bottom:1px solid var(--glass-border);">Asus</td><td class="v2025" style="padding:.65rem;text-align:right;border-bottom:1px solid var(--glass-border);"></td><td class="v2026" style="padding:.65rem;text-align:right;border-bottom:1px solid var(--glass-border);"></td><td class="yoy" style="padding:.65rem;text-align:right;border-bottom:1px solid var(--glass-border);font-weight:700;"></td></tr>
-                <tr data-v2025="72000" data-v2026="69800"><td style="padding:.65rem;border-bottom:1px solid var(--glass-border);">Gigabyte</td><td class="v2025" style="padding:.65rem;text-align:right;border-bottom:1px solid var(--glass-border);"></td><td class="v2026" style="padding:.65rem;text-align:right;border-bottom:1px solid var(--glass-border);"></td><td class="yoy" style="padding:.65rem;text-align:right;border-bottom:1px solid var(--glass-border);font-weight:700;"></td></tr>
-                <tr data-v2025="81500" data-v2026="88200"><td style="padding:.65rem;border-bottom:1px solid var(--glass-border);">Kingston</td><td class="v2025" style="padding:.65rem;text-align:right;border-bottom:1px solid var(--glass-border);"></td><td class="v2026" style="padding:.65rem;text-align:right;border-bottom:1px solid var(--glass-border);"></td><td class="yoy" style="padding:.65rem;text-align:right;border-bottom:1px solid var(--glass-border);font-weight:700;"></td></tr>
-                <tr data-v2025="131000" data-v2026="129500"><td style="padding:.65rem;border-bottom:1px solid var(--glass-border);">Samsung</td><td class="v2025" style="padding:.65rem;text-align:right;border-bottom:1px solid var(--glass-border);"></td><td class="v2026" style="padding:.65rem;text-align:right;border-bottom:1px solid var(--glass-border);"></td><td class="yoy" style="padding:.65rem;text-align:right;border-bottom:1px solid var(--glass-border);font-weight:700;"></td></tr>
-                <tr data-v2025="46000" data-v2026="51200"><td style="padding:.65rem;border-bottom:1px solid var(--glass-border);">PNY</td><td class="v2025" style="padding:.65rem;text-align:right;border-bottom:1px solid var(--glass-border);"></td><td class="v2026" style="padding:.65rem;text-align:right;border-bottom:1px solid var(--glass-border);"></td><td class="yoy" style="padding:.65rem;text-align:right;border-bottom:1px solid var(--glass-border);font-weight:700;"></td></tr>
-                <tr data-v2025="54000" data-v2026="55750"><td style="padding:.65rem;border-bottom:1px solid var(--glass-border);">LG</td><td class="v2025" style="padding:.65rem;text-align:right;border-bottom:1px solid var(--glass-border);"></td><td class="v2026" style="padding:.65rem;text-align:right;border-bottom:1px solid var(--glass-border);"></td><td class="yoy" style="padding:.65rem;text-align:right;border-bottom:1px solid var(--glass-border);font-weight:700;"></td></tr>
-                <tr data-v2025="97800" data-v2026="103100"><td style="padding:.65rem;border-bottom:1px solid var(--glass-border);">Seagate</td><td class="v2025" style="padding:.65rem;text-align:right;border-bottom:1px solid var(--glass-border);"></td><td class="v2026" style="padding:.65rem;text-align:right;border-bottom:1px solid var(--glass-border);"></td><td class="yoy" style="padding:.65rem;text-align:right;border-bottom:1px solid var(--glass-border);font-weight:700;"></td></tr>
-                <tr data-v2025="68800" data-v2026="70100"><td style="padding:.65rem;border-bottom:1px solid var(--glass-border);">Corsair</td><td class="v2025" style="padding:.65rem;text-align:right;border-bottom:1px solid var(--glass-border);"></td><td class="v2026" style="padding:.65rem;text-align:right;border-bottom:1px solid var(--glass-border);"></td><td class="yoy" style="padding:.65rem;text-align:right;border-bottom:1px solid var(--glass-border);font-weight:700;"></td></tr>
-                <tr data-v2025="38400" data-v2026="42100"><td style="padding:.65rem;border-bottom:1px solid var(--glass-border);">Team</td><td class="v2025" style="padding:.65rem;text-align:right;border-bottom:1px solid var(--glass-border);"></td><td class="v2026" style="padding:.65rem;text-align:right;border-bottom:1px solid var(--glass-border);"></td><td class="yoy" style="padding:.65rem;text-align:right;border-bottom:1px solid var(--glass-border);font-weight:700;"></td></tr>
-                <tr data-v2025="92800" data-v2026="95500"><td style="padding:.65rem;border-bottom:1px solid var(--glass-border);">Logitech</td><td class="v2025" style="padding:.65rem;text-align:right;border-bottom:1px solid var(--glass-border);"></td><td class="v2026" style="padding:.65rem;text-align:right;border-bottom:1px solid var(--glass-border);"></td><td class="yoy" style="padding:.65rem;text-align:right;border-bottom:1px solid var(--glass-border);font-weight:700;"></td></tr>
-                <tr data-v2025="84500" data-v2026="83600"><td style="padding:.65rem;border-bottom:1px solid var(--glass-border);">WD</td><td class="v2025" style="padding:.65rem;text-align:right;border-bottom:1px solid var(--glass-border);"></td><td class="v2026" style="padding:.65rem;text-align:right;border-bottom:1px solid var(--glass-border);"></td><td class="yoy" style="padding:.65rem;text-align:right;border-bottom:1px solid var(--glass-border);font-weight:700;"></td></tr>
-                <tr data-v2025="112400" data-v2026="119900"><td style="padding:.65rem;border-bottom:1px solid var(--glass-border);">Intel</td><td class="v2025" style="padding:.65rem;text-align:right;border-bottom:1px solid var(--glass-border);"></td><td class="v2026" style="padding:.65rem;text-align:right;border-bottom:1px solid var(--glass-border);"></td><td class="yoy" style="padding:.65rem;text-align:right;border-bottom:1px solid var(--glass-border);font-weight:700;"></td></tr>
-                <tr data-v2025="40200" data-v2026="38900"><td style="padding:.65rem;border-bottom:1px solid var(--glass-border);">Razer</td><td class="v2025" style="padding:.65rem;text-align:right;border-bottom:1px solid var(--glass-border);"></td><td class="v2026" style="padding:.65rem;text-align:right;border-bottom:1px solid var(--glass-border);"></td><td class="yoy" style="padding:.65rem;text-align:right;border-bottom:1px solid var(--glass-border);font-weight:700;"></td></tr>
-                <tr data-v2025="35800" data-v2026="37600"><td style="padding:.65rem;border-bottom:1px solid var(--glass-border);">Sapphire</td><td class="v2025" style="padding:.65rem;text-align:right;border-bottom:1px solid var(--glass-border);"></td><td class="v2026" style="padding:.65rem;text-align:right;border-bottom:1px solid var(--glass-border);"></td><td class="yoy" style="padding:.65rem;text-align:right;border-bottom:1px solid var(--glass-border);font-weight:700;"></td></tr>
-                <tr data-v2025="50300" data-v2026="54100"><td style="padding:.65rem;border-bottom:1px solid var(--glass-border);">Acer</td><td class="v2025" style="padding:.65rem;text-align:right;border-bottom:1px solid var(--glass-border);"></td><td class="v2026" style="padding:.65rem;text-align:right;border-bottom:1px solid var(--glass-border);"></td><td class="yoy" style="padding:.65rem;text-align:right;border-bottom:1px solid var(--glass-border);font-weight:700;"></td></tr>
-                <tr data-v2025="27100" data-v2026="29400"><td style="padding:.65rem;border-bottom:1px solid var(--glass-border);">Netgear</td><td class="v2025" style="padding:.65rem;text-align:right;border-bottom:1px solid var(--glass-border);"></td><td class="v2026" style="padding:.65rem;text-align:right;border-bottom:1px solid var(--glass-border);"></td><td class="yoy" style="padding:.65rem;text-align:right;border-bottom:1px solid var(--glass-border);font-weight:700;"></td></tr>
-                <tr data-v2025="156000" data-v2026="167500"><td style="padding:.65rem;border-bottom:1px solid var(--glass-border);">Apple</td><td class="v2025" style="padding:.65rem;text-align:right;border-bottom:1px solid var(--glass-border);"></td><td class="v2026" style="padding:.65rem;text-align:right;border-bottom:1px solid var(--glass-border);"></td><td class="yoy" style="padding:.65rem;text-align:right;border-bottom:1px solid var(--glass-border);font-weight:700;"></td></tr>
-                <tr data-v2025="63400" data-v2026="64800"><td style="padding:.65rem;border-bottom:1px solid var(--glass-border);">Sandisk</td><td class="v2025" style="padding:.65rem;text-align:right;border-bottom:1px solid var(--glass-border);"></td><td class="v2026" style="padding:.65rem;text-align:right;border-bottom:1px solid var(--glass-border);"></td><td class="yoy" style="padding:.65rem;text-align:right;border-bottom:1px solid var(--glass-border);font-weight:700;"></td></tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section class="slide" data-slide="3" id="slide-3" aria-label="Executive summary">
-      <div class="content">
-        <div class="card reveal">
-          <h2 style="margin:0 0 .5rem 0;font-weight:700">Executive summary</h2>
-          <p class="small">One paragraph summary of performance, topline metrics, and key asks.</p>
-        </div>
-      </div>
-    </section>
-
-    <section class="slide" data-slide="4" id="slide-4" aria-label="KPI scorecard">
-      <div class="content">
-        <div class="card reveal">
-          <h2 style="margin:0 0 .5rem 0;font-weight:700">KPI scorecard</h2>
-          <p class="small">Top KPIs and short trend summary. Replace with charts/tables as needed.</p>
-        </div>
-      </div>
-    </section>
-  </div>
-
-  <div class="nav-controls" role="navigation" aria-label="Slide navigation">
-    <button class="nav-btn" id="prevBtn" aria-label="Previous slide" title="Previous (←)">&larr;</button>
-    <div class="slide-dots" id="dotsContainer" role="tablist" aria-label="Slide dots"></div>
-    <div id="slideCounter" class="small" aria-live="polite" style="min-width:56px;text-align:center">1 / 4</div>
-    <button class="nav-btn" id="nextBtn" aria-label="Next slide" title="Next (→)">&rarr;</button>
   </div>
 
   <script>
     (function(){
-      const slides = Array.from(document.querySelectorAll('.slide'));
-      const total = slides.length;
-      let idx = slides.findIndex(s => s.classList.contains('active'));
-      if (idx < 0) idx = 0;
-
-      const prevBtn = document.getElementById('prevBtn');
-      const nextBtn = document.getElementById('nextBtn');
-      const dotsContainer = document.getElementById('dotsContainer');
-      const slideCounter = document.getElementById('slideCounter');
-
-      slides.forEach((s, i) => {
-        const btn = document.createElement('button');
-        btn.className = 'dot';
-        btn.setAttribute('aria-label', 'Go to slide ' + (i+1));
-        btn.setAttribute('role','tab');
-        btn.addEventListener('click', () => goTo(i));
-        dotsContainer.appendChild(btn);
-      });
-      const dots = Array.from(dotsContainer.children);
-
-      function updateUI(){
-        slides.forEach((s,i) => s.classList.toggle('active', i === idx));
-        dots.forEach((d,i) => {
-          d.classList.toggle('active', i === idx);
-          if (i === idx) d.setAttribute('aria-current', 'true'); else d.removeAttribute('aria-current');
-        });
-        slideCounter.textContent = (idx + 1) + ' / ' + total;
-
-        const reveals = slides[idx].querySelectorAll('.reveal');
-        reveals.forEach((el, i) => {
-          el.classList.remove('show');
-          setTimeout(() => el.classList.add('show'), 70 * i);
-        });
-
-        const bg = document.getElementById('bg');
-        if (bg) bg.style.transform = `translateY(${(idx - (total/2)) * 6}px)`;
-      }
-
-      function goTo(i){
-        idx = Math.max(0, Math.min(total - 1, i));
-        updateUI();
-        slides[idx].setAttribute('tabindex','-1');
-        slides[idx].focus({preventScroll:true});
-      }
-
-      prevBtn.addEventListener('click', () => goTo(idx - 1));
-      nextBtn.addEventListener('click', () => goTo(idx + 1));
-      window.addEventListener('keydown', (ev) => {
-        if (ev.key === 'ArrowLeft') goTo(idx - 1);
-        if (ev.key === 'ArrowRight') goTo(idx + 1);
-        if (ev.key === 'Home') goTo(0);
-        if (ev.key === 'End') goTo(total - 1);
-      });
-
-      let startX = null;
-      const deck = document.getElementById('deck');
-      deck.addEventListener('touchstart', e => startX = e.changedTouches[0].clientX);
-      deck.addEventListener('touchend', e => {
-        if (startX == null) return;
-        const dx = e.changedTouches[0].clientX - startX;
-        if (dx > 60) goTo(idx - 1);
-        if (dx < -60) goTo(idx + 1);
-        startX = null;
-      });
-
-      updateUI();
+      const reveals = document.querySelectorAll('.reveal');
+      reveals.forEach((el, i) => setTimeout(() => el.classList.add('show'), 90 * i));
     })();
 
     (function(){
@@ -287,7 +129,6 @@
       const canvas = document.getElementById('particleCanvas');
       if (!canvas) return;
       const ctx = canvas.getContext('2d');
-
       const DPR = Math.min(2, window.devicePixelRatio || 1);
 
       function resizeCanvas(){
@@ -320,14 +161,10 @@
           particles.push({
             x: rand(0, w),
             y: rand(0, h),
-            vx: 0,
-            vy: 0,
-            baseX: rand(0, w),
-            baseY: rand(0, h),
-            noiseOffsetX: rand(0, 1000),
-            noiseOffsetY: rand(0, 1000),
-            r: rand(1.8, 3.6),
-            alpha: rand(0.32, 0.95)
+            vx: 0, vy: 0,
+            baseX: rand(0, w), baseY: rand(0, h),
+            noiseOffsetX: rand(0, 1000), noiseOffsetY: rand(0, 1000),
+            r: rand(1.8, 3.6), alpha: rand(0.32, 0.95)
           });
         }
       }
@@ -351,7 +188,6 @@
 
           p.x = p.baseX + p.vx;
           p.y = p.baseY + p.vy;
-
           p.vx *= 0.91;
           p.vy *= 0.91;
 
@@ -383,28 +219,10 @@
       init();
       requestAnimationFrame(step);
 
-      let mouse = {x:-9999,y:-9999};
-      window.addEventListener('pointermove', e => {
-        const rect = canvas.getBoundingClientRect();
-        mouse.x = (e.clientX - rect.left) * (w / rect.width);
-        mouse.y = (e.clientY - rect.top) * (h / rect.height);
-        for (let p of particles){
-          const dx = p.x - mouse.x, dy = p.y - mouse.y;
-          const d2 = dx*dx + dy*dy;
-          if (d2 < 36000){
-            const f = 0.03 * (1 - d2/36000);
-            p.vx += dx * f;
-            p.vy += dy * f;
-          }
-        }
-      });
-
       let _pcResize = null;
       window.addEventListener('resize', () => {
         clearTimeout(_pcResize);
-        _pcResize = setTimeout(() => {
-          init();
-        }, 140);
+        _pcResize = setTimeout(init, 140);
       });
     })();
 
@@ -428,70 +246,8 @@
         });
       });
     })();
-
-    (function(){
-      if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-      const tilts = document.querySelectorAll('.tilt');
-      tilts.forEach(el => {
-        el.addEventListener('pointermove', (ev) => {
-          const r = el.getBoundingClientRect();
-          const px = (ev.clientX - r.left) / r.width;
-          const py = (ev.clientY - r.top) / r.height;
-          const rx = (py - 0.5) * 6;
-          const ry = (px - 0.5) * -8;
-          el.style.transform = `perspective(900px) rotateX(${rx}deg) rotateY(${ry}deg) translateZ(6px)`;
-        });
-        el.addEventListener('pointerleave', () => {
-          el.style.transform = '';
-        });
-      });
-    })();
-
-    (function(){
-      if (!('IntersectionObserver' in window)) {
-        document.querySelectorAll('.reveal').forEach(el => el.classList.add('show'));
-        return;
-      }
-      const io = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('show');
-          }
-        });
-      }, {root: null, threshold: 0.15});
-      document.querySelectorAll('.reveal').forEach(el => io.observe(el));
-    })();
-
-    (function(){
-      const rows = document.querySelectorAll('#yoyTableBody tr');
-      if (!rows.length) return;
-
-      const numFmt = new Intl.NumberFormat('en-US', { maximumFractionDigits: 0 });
-
-      rows.forEach(row => {
-        const v2025 = Number(row.dataset.v2025 || 0);
-        const v2026 = Number(row.dataset.v2026 || 0);
-
-        const c2025 = row.querySelector('.v2025');
-        const c2026 = row.querySelector('.v2026');
-        const cyoY  = row.querySelector('.yoy');
-
-        if (c2025) c2025.textContent = numFmt.format(v2025);
-        if (c2026) c2026.textContent = numFmt.format(v2026);
-
-        let yoy = 0;
-        if (v2025 > 0) yoy = ((v2026 - v2025) / v2025) * 100;
-
-        const sign = yoy > 0 ? '+' : '';
-        if (cyoY) {
-          cyoY.textContent = `${sign}${yoy.toFixed(1)}%`;
-          cyoY.style.color =
-            yoy > 0 ? '#0f766e' :
-            yoy < 0 ? '#b91c1c' :
-                      '#6b7280';
-        }
-      });
-    })();
   </script>
 </body>
 </html>
+```
+

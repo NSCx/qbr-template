@@ -1,6 +1,467 @@
-    /* ---------------------------
-       Slide 2 YoY table formatter
-       --------------------------- */
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="slides-format" content="viewport" />
+  <title>SCORPTEC - Quarterly Business Review</title>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@400;500;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      /* palette */
+      --bg: #faf8f5;
+      --surface: #ffffff;
+      --text: #111827;
+      --muted: #5b6576;
+      --accent-1: #1d4ed8;
+      --accent-2: #f97316;
+      --accent-3: #0f766e;
+      --glass: rgba(255,255,255,0.86);
+      --glass-border: rgba(23,32,51,0.06);
+      --shadow: 0 18px 45px rgba(23,32,51,0.06);
+      --font-body: "DM Sans", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      --font-display: "DM Serif Display", Georgia, serif;
+
+      /* layout tokens */
+      --page-max: 2200px;
+      --radius: 18px;
+      --space-sm: 0.6rem;
+      --space-md: 1.25rem;
+      --card-pad: 1.25rem;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      :root { --reduce-motion: 1; }
+    }
+
+    *{box-sizing:border-box}
+    html,body{height:100%;margin:0;background:var(--bg);color:var(--text);font-family:var(--font-body);-webkit-font-smoothing:antialiased}
+    .deck{position:relative;height:100vh;width:100vw;overflow:hidden}
+    @media (min-width:2400px){
+      .deck{height:1440px}
+      html,body{height:1440px}
+    }
+    .slide{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;padding:clamp(1rem,3vw,2.5rem);opacity:0;transform:scale(.98);transition:opacity .45s ease,transform .45s cubic-bezier(.2,.9,.2,1);pointer-events:none}
+    .slide.active{opacity:1;transform:scale(1);pointer-events:auto}
+    .content{width:100%;max-width:var(--page-max);z-index:6;padding:0 2rem}
+
+    .bg-animated{
+      position:absolute;inset:0;z-index:0;overflow:hidden;pointer-events:none;
+      background: radial-gradient(900px 900px at 6% 18%, rgba(29,78,216,0.10), transparent 14%),
+                  radial-gradient(760px 760px at 92% 82%, rgba(249,115,22,0.08), transparent 12%),
+                  radial-gradient(520px 520px at 50% 52%, rgba(15,118,110,0.06), transparent 10%);
+      transition:transform .25s ease;
+    }
+
+    .blob{
+      position:absolute;border-radius:50%;filter:blur(80px);opacity:.12;transform-origin:center;
+      will-change:transform,opacity;mix-blend-mode:screen;
+    }
+    .blob.b1{width:900px;height:900px;top:-260px;right:-260px;background:var(--accent-1)}
+    .blob.b2{width:700px;height:700px;bottom:-260px;left:-220px;background:var(--accent-2)}
+    .blob.b3{width:460px;height:460px;top:46%;left:8%;background:var(--accent-3)}
+    @keyframes floatA { 0%{transform:translateY(0) scale(1);} 50%{transform:translateY(-34px) scale(1.05);} 100%{transform:translateY(0) scale(1);} }
+    @keyframes floatB { 0%{transform:translate(0,0) rotate(0);} 50%{transform:translate(-44px,26px) rotate(1deg);} 100%{transform:translate(0,0) rotate(0);} }
+    @keyframes floatC { 0%{transform:translate(0,0) scale(1);} 50%{transform:translate(34px,-28px) scale(.95);} 100%{transform:translate(0,0) scale(1);} }
+    .blob.b1{animation: floatA 16s ease-in-out infinite}
+    .blob.b2{animation: floatB 22s ease-in-out infinite}
+    .blob.b3{animation: floatC 18s ease-in-out infinite}
+
+    #particleCanvas{position:absolute;inset:0;z-index:2;pointer-events:none;width:100%;height:100%;display:block}
+
+    .title-wrap{display:flex;flex-direction:column;align-items:center;gap:.6rem;text-align:center}
+    .title{font-family:var(--font-display);font-size:clamp(3rem,4.8vw,6rem);line-height:1;margin:0}
+    .title .gradient-text{
+      background:linear-gradient(90deg,var(--accent-1),var(--accent-2),var(--accent-1));
+      -webkit-background-clip:text;background-clip:text;color:transparent;
+      display:inline-block;background-size:200% 100%;
+      animation: textShift 6s linear infinite;font-weight:400;
+    }
+    @keyframes textShift{ 0%{background-position:0%} 50%{background-position:100%} 100%{background-position:0%} }
+
+    .subtitle{color:var(--muted);font-size:clamp(.95rem,1.5vw,1.2rem);margin:0}
+
+    .card{background:var(--glass);border:1px solid var(--glass-border);border-radius:var(--radius);padding:var(--card-pad);box-shadow:var(--shadow);backdrop-filter:blur(6px);transition:transform .2s ease,box-shadow .2s ease}
+    .card:hover{transform:translateY(-8px) scale(1.005);box-shadow:0 30px 60px rgba(23,32,51,0.10)}
+    .card:focus-within{outline:2px solid rgba(29,78,216,0.08);outline-offset:4px}
+
+    .small{font-size:.95rem;color:var(--muted)}
+    .text-lg{font-size:1.05rem}
+    .text-2xl{font-size:1.4rem}
+    .grid-2{display:grid;grid-template-columns:repeat(2,1fr);gap:1rem}
+    @media (max-width:840px){ .grid-2{grid-template-columns:1fr} }
+
+    .reveal{opacity:0;transform:translateY(14px);transition:opacity .5s ease,transform .5s cubic-bezier(.2,.9,.2,1)}
+    .reveal.show{opacity:1;transform:translateY(0)}
+
+    .nav-controls{
+      position:fixed;left:50%;transform:translateX(-50%);bottom:22px;z-index:20;display:flex;align-items:center;gap:12px;
+      background:rgba(255,255,255,0.7);padding:8px 12px;border-radius:999px;box-shadow:0 6px 18px rgba(17,24,39,0.06);backdrop-filter:blur(6px)
+    }
+    .nav-btn{display:inline-flex;align-items:center;justify-content:center;width:44px;height:44px;border-radius:50%;border:none;background:transparent;color:var(--accent-1);cursor:pointer;font-weight:700;font-size:1.15rem}
+    .nav-btn:hover{background:rgba(29,78,216,0.04)}
+    .nav-btn:focus-visible{outline:3px solid rgba(29,78,216,0.14);outline-offset:4px;border-radius:50%}
+    .slide-dots{display:flex;gap:10px}
+    .dot{width:12px;height:12px;border-radius:999px;background:rgba(23,32,51,0.12);cursor:pointer;border:0;padding:0}
+    .dot.active{background:var(--accent-1);transform:scale(1.25);box-shadow:0 6px 14px rgba(29,78,216,0.08)}
+    .dot:focus-visible{outline:2px solid rgba(29,78,216,0.12);outline-offset:3px}
+
+    .tilt{transform-style:preserve-3d;transition:transform .18s ease}
+    @media (prefers-reduced-motion: reduce){
+      .blob, #particleCanvas, .title .gradient-text, .card:hover, .tilt { animation: none !important; transition: none !important; }
+    }
+
+    :focus{outline: none}
+    @media (max-width:520px){
+      .nav-controls{left:12px;transform:none;right:auto;bottom:18px}
+      .nav-btn{width:40px;height:40px}
+    }
+  </style>
+</head>
+<body>
+  <div class="deck" id="deck" aria-roledescription="slide deck">
+    <div class="bg-animated" id="bg" aria-hidden="true">
+      <div class="blob b1" aria-hidden="true"></div>
+      <div class="blob b2" aria-hidden="true"></div>
+      <div class="blob b3" aria-hidden="true"></div>
+    </div>
+
+    <canvas id="particleCanvas" aria-hidden="true"></canvas>
+
+    <section class="slide active" data-slide="1" id="slide-1" aria-label="Title slide">
+      <div class="content title-wrap" role="group" aria-labelledby="main-title">
+        <h1 id="main-title" class="title reveal"><span class="gradient-text">SCORPTEC - Quarterly Business Review</span></h1>
+        <p class="subtitle reveal">Performance, key wins, and next-quarter priorities</p>
+      </div>
+    </section>
+
+    <!-- Slide 2: YoY brand performance -->
+    <section class="slide" data-slide="2" id="slide-2" aria-label="YoY brand performance">
+      <div class="content">
+        <div class="card reveal">
+          <h2 style="margin:0 0 .9rem 0;font-weight:700">Synnex YoY Brand Performance Q1 Q2</h2>
+          <p class="small" style="margin:0 0 1rem 0;">Brands 2025/2026 Year on Year</p>
+
+          <div style="overflow:auto;">
+            <table style="width:100%;border-collapse:collapse;font-size:.98rem;">
+              <thead>
+                <tr>
+                  <th style="text-align:left;padding:.7rem;border-bottom:1px solid var(--glass-border);">Brand</th>
+                  <th style="text-align:right;padding:.7rem;border-bottom:1px solid var(--glass-border);">2025</th>
+                  <th style="text-align:right;padding:.7rem;border-bottom:1px solid var(--glass-border);">2026</th>
+                  <th style="text-align:right;padding:.7rem;border-bottom:1px solid var(--glass-border);">YoY %</th>
+                </tr>
+              </thead>
+              <tbody id="yoyTableBody">
+                <tr data-v2025="125000" data-v2026="138000"><td style="padding:.65rem;border-bottom:1px solid var(--glass-border);">HP</td><td class="v2025" style="padding:.65rem;text-align:right;border-bottom:1px solid var(--glass-border);"></td><td class="v2026" style="padding:.65rem;text-align:right;border-bottom:1px solid var(--glass-border);"></td><td class="yoy" style="padding:.65rem;text-align:right;border-bottom:1px solid var(--glass-border);font-weight:700;"></td></tr>
+                <tr data-v2025="117000" data-v2026="121000"><td style="padding:.65rem;border-bottom:1px solid var(--glass-border);">Lenovo</td><td class="v2025" style="padding:.65rem;text-align:right;border-bottom:1px solid var(--glass-border);"></td><td class="v2026" style="padding:.65rem;text-align:right;border-bottom:1px solid var(--glass-border);"></td><td class="yoy" style="padding:.65rem;text-align:right;border-bottom:1px solid var(--glass-border);font-weight:700;"></td></tr>
+                <tr data-v2025="89000" data-v2026="94000"><td style="padding:.65rem;border-bottom:1px solid var(--glass-border);">Asus</td><td class="v2025" style="padding:.65rem;text-align:right;border-bottom:1px solid var(--glass-border);"></td><td class="v2026" style="padding:.65rem;text-align:right;border-bottom:1px solid var(--glass-border);"></td><td class="yoy" style="padding:.65rem;text-align:right;border-bottom:1px solid var(--glass-border);font-weight:700;"></td></tr>
+                <tr data-v2025="72000" data-v2026="69800"><td style="padding:.65rem;border-bottom:1px solid var(--glass-border);">Gigabyte</td><td class="v2025" style="padding:.65rem;text-align:right;border-bottom:1px solid var(--glass-border);"></td><td class="v2026" style="padding:.65rem;text-align:right;border-bottom:1px solid var(--glass-border);"></td><td class="yoy" style="padding:.65rem;text-align:right;border-bottom:1px solid var(--glass-border);font-weight:700;"></td></tr>
+                <tr data-v2025="81500" data-v2026="88200"><td style="padding:.65rem;border-bottom:1px solid var(--glass-border);">Kingston</td><td class="v2025" style="padding:.65rem;text-align:right;border-bottom:1px solid var(--glass-border);"></td><td class="v2026" style="padding:.65rem;text-align:right;border-bottom:1px solid var(--glass-border);"></td><td class="yoy" style="padding:.65rem;text-align:right;border-bottom:1px solid var(--glass-border);font-weight:700;"></td></tr>
+                <tr data-v2025="131000" data-v2026="129500"><td style="padding:.65rem;border-bottom:1px solid var(--glass-border);">Samsung</td><td class="v2025" style="padding:.65rem;text-align:right;border-bottom:1px solid var(--glass-border);"></td><td class="v2026" style="padding:.65rem;text-align:right;border-bottom:1px solid var(--glass-border);"></td><td class="yoy" style="padding:.65rem;text-align:right;border-bottom:1px solid var(--glass-border);font-weight:700;"></td></tr>
+                <tr data-v2025="46000" data-v2026="51200"><td style="padding:.65rem;border-bottom:1px solid var(--glass-border);">PNY</td><td class="v2025" style="padding:.65rem;text-align:right;border-bottom:1px solid var(--glass-border);"></td><td class="v2026" style="padding:.65rem;text-align:right;border-bottom:1px solid var(--glass-border);"></td><td class="yoy" style="padding:.65rem;text-align:right;border-bottom:1px solid var(--glass-border);font-weight:700;"></td></tr>
+                <tr data-v2025="54000" data-v2026="55750"><td style="padding:.65rem;border-bottom:1px solid var(--glass-border);">LG</td><td class="v2025" style="padding:.65rem;text-align:right;border-bottom:1px solid var(--glass-border);"></td><td class="v2026" style="padding:.65rem;text-align:right;border-bottom:1px solid var(--glass-border);"></td><td class="yoy" style="padding:.65rem;text-align:right;border-bottom:1px solid var(--glass-border);font-weight:700;"></td></tr>
+                <tr data-v2025="97800" data-v2026="103100"><td style="padding:.65rem;border-bottom:1px solid var(--glass-border);">Seagate</td><td class="v2025" style="padding:.65rem;text-align:right;border-bottom:1px solid var(--glass-border);"></td><td class="v2026" style="padding:.65rem;text-align:right;border-bottom:1px solid var(--glass-border);"></td><td class="yoy" style="padding:.65rem;text-align:right;border-bottom:1px solid var(--glass-border);font-weight:700;"></td></tr>
+                <tr data-v2025="68800" data-v2026="70100"><td style="padding:.65rem;border-bottom:1px solid var(--glass-border);">Corsair</td><td class="v2025" style="padding:.65rem;text-align:right;border-bottom:1px solid var(--glass-border);"></td><td class="v2026" style="padding:.65rem;text-align:right;border-bottom:1px solid var(--glass-border);"></td><td class="yoy" style="padding:.65rem;text-align:right;border-bottom:1px solid var(--glass-border);font-weight:700;"></td></tr>
+                <tr data-v2025="38400" data-v2026="42100"><td style="padding:.65rem;border-bottom:1px solid var(--glass-border);">Team</td><td class="v2025" style="padding:.65rem;text-align:right;border-bottom:1px solid var(--glass-border);"></td><td class="v2026" style="padding:.65rem;text-align:right;border-bottom:1px solid var(--glass-border);"></td><td class="yoy" style="padding:.65rem;text-align:right;border-bottom:1px solid var(--glass-border);font-weight:700;"></td></tr>
+                <tr data-v2025="92800" data-v2026="95500"><td style="padding:.65rem;border-bottom:1px solid var(--glass-border);">Logitech</td><td class="v2025" style="padding:.65rem;text-align:right;border-bottom:1px solid var(--glass-border);"></td><td class="v2026" style="padding:.65rem;text-align:right;border-bottom:1px solid var(--glass-border);"></td><td class="yoy" style="padding:.65rem;text-align:right;border-bottom:1px solid var(--glass-border);font-weight:700;"></td></tr>
+                <tr data-v2025="84500" data-v2026="83600"><td style="padding:.65rem;border-bottom:1px solid var(--glass-border);">WD</td><td class="v2025" style="padding:.65rem;text-align:right;border-bottom:1px solid var(--glass-border);"></td><td class="v2026" style="padding:.65rem;text-align:right;border-bottom:1px solid var(--glass-border);"></td><td class="yoy" style="padding:.65rem;text-align:right;border-bottom:1px solid var(--glass-border);font-weight:700;"></td></tr>
+                <tr data-v2025="112400" data-v2026="119900"><td style="padding:.65rem;border-bottom:1px solid var(--glass-border);">Intel</td><td class="v2025" style="padding:.65rem;text-align:right;border-bottom:1px solid var(--glass-border);"></td><td class="v2026" style="padding:.65rem;text-align:right;border-bottom:1px solid var(--glass-border);"></td><td class="yoy" style="padding:.65rem;text-align:right;border-bottom:1px solid var(--glass-border);font-weight:700;"></td></tr>
+                <tr data-v2025="40200" data-v2026="38900"><td style="padding:.65rem;border-bottom:1px solid var(--glass-border);">Razer</td><td class="v2025" style="padding:.65rem;text-align:right;border-bottom:1px solid var(--glass-border);"></td><td class="v2026" style="padding:.65rem;text-align:right;border-bottom:1px solid var(--glass-border);"></td><td class="yoy" style="padding:.65rem;text-align:right;border-bottom:1px solid var(--glass-border);font-weight:700;"></td></tr>
+                <tr data-v2025="35800" data-v2026="37600"><td style="padding:.65rem;border-bottom:1px solid var(--glass-border);">Sapphire</td><td class="v2025" style="padding:.65rem;text-align:right;border-bottom:1px solid var(--glass-border);"></td><td class="v2026" style="padding:.65rem;text-align:right;border-bottom:1px solid var(--glass-border);"></td><td class="yoy" style="padding:.65rem;text-align:right;border-bottom:1px solid var(--glass-border);font-weight:700;"></td></tr>
+                <tr data-v2025="50300" data-v2026="54100"><td style="padding:.65rem;border-bottom:1px solid var(--glass-border);">Acer</td><td class="v2025" style="padding:.65rem;text-align:right;border-bottom:1px solid var(--glass-border);"></td><td class="v2026" style="padding:.65rem;text-align:right;border-bottom:1px solid var(--glass-border);"></td><td class="yoy" style="padding:.65rem;text-align:right;border-bottom:1px solid var(--glass-border);font-weight:700;"></td></tr>
+                <tr data-v2025="27100" data-v2026="29400"><td style="padding:.65rem;border-bottom:1px solid var(--glass-border);">Netgear</td><td class="v2025" style="padding:.65rem;text-align:right;border-bottom:1px solid var(--glass-border);"></td><td class="v2026" style="padding:.65rem;text-align:right;border-bottom:1px solid var(--glass-border);"></td><td class="yoy" style="padding:.65rem;text-align:right;border-bottom:1px solid var(--glass-border);font-weight:700;"></td></tr>
+                <tr data-v2025="156000" data-v2026="167500"><td style="padding:.65rem;border-bottom:1px solid var(--glass-border);">Apple</td><td class="v2025" style="padding:.65rem;text-align:right;border-bottom:1px solid var(--glass-border);"></td><td class="v2026" style="padding:.65rem;text-align:right;border-bottom:1px solid var(--glass-border);"></td><td class="yoy" style="padding:.65rem;text-align:right;border-bottom:1px solid var(--glass-border);font-weight:700;"></td></tr>
+                <tr data-v2025="63400" data-v2026="64800"><td style="padding:.65rem;border-bottom:1px solid var(--glass-border);">Sandisk</td><td class="v2025" style="padding:.65rem;text-align:right;border-bottom:1px solid var(--glass-border);"></td><td class="v2026" style="padding:.65rem;text-align:right;border-bottom:1px solid var(--glass-border);"></td><td class="yoy" style="padding:.65rem;text-align:right;border-bottom:1px solid var(--glass-border);font-weight:700;"></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-slide="3" id="slide-3" aria-label="Executive summary">
+      <div class="content">
+        <div class="card reveal">
+          <h2 style="margin:0 0 .5rem 0;font-weight:700">Executive summary</h2>
+          <p class="small">One paragraph summary of performance, topline metrics, and key asks.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-slide="4" id="slide-4" aria-label="KPI scorecard">
+      <div class="content">
+        <div class="card reveal">
+          <h2 style="margin:0 0 .5rem 0;font-weight:700">KPI scorecard</h2>
+          <p class="small">Top KPIs and short trend summary. Replace with charts/tables as needed.</p>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <div class="nav-controls" role="navigation" aria-label="Slide navigation">
+    <button class="nav-btn" id="prevBtn" aria-label="Previous slide" title="Previous (←)">&larr;</button>
+    <div class="slide-dots" id="dotsContainer" role="tablist" aria-label="Slide dots"></div>
+    <div id="slideCounter" class="small" aria-live="polite" style="min-width:56px;text-align:center">1 / 4</div>
+    <button class="nav-btn" id="nextBtn" aria-label="Next slide" title="Next (→)">&rarr;</button>
+  </div>
+
+  <script>
+    (function(){
+      const slides = Array.from(document.querySelectorAll('.slide'));
+      const total = slides.length;
+      let idx = slides.findIndex(s => s.classList.contains('active'));
+      if (idx < 0) idx = 0;
+
+      const prevBtn = document.getElementById('prevBtn');
+      const nextBtn = document.getElementById('nextBtn');
+      const dotsContainer = document.getElementById('dotsContainer');
+      const slideCounter = document.getElementById('slideCounter');
+
+      slides.forEach((s, i) => {
+        const btn = document.createElement('button');
+        btn.className = 'dot';
+        btn.setAttribute('aria-label', 'Go to slide ' + (i+1));
+        btn.setAttribute('role','tab');
+        btn.addEventListener('click', () => goTo(i));
+        dotsContainer.appendChild(btn);
+      });
+      const dots = Array.from(dotsContainer.children);
+
+      function updateUI(){
+        slides.forEach((s,i) => s.classList.toggle('active', i === idx));
+        dots.forEach((d,i) => {
+          d.classList.toggle('active', i === idx);
+          if (i === idx) d.setAttribute('aria-current', 'true'); else d.removeAttribute('aria-current');
+        });
+        slideCounter.textContent = (idx + 1) + ' / ' + total;
+
+        const reveals = slides[idx].querySelectorAll('.reveal');
+        reveals.forEach((el, i) => {
+          el.classList.remove('show');
+          setTimeout(() => el.classList.add('show'), 70 * i);
+        });
+
+        const bg = document.getElementById('bg');
+        if (bg) bg.style.transform = `translateY(${(idx - (total/2)) * 6}px)`;
+      }
+
+      function goTo(i){
+        idx = Math.max(0, Math.min(total - 1, i));
+        updateUI();
+        slides[idx].setAttribute('tabindex','-1');
+        slides[idx].focus({preventScroll:true});
+      }
+
+      prevBtn.addEventListener('click', () => goTo(idx - 1));
+      nextBtn.addEventListener('click', () => goTo(idx + 1));
+      window.addEventListener('keydown', (ev) => {
+        if (ev.key === 'ArrowLeft') goTo(idx - 1);
+        if (ev.key === 'ArrowRight') goTo(idx + 1);
+        if (ev.key === 'Home') goTo(0);
+        if (ev.key === 'End') goTo(total - 1);
+      });
+
+      let startX = null;
+      const deck = document.getElementById('deck');
+      deck.addEventListener('touchstart', e => startX = e.changedTouches[0].clientX);
+      deck.addEventListener('touchend', e => {
+        if (startX == null) return;
+        const dx = e.changedTouches[0].clientX - startX;
+        if (dx > 60) goTo(idx - 1);
+        if (dx < -60) goTo(idx + 1);
+        startX = null;
+      });
+
+      updateUI();
+    })();
+
+    (function(){
+      if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+      const canvas = document.getElementById('particleCanvas');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+
+      const DPR = Math.min(2, window.devicePixelRatio || 1);
+
+      function resizeCanvas(){
+        const w = canvas.clientWidth || window.innerWidth;
+        const h = canvas.clientHeight || window.innerHeight;
+        canvas.width = Math.floor(w * DPR);
+        canvas.height = Math.floor(h * DPR);
+        canvas.style.width = w + 'px';
+        canvas.style.height = h + 'px';
+        ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+        return {w, h};
+      }
+
+      function simplerNoise(x) {
+        return Math.sin(x * 0.1) * Math.cos(x * 0.05) + Math.sin(x * 0.07);
+      }
+
+      let w = 0, h = 0;
+      let particles = [];
+      let COUNT = 0;
+      let time = 0;
+
+      function rand(min, max){ return Math.random() * (max - min) + min; }
+      function init(){
+        const size = resizeCanvas();
+        w = size.w; h = size.h;
+        COUNT = Math.max(22, Math.round((w * h) / 56000));
+        particles = [];
+        for (let i=0;i<COUNT;i++){
+          particles.push({
+            x: rand(0, w),
+            y: rand(0, h),
+            vx: 0,
+            vy: 0,
+            baseX: rand(0, w),
+            baseY: rand(0, h),
+            noiseOffsetX: rand(0, 1000),
+            noiseOffsetY: rand(0, 1000),
+            r: rand(1.8, 3.6),
+            alpha: rand(0.32, 0.95)
+          });
+        }
+      }
+
+      function step(){
+        ctx.clearRect(0,0,w,h);
+        time += 0.005;
+
+        for (let p of particles){
+          const noiseX = simplerNoise(time * 2 + p.noiseOffsetX);
+          const noiseY = simplerNoise(time * 1.8 + p.noiseOffsetY);
+          const randomWalk = rand(-0.15, 0.15) * 0.3;
+
+          p.baseX += (noiseX * 0.3 + randomWalk);
+          p.baseY += (noiseY * 0.3 + randomWalk);
+
+          if (p.baseX < -24) p.baseX = w + 24;
+          if (p.baseX > w + 24) p.baseX = -24;
+          if (p.baseY < -24) p.baseY = h + 24;
+          if (p.baseY > h + 24) p.baseY = -24;
+
+          p.x = p.baseX + p.vx;
+          p.y = p.baseY + p.vy;
+
+          p.vx *= 0.91;
+          p.vy *= 0.91;
+
+          ctx.beginPath();
+          ctx.fillStyle = `rgba(29,78,216,${(p.alpha * 0.9).toFixed(3)})`;
+          ctx.arc(p.x, p.y, p.r, 0, Math.PI*2);
+          ctx.fill();
+        }
+
+        for (let i=0;i<particles.length;i++){
+          for (let j=i+1;j<particles.length;j++){
+            const a = particles[i], b = particles[j];
+            const dx = a.x - b.x, dy = a.y - b.y;
+            const d2 = dx*dx + dy*dy;
+            if (d2 < 42000){
+              const t = 1 - (d2 / 42000);
+              ctx.beginPath();
+              ctx.strokeStyle = `rgba(29,78,216,${(t * 0.12).toFixed(3)})`;
+              ctx.lineWidth = 1;
+              ctx.moveTo(a.x, a.y);
+              ctx.lineTo(b.x, b.y);
+              ctx.stroke();
+            }
+          }
+        }
+        requestAnimationFrame(step);
+      }
+
+      init();
+      requestAnimationFrame(step);
+
+      let mouse = {x:-9999,y:-9999};
+      window.addEventListener('pointermove', e => {
+        const rect = canvas.getBoundingClientRect();
+        mouse.x = (e.clientX - rect.left) * (w / rect.width);
+        mouse.y = (e.clientY - rect.top) * (h / rect.height);
+        for (let p of particles){
+          const dx = p.x - mouse.x, dy = p.y - mouse.y;
+          const d2 = dx*dx + dy*dy;
+          if (d2 < 36000){
+            const f = 0.03 * (1 - d2/36000);
+            p.vx += dx * f;
+            p.vy += dy * f;
+          }
+        }
+      });
+
+      let _pcResize = null;
+      window.addEventListener('resize', () => {
+        clearTimeout(_pcResize);
+        _pcResize = setTimeout(() => {
+          init();
+        }, 140);
+      });
+    })();
+
+    (function(){
+      const bg = document.getElementById('bg');
+      const blobs = document.querySelectorAll('.blob');
+      if (!bg || !blobs.length) return;
+
+      window.addEventListener('pointermove', (e) => {
+        if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+        const cx = window.innerWidth/2, cy = window.innerHeight/2;
+        const dx = (e.clientX - cx) / cx;
+        const dy = (e.clientY - cy) / cy;
+        bg.style.transform = `translate(${dx * 12}px, ${dy * 8}px)`;
+
+        blobs.forEach((b, i) => {
+          const depth = (i+1) * 10;
+          const bx = dx * depth * (i%2 ? -1 : 1);
+          const by = dy * (depth/1.4) * (i%2 ? 1 : -1);
+          b.style.transform = `translate3d(${bx}px, ${by}px, 0)`;
+        });
+      });
+    })();
+
+    (function(){
+      if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+      const tilts = document.querySelectorAll('.tilt');
+      tilts.forEach(el => {
+        el.addEventListener('pointermove', (ev) => {
+          const r = el.getBoundingClientRect();
+          const px = (ev.clientX - r.left) / r.width;
+          const py = (ev.clientY - r.top) / r.height;
+          const rx = (py - 0.5) * 6;
+          const ry = (px - 0.5) * -8;
+          el.style.transform = `perspective(900px) rotateX(${rx}deg) rotateY(${ry}deg) translateZ(6px)`;
+        });
+        el.addEventListener('pointerleave', () => {
+          el.style.transform = '';
+        });
+      });
+    })();
+
+    (function(){
+      if (!('IntersectionObserver' in window)) {
+        document.querySelectorAll('.reveal').forEach(el => el.classList.add('show'));
+        return;
+      }
+      const io = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('show');
+          }
+        });
+      }, {root: null, threshold: 0.15});
+      document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+    })();
+
     (function(){
       const rows = document.querySelectorAll('#yoyTableBody tr');
       if (!rows.length) return;
@@ -18,7 +479,6 @@
         if (c2025) c2025.textContent = numFmt.format(v2025);
         if (c2026) c2026.textContent = numFmt.format(v2026);
 
-        // Guard divide-by-zero
         let yoy = 0;
         if (v2025 > 0) yoy = ((v2026 - v2025) / v2025) * 100;
 
@@ -26,9 +486,12 @@
         if (cyoY) {
           cyoY.textContent = `${sign}${yoy.toFixed(1)}%`;
           cyoY.style.color =
-            yoy > 0 ? '#0f766e' :   // green
-            yoy < 0 ? '#b91c1c' :   // red
-                      '#6b7280';    // gray
+            yoy > 0 ? '#0f766e' :
+            yoy < 0 ? '#b91c1c' :
+                      '#6b7280';
         }
       });
     })();
+  </script>
+</body>
+</html>

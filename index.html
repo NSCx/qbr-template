@@ -157,6 +157,7 @@
       justify-content:space-between;
       align-items:flex-start;
     }
+
     .cover-brand{
       display:flex;
       align-items:center;
@@ -168,24 +169,19 @@
       text-shadow:0 3px 14px rgba(0,0,0,.25);
       opacity:.96;
     }
-    .cover-brand-mark{
-      width:34px;height:22px;display:inline-block;position:relative;flex:0 0 auto;
-      filter:drop-shadow(0 3px 8px rgba(0,0,0,.28));
+    .cover-brand-logo{
+      width:clamp(180px, 18vw, 290px);
+      height:auto;
+      display:block;
+      object-fit:contain;
+      filter:drop-shadow(0 3px 10px rgba(0,0,0,.28));
     }
-    .cover-brand-mark::before,
-    .cover-brand-mark::after{
-      content:"";
-      position:absolute;left:0;right:0;border-radius:2px;
-      transform:skewX(-28deg);
+    .cover-brand-fallback{
+      display:none;
+      font-weight:800;
+      color:#fff;
     }
-    .cover-brand-mark::before{
-      top:0;height:9px;
-      background:linear-gradient(90deg,#e5e7eb 0 62%, #dc2626 62% 78%, #0ea5e9 78% 100%);
-    }
-    .cover-brand-mark::after{
-      bottom:0;height:9px;
-      background:linear-gradient(90deg,#94a3b8 0 62%, #0ea5e9 62% 100%);
-    }
+
     .cover-copy{
       margin:0 0 clamp(3rem,9vh,7rem) clamp(.3rem,.8vw,.9rem);
       max-width:min(900px, 82%);
@@ -332,8 +328,7 @@
       #slide-3 .exec-grid{grid-template-columns:1fr !important}
       #slide-1 .content{padding:1.1rem 1.1rem 1.6rem 1.1rem}
       .cover-copy{max-width:95%;margin:0 0 2.6rem 0}
-      .cover-brand{font-size:1.1rem}
-      .cover-brand-mark{width:30px;height:20px}
+      .cover-brand-logo{width:clamp(150px, 46vw, 220px)}
       #slide-1 .subtitle{font-size:1.05rem}
     }
     @media (max-width:520px){
@@ -359,8 +354,13 @@
       <div class="cover-wave" aria-hidden="true"></div>
       <div class="content" role="group" aria-labelledby="main-title">
         <div class="cover-brand reveal" aria-label="Synnex brand">
-          <span class="cover-brand-mark" aria-hidden="true"></span>
-          <span>SYNNEX</span>
+          <img
+            src="https://github.com/NSCx/qbr-template/raw/main/assets/synnex-logo.png"
+            alt="SYNNEX"
+            class="cover-brand-logo"
+            onerror="this.style.display='none'; this.nextElementSibling.style.display='inline';"
+          />
+          <span class="cover-brand-fallback">SYNNEX</span>
         </div>
         <div class="cover-copy">
           <h1 id="main-title" class="title reveal"><span class="gradient-text">SCORPTEC - Quarterly Business Review</span></h1>
@@ -391,7 +391,43 @@
                 <tr><td>ASUS</td><td>$4,858,672.60</td><td>$10,709,708.29</td><td class="cell-pos">$5,851,035.69</td><td class="yoy-cell cell-pos" data-yoy="120">120%</td></tr>
                 <tr><td>LENOV</td><td>$-</td><td>$3,129,483.72</td><td class="cell-pos">$3,129,483.72</td><td class="yoy-cell cell-zero" data-yoy="">#DIV/0!</td></tr>
                 <tr><td>PNY</td><td>$98,250.00</td><td>$3,073,493.66</td><td class="cell-pos">$2,975,243.66</td><td class="yoy-cell cell-pos" data-yoy="3028">3028%</td></tr>
-                <!-- Keep all existing rows exactly as your current file -->
+                <tr><td>KINGS</td><td>$1,049,489.79</td><td>$2,598,967.46</td><td class="cell-pos">$1,549,477.67</td><td class="yoy-cell cell-pos" data-yoy="148">148%</td></tr>
+                <tr><td>GIGA</td><td>$4,195,068.51</td><td>$5,544,352.13</td><td class="cell-pos">$1,349,283.62</td><td class="yoy-cell cell-pos" data-yoy="32">32%</td></tr>
+                <tr><td>LG</td><td>$1,177,819.55</td><td>$2,053,641.63</td><td class="cell-pos">$875,822.08</td><td class="yoy-cell cell-pos" data-yoy="74">74%</td></tr>
+                <tr><td>WD</td><td>$461,512.10</td><td>$1,205,345.87</td><td class="cell-pos">$743,833.77</td><td class="yoy-cell cell-pos" data-yoy="161">161%</td></tr>
+                <tr><td>SAPHR</td><td>$162,148.00</td><td>$898,856.52</td><td class="cell-pos">$736,708.52</td><td class="yoy-cell cell-pos" data-yoy="454">454%</td></tr>
+                <tr><td>SEAGA</td><td>$1,095,483.94</td><td>$1,685,232.08</td><td class="cell-pos">$589,748.14</td><td class="yoy-cell cell-pos" data-yoy="54">54%</td></tr>
+                <tr><td>TEAM</td><td>$743,283.37</td><td>$1,184,552.00</td><td class="cell-pos">$441,268.63</td><td class="yoy-cell cell-pos" data-yoy="59">59%</td></tr>
+                <tr><td>MAXSN</td><td>$67,624.00</td><td>$115,040.00</td><td class="cell-pos">$47,416.00</td><td class="yoy-cell cell-pos" data-yoy="70">70%</td></tr>
+                <tr><td>RAZER</td><td>$503,551.95</td><td>$540,450.83</td><td class="cell-pos">$36,898.88</td><td class="yoy-cell cell-pos" data-yoy="7">7%</td></tr>
+                <tr><td>NINTD</td><td>$-</td><td>$3,022.50</td><td class="cell-pos">$3,022.50</td><td class="yoy-cell cell-zero" data-yoy="">#DIV/0!</td></tr>
+                <tr><td>EPOS</td><td>-$408.80</td><td>$-</td><td class="cell-pos">$408.80</td><td class="yoy-cell cell-neg" data-yoy="-100">-100%</td></tr>
+                <tr><td>HMM</td><td>$25,485.00</td><td>$25,698.00</td><td class="cell-pos">$213.00</td><td class="yoy-cell cell-pos" data-yoy="1">1%</td></tr>
+                <tr><td>ACER</td><td>$528,782.32</td><td>$528,966.65</td><td class="cell-pos">$184.33</td><td class="yoy-cell cell-zero" data-yoy="0">0%</td></tr>
+                <tr><td>FRCTL</td><td>-$155.00</td><td>$-</td><td class="cell-pos">$155.00</td><td class="yoy-cell cell-neg" data-yoy="-100">-100%</td></tr>
+                <tr><td>OTTER</td><td>$-</td><td>$-</td><td class="cell-zero">$-</td><td class="yoy-cell cell-zero" data-yoy="">#DIV/0!</td></tr>
+                <tr><td>SNLOG</td><td>$-</td><td>$-</td><td class="cell-zero">$-</td><td class="yoy-cell cell-zero" data-yoy="">#DIV/0!</td></tr>
+                <tr><td>ADATA</td><td>$200.00</td><td>$-</td><td class="cell-neg">-$200.00</td><td class="yoy-cell cell-neg" data-yoy="-100">-100%</td></tr>
+                <tr><td>STM</td><td>$891.07</td><td>$-</td><td class="cell-neg">-$891.07</td><td class="yoy-cell cell-neg" data-yoy="-100">-100%</td></tr>
+                <tr><td>GALAX</td><td>$33,700.00</td><td>$31,900.00</td><td class="cell-neg">-$1,800.00</td><td class="yoy-cell cell-neg" data-yoy="-5">-5%</td></tr>
+                <tr><td>ALOGI</td><td>$5,182.12</td><td>$533.68</td><td class="cell-neg">-$4,648.44</td><td class="yoy-cell cell-neg" data-yoy="-90">-90%</td></tr>
+                <tr><td>EPSON</td><td>$4,939.28</td><td>$-</td><td class="cell-neg">-$4,939.28</td><td class="yoy-cell cell-neg" data-yoy="-100">-100%</td></tr>
+                <tr><td>NVIDI</td><td>$49,160.00</td><td>$42,197.00</td><td class="cell-neg">-$6,963.00</td><td class="yoy-cell cell-neg" data-yoy="-14">-14%</td></tr>
+                <tr><td>LACIE</td><td>$66,523.60</td><td>$40,674.21</td><td class="cell-neg">-$25,849.39</td><td class="yoy-cell cell-neg" data-yoy="-39">-39%</td></tr>
+                <tr><td>AMD</td><td>$52,650.00</td><td>$22,850.00</td><td class="cell-neg">-$29,800.00</td><td class="yoy-cell cell-neg" data-yoy="-57">-57%</td></tr>
+                <tr><td>BRTHR</td><td>$36,498.72</td><td>$4,030.06</td><td class="cell-neg">-$32,468.66</td><td class="yoy-cell cell-neg" data-yoy="-89">-89%</td></tr>
+                <tr><td>LOGI</td><td>$1,577,550.21</td><td>$1,532,439.89</td><td class="cell-neg">-$45,110.32</td><td class="yoy-cell cell-neg" data-yoy="-3">-3%</td></tr>
+                <tr><td>MSOFT</td><td>$129,815.16</td><td>$75,075.48</td><td class="cell-neg">-$54,739.68</td><td class="yoy-cell cell-neg" data-yoy="-42">-42%</td></tr>
+                <tr><td>APPLE</td><td>$215,258.08</td><td>$131,791.66</td><td class="cell-neg">-$83,466.42</td><td class="yoy-cell cell-neg" data-yoy="-39">-39%</td></tr>
+                <tr><td>HTC</td><td>$285,869.08</td><td>$106,806.60</td><td class="cell-neg">-$179,062.48</td><td class="yoy-cell cell-neg" data-yoy="-63">-63%</td></tr>
+                <tr><td>NETGR</td><td>$531,569.93</td><td>$268,029.64</td><td class="cell-neg">-$263,540.29</td><td class="yoy-cell cell-neg" data-yoy="-50">-50%</td></tr>
+                <tr><td>COOLM</td><td>$327,557.50</td><td>-$2,913.00</td><td class="cell-neg">-$330,470.50</td><td class="yoy-cell cell-neg" data-yoy="-101">-101%</td></tr>
+                <tr><td>SANDS</td><td>$502,752.28</td><td>$71,115.14</td><td class="cell-neg">-$431,637.14</td><td class="yoy-cell cell-neg" data-yoy="-86">-86%</td></tr>
+                <tr><td>SAM</td><td>$2,659,395.70</td><td>$2,166,736.42</td><td class="cell-neg">-$492,659.28</td><td class="yoy-cell cell-neg" data-yoy="-19">-19%</td></tr>
+                <tr><td>CRSAR</td><td>$2,601,491.27</td><td>$1,648,272.00</td><td class="cell-neg">-$953,219.27</td><td class="yoy-cell cell-neg" data-yoy="-37">-37%</td></tr>
+                <tr><td>HP</td><td>$1,302,502.54</td><td>$141,059.25</td><td class="cell-neg">-$1,161,443.29</td><td class="yoy-cell cell-neg" data-yoy="-89">-89%</td></tr>
+                <tr><td>INTEL</td><td>$2,020,215.02</td><td>$703,421.62</td><td class="cell-neg">-$1,316,793.40</td><td class="yoy-cell cell-neg" data-yoy="-65">-65%</td></tr>
+                <tr class="total-row"><td>Grand Total</td><td>$27,370,328.89</td><td>$40,280,830.98</td><td class="cell-pos">$12,910,502.09</td><td class="yoy-cell cell-pos" data-yoy="47">47%</td></tr>
               </tbody>
             </table>
           </div>
@@ -438,25 +474,25 @@
                 <tr>
                   <td style="padding:.6rem;border-bottom:1px solid var(--glass-border);font-weight:700;">Recover Tier-1 Decliners</td>
                   <td style="padding:.6rem;border-bottom:1px solid var(--glass-border);">Biggest YoY value erosion from <strong>INTEL (-$1.32M)</strong>, <strong>HP (-$1.16M)</strong>, <strong>CRSAR</strong>.</td>
-                  <td style="padding:.6rem;border-bottom:1px solid var(--glass-border);">Joint QBRs with vendor + sales leaders, account-level win/loss review, weekly deal-recovery pipeline.</td>
+                  <td style="padding:.6rem;border-bottom:1px solid var(--glass-border);">Joint QBRs with vendor + sales leaders, account-level win/loss review, weekly deal-recovery pipeline, promo and rebate optimisation.</td>
                   <td style="padding:.6rem;border-bottom:1px solid var(--glass-border);">Recover <strong>25–35%</strong> of lost revenue in top 4 decliners by next quarter.</td>
                 </tr>
                 <tr>
                   <td style="padding:.6rem;border-bottom:1px solid var(--glass-border);font-weight:700;">Stabilize Margin-Leaking / Negative Lines</td>
                   <td style="padding:.6rem;border-bottom:1px solid var(--glass-border);"><strong>COOLM</strong> moved to negative sales (<strong>-$2.9K</strong>), with several brands at near-zero run-rate.</td>
-                  <td style="padding:.6rem;border-bottom:1px solid var(--glass-border);">SKU rationalization, return/credit root-cause checks, floor-price governance.</td>
+                  <td style="padding:.6rem;border-bottom:1px solid var(--glass-border);">SKU rationalization, return/credit root-cause checks, floor-price governance, discontinue non-performing listings.</td>
                   <td style="padding:.6rem;border-bottom:1px solid var(--glass-border);">Eliminate negative net sales; restore all active lines to positive monthly run-rate.</td>
                 </tr>
                 <tr>
                   <td style="padding:.6rem;border-bottom:1px solid var(--glass-border);font-weight:700;">Reduce Concentration Risk</td>
                   <td style="padding:.6rem;border-bottom:1px solid var(--glass-border);">Growth is led by a small cluster (ASUS, LENOV, PNY, KINGS, GIGA), while many brands shrink.</td>
-                  <td style="padding:.6rem;border-bottom:1px solid var(--glass-border);">Diversification plan across mid-tier brands with bundled offers and channel-specific campaigns.</td>
+                  <td style="padding:.6rem;border-bottom:1px solid var(--glass-border);">Diversification plan across mid-tier brands (LG, WD, SAPHR, TEAM, SEAGA) with bundled offers and channel-specific campaigns.</td>
                   <td style="padding:.6rem;border-bottom:1px solid var(--glass-border);">Increase non-top-5 share of growth by <strong>+10 pts</strong>.</td>
                 </tr>
                 <tr>
                   <td style="padding:.6rem;border-bottom:1px solid var(--glass-border);font-weight:700;">Re-energize Developing Brand Portfolio</td>
-                  <td style="padding:.6rem;border-bottom:1px solid var(--glass-border);">Several developing brands recorded softer YoY outcomes this half.</td>
-                  <td style="padding:.6rem;border-bottom:1px solid var(--glass-border);">Segment portfolio into defend / incubate / accelerate; assign owner per brand.</td>
+                  <td style="padding:.6rem;border-bottom:1px solid var(--glass-border);">Several developing brands recorded softer YoY outcomes this half (e.g., BRTHR, NETGR, HTC, APPLE).</td>
+                  <td style="padding:.6rem;border-bottom:1px solid var(--glass-border);">Segment portfolio into defend / incubate / accelerate; assign owner per brand; apply minimum quarterly revenue thresholds.</td>
                   <td style="padding:.6rem;border-bottom:1px solid var(--glass-border);">Improve aggregate YoY across developing brands by <strong>+15 pts</strong>.</td>
                 </tr>
               </tbody>
@@ -481,7 +517,6 @@
   </div>
 
   <script>
-    /* Slide manager */
     (function(){
       const slides = Array.from(document.querySelectorAll('.slide'));
       const total = slides.length;
@@ -552,7 +587,6 @@
       updateUI();
     })();
 
-    /* Particle network */
     (function(){
       if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
@@ -673,7 +707,6 @@
       });
     })();
 
-    /* Parallax */
     (function(){
       const bg = document.getElementById('bg');
       const blobs = document.querySelectorAll('.blob');
@@ -695,7 +728,6 @@
       });
     })();
 
-    /* YoY color rules */
     (function(){
       const yoyCells = document.querySelectorAll('.yoy-cell');
       yoyCells.forEach(cell => {

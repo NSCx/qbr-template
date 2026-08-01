@@ -161,55 +161,36 @@
     .cover-brand{
       display:flex;
       align-items:center;
-      gap:1rem;
-      padding:.8rem 1rem;
-      border:1px solid rgba(255,255,255,.16);
-      background:rgba(255,255,255,.08);
-      backdrop-filter:blur(12px);
-      border-radius:18px;
-      box-shadow:0 18px 40px rgba(2,8,23,.18);
-      max-width:min(460px, 100%);
+      justify-content:center;
+      padding:0;
+      border:none;
+      background:transparent;
+      backdrop-filter:none;
+      border-radius:0;
+      box-shadow:none;
+      max-width:none;
+      width:100%;
     }
     .cover-logo-wrap{
       display:flex;
       align-items:center;
       justify-content:center;
-      width:88px;
-      height:88px;
-      border-radius:20px;
-      background:linear-gradient(180deg, rgba(255,255,255,.18), rgba(255,255,255,.06));
-      border:1px solid rgba(255,255,255,.18);
-      box-shadow:inset 0 1px 0 rgba(255,255,255,.24);
+      width:min(38vw, 420px);
+      height:min(38vw, 420px);
+      border-radius:0;
+      background:transparent;
+      border:none;
+      box-shadow:none;
       flex:0 0 auto;
-      overflow:hidden;
+      overflow:visible;
+      margin-top:clamp(1rem, 3vh, 2rem);
     }
     .cover-logo{
-      width:72%;
-      height:72%;
+      width:100%;
+      height:100%;
       object-fit:contain;
       display:block;
-      filter:drop-shadow(0 8px 18px rgba(0,0,0,.18));
-    }
-    .cover-brand-copy{
-      display:flex;
-      flex-direction:column;
-      gap:.2rem;
-      min-width:0;
-    }
-    .cover-kicker{
-      margin:0;
-      font-size:.78rem;
-      font-weight:700;
-      letter-spacing:.18em;
-      text-transform:uppercase;
-      color:rgba(255,255,255,.72);
-    }
-    .cover-brand-name{
-      margin:0;
-      font-size:1.15rem;
-      font-weight:800;
-      letter-spacing:.02em;
-      color:#fff;
+      filter:drop-shadow(0 18px 36px rgba(0,0,0,.28));
     }
 
     .cover-copy{
@@ -431,8 +412,7 @@
     @media (max-width:820px){
       #slide-3 .exec-grid{grid-template-columns:1fr !important}
       #slide-1 .content{padding:1.1rem 1.1rem 1.6rem 1.1rem}
-      .cover-brand{padding:.7rem .8rem;gap:.8rem}
-      .cover-logo-wrap{width:72px;height:72px;border-radius:16px}
+      .cover-logo-wrap{width:min(52vw, 300px);height:min(52vw, 300px)}
       .cover-copy{max-width:95%;margin:0 0 2.6rem 0}
       .cover-copy::before{left:-.65rem}
       #slide-1 .subtitle{font-size:1.05rem}
@@ -444,8 +424,7 @@
       .nav-controls{left:12px;transform:none;right:auto;bottom:18px}
       .nav-btn{width:40px;height:40px}
       .cover-brand{max-width:100%}
-      .cover-kicker{font-size:.7rem}
-      .cover-brand-name{font-size:1rem}
+      .cover-logo-wrap{width:min(62vw, 240px);height:min(62vw, 240px)}
       .meta-pill{font-size:.86rem;padding:.55rem .8rem}
       #slide-1 .title{font-size:clamp(2.35rem, 10vw, 3.4rem)}
     }
@@ -468,13 +447,9 @@
       <div class="cover-grid" aria-hidden="true"></div>
       <div class="cover-orb" aria-hidden="true"></div>
       <div class="content" role="group" aria-labelledby="main-title">
-        <div class="cover-brand reveal" aria-label="Scorptec branding">
+        <div class="cover-brand reveal" aria-label="Scorptec logo">
           <div class="cover-logo-wrap">
             <img class="cover-logo" src="logo.png" alt="Scorptec logo" />
-          </div>
-          <div class="cover-brand-copy">
-            <p class="cover-kicker">Quarterly Business Review</p>
-            <p class="cover-brand-name">SCORPTEC</p>
           </div>
         </div>
 

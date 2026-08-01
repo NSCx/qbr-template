@@ -640,42 +640,6 @@
       align-items: center;
       justify-content: space-between;
     }
-    .cover-brand-pill {
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      padding: 7px 14px 7px 7px;
-      background: rgba(255,255,255,0.05);
-      border: 1px solid rgba(255,255,255,0.10);
-      border-radius: 12px;
-      backdrop-filter: blur(12px);
-    }
-    .cover-logo-box {
-      width: 40px; height: 40px;
-      border-radius: 8px;
-      background: rgba(255,255,255,0.08);
-      border: 1px solid rgba(255,255,255,0.13);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      overflow: hidden;
-      flex-shrink: 0;
-    }
-    .cover-logo-box img { width: 80%; height: 80%; object-fit: contain; }
-    .cover-brand-name {
-      font-family: var(--font-head);
-      font-size: 14px;
-      font-weight: 700;
-      color: #fff;
-      letter-spacing: .02em;
-    }
-    .cover-brand-tag {
-      font-size: 10px;
-      font-weight: 600;
-      letter-spacing: .10em;
-      text-transform: uppercase;
-      color: rgba(255,255,255,0.46);
-    }
     .cover-confidential {
       font-size: 10px;
       font-weight: 600;
@@ -851,15 +815,7 @@
           <div class="content" role="group" aria-labelledby="main-title">
 
             <header class="cover-header reveal">
-              <div class="cover-brand-pill" aria-label="Scorptec branding">
-                <div class="cover-logo-box">
-                  <img src="logo.png" alt="Scorptec logo" />
-                </div>
-                <div>
-                  <div class="cover-brand-name">SCORPTEC</div>
-                  <div class="cover-brand-tag">Technology Partner</div>
-                </div>
-              </div>
+              <img src="logo.png" alt="Scorptec logo" style="height:40px;object-fit:contain;" />
               <div class="cover-confidential" aria-label="Confidential document">CONFIDENTIAL</div>
             </header>
 

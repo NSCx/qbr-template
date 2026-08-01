@@ -142,6 +142,10 @@
       0%, 100% { transform: translateX(0) scaleY(1);     opacity: 0.6; }
       50%      { transform: translateX(10%) scaleY(1.28); opacity: 1; }
     }
+    @keyframes qbrDimGlow {
+      0%, 100% { opacity: 0.9; filter: saturate(0.92) brightness(0.9); text-shadow: 0 0 10px rgba(0,210,255,0.18); }
+      50%      { opacity: 1;   filter: saturate(1.1) brightness(1.06); text-shadow: 0 0 20px rgba(0,210,255,0.36), 0 0 34px rgba(0,210,255,0.22); }
+    }
 
     /* ── SLIDES ──────────────────────────────────────────── */
     .slide {
@@ -725,6 +729,11 @@
       letter-spacing: -.03em;
     }
     .cover-title .hl { color: var(--cyan); }
+    .cover-title .qbr-line {
+      display: inline-block;
+      white-space: nowrap;
+      animation: qbrDimGlow 6.5s ease-in-out infinite;
+    }
     .cover-desc {
       font-size: 16px;
       color: rgba(255,255,255,0.56);
@@ -830,7 +839,7 @@
     }
     @media (prefers-reduced-motion: reduce) {
       .reveal, .slide, .dot { transition: none !important; }
-      .bg-hex, .bg-aurora-band { animation: none !important; }
+      .bg-hex, .bg-aurora-band, .cover-title .qbr-line { animation: none !important; }
     }
   </style>
 </head>
@@ -859,7 +868,7 @@
 
             <div class="cover-center">
               <div class="cover-eyebrow reveal">QBR 2026 &mdash; First Half</div>
-              <h1 id="main-title" class="cover-title reveal">Scorptec Quarterly<br/>Business <span class="hl">Review</span></h1>
+              <h1 id="main-title" class="cover-title reveal">Scorptec<br/><span class="qbr-line"><span class="hl">Quarterly</span> <span class="hl">Business Review</span></span></h1>
               <p class="cover-desc reveal">Performance, key wins, and next-quarter priorities for 2026 Synnex brand portfolio.</p>
               <div class="cover-pills reveal" aria-label="Review highlights">
                 <span class="cover-pill">2026 1H Review</span>

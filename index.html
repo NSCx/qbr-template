@@ -65,12 +65,6 @@
     }
 
     /* ── GLOBAL BACKGROUND ───────────────────────────────── */
-    .bg-canvas {
-      position: absolute;
-      inset: 0;
-      z-index: 0;
-      pointer-events: none;
-    }
     /* Hexagonal dot matrix */
     .bg-hex {
       position: absolute;
@@ -645,78 +639,6 @@
       z-index: 3;
     }
 
-    /* Cover ambient decoration — diamond grid */
-    .cover-diamond-outer {
-      position: absolute;
-      right: 7%;
-      top: 50%;
-      transform: translateY(-50%) rotate(45deg);
-      width: 500px;
-      height: 500px;
-      border: 1px solid rgba(0,210,255,0.045);
-      z-index: 1;
-      pointer-events: none;
-    }
-    .cover-diamond {
-      position: absolute;
-      right: 7%;
-      top: 50%;
-      transform: translateY(-50%) rotate(45deg);
-      width: 340px;
-      height: 340px;
-      border: 1px solid rgba(0,210,255,0.13);
-      background: linear-gradient(
-        135deg,
-        rgba(0,210,255,0.028) 0%,
-        rgba(59,127,245,0.055) 50%,
-        rgba(0,230,184,0.018) 100%
-      );
-      z-index: 1;
-      pointer-events: none;
-      animation: diamondPulse 11s ease-in-out infinite;
-    }
-    .cover-diamond::before {
-      content: "";
-      position: absolute;
-      top: -4px; left: calc(50% - 4px);
-      width: 8px; height: 8px;
-      border-radius: 50%;
-      background: var(--cyan);
-      box-shadow: 0 0 10px 4px rgba(0,210,255,0.75);
-    }
-    .cover-diamond::after {
-      content: "";
-      position: absolute;
-      bottom: -4px; left: calc(50% - 4px);
-      width: 8px; height: 8px;
-      border-radius: 50%;
-      background: var(--blue);
-      box-shadow: 0 0 10px 4px rgba(59,127,245,0.75);
-    }
-    .cover-diamond-inner {
-      position: absolute;
-      right: 7%;
-      top: 50%;
-      transform: translateY(-50%) rotate(45deg);
-      width: 190px;
-      height: 190px;
-      border: 1px solid rgba(0,210,255,0.08);
-      background: radial-gradient(ellipse at center, rgba(0,210,255,0.045), transparent 70%);
-      z-index: 2;
-      pointer-events: none;
-      animation: diamondPulse 11s ease-in-out infinite 2.5s;
-    }
-    .cover-h-line {
-      position: absolute;
-      right: 0;
-      height: 1px;
-      background: linear-gradient(270deg, rgba(0,210,255,0.28) 0%, rgba(0,210,255,0.07) 40%, transparent 80%);
-      z-index: 1;
-      pointer-events: none;
-    }
-    .cover-h-line-1 { top: 20%; width: 540px; animation: hLineFade 9s ease-in-out infinite; }
-    .cover-h-line-2 { top: 50%; width: 400px; animation: hLineFade 9s ease-in-out infinite 3s; }
-    .cover-h-line-3 { top: 80%; width: 480px; animation: hLineFade 9s ease-in-out infinite 6s; }
     .cover-dot-grid {
       position: absolute;
       top: 5%;
@@ -756,15 +678,6 @@
       filter: blur(5px);
       opacity: .5;
     }
-    @keyframes diamondPulse {
-      0%,100% { opacity: 0.55; }
-      50%      { opacity: 1; }
-    }
-    @keyframes hLineFade {
-      0%,100% { opacity: 0.4; transform: scaleX(0.88); transform-origin: right; }
-      50%      { opacity: 1;   transform: scaleX(1);    transform-origin: right; }
-    }
-
     .cover-header {
       display: flex;
       align-items: center;
@@ -917,14 +830,13 @@
     }
     @media (prefers-reduced-motion: reduce) {
       .reveal, .slide, .dot { transition: none !important; }
-      .cover-diamond, .cover-diamond-inner, .cover-h-line, .bg-hex, .bg-aurora-band { animation: none !important; }
+      .bg-hex, .bg-aurora-band { animation: none !important; }
     }
   </style>
 </head>
 <body>
   <div class="deck-wrapper">
     <div class="deck" id="deck" aria-roledescription="slide deck">
-      <canvas class="bg-canvas" id="bgCanvas" aria-hidden="true"></canvas>
       <div class="bg-hex" aria-hidden="true"></div>
       <div class="bg-aurora" aria-hidden="true">
         <div class="bg-aurora-band bg-aurora-band-1"></div>
@@ -935,12 +847,6 @@
 
       <!-- ── Slide 1: Cover ──────────────────────────────── -->
       <section class="slide active" data-slide="1" id="slide-1" aria-label="Title slide">
-        <div class="cover-diamond-outer" aria-hidden="true"></div>
-        <div class="cover-diamond"       aria-hidden="true"></div>
-        <div class="cover-diamond-inner" aria-hidden="true"></div>
-        <div class="cover-h-line cover-h-line-1" aria-hidden="true"></div>
-        <div class="cover-h-line cover-h-line-2" aria-hidden="true"></div>
-        <div class="cover-h-line cover-h-line-3" aria-hidden="true"></div>
         <div class="cover-dot-grid"      aria-hidden="true"></div>
         <div class="cover-vert-glow"     aria-hidden="true"></div>
         <div class="slide-body">
@@ -1474,100 +1380,6 @@
           cell.style.color = 'var(--muted)';
         }
       });
-    })();
-    /* ── Animated waveforms + diagonal light streaks (canvas) */
-    (function(){
-      if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-      var canvas = document.getElementById('bgCanvas');
-      if (!canvas) return;
-      var ctx = canvas.getContext('2d');
-      var W = 1600, H = 900;
-      canvas.width = W;
-      canvas.height = H;
-
-      /* Flowing sine waves */
-      var waves = [
-        { y: H * 0.18, amp: 28, freq: 0.0028, speed: 0.012, phase: 0.0, r:   0, g: 210, b: 255, alpha: 0.110 },
-        { y: H * 0.38, amp: 44, freq: 0.0022, speed: 0.008, phase: 2.1, r:  59, g: 127, b: 245, alpha: 0.090 },
-        { y: H * 0.57, amp: 36, freq: 0.0034, speed: 0.010, phase: 4.3, r:   0, g: 230, b: 184, alpha: 0.080 },
-        { y: H * 0.75, amp: 22, freq: 0.0040, speed: 0.014, phase: 1.5, r:   0, g: 210, b: 255, alpha: 0.065 },
-        { y: H * 0.90, amp: 16, freq: 0.0030, speed: 0.009, phase: 3.7, r:  59, g: 127, b: 245, alpha: 0.050 },
-      ];
-
-      /* Diagonal light streaks */
-      var PAL_R = [0, 59,  0];
-      var PAL_G = [210, 127, 230];
-      var PAL_B = [255, 245, 184];
-      var COS30 = Math.cos(Math.PI / 6);
-      var SIN30 = Math.sin(Math.PI / 6);
-      var TOTAL_DIST = H * 2.2;
-
-      function makeStreak() {
-        var ci = Math.floor(Math.random() * 3);
-        return {
-          startX: (Math.random() - 0.3) * W * 1.6,
-          progress: Math.random(),
-          speed: 0.0006 + Math.random() * 0.0009,
-          length: 70 + Math.random() * 130,
-          maxAlpha: 0.14 + Math.random() * 0.20,
-          r: PAL_R[ci], g: PAL_G[ci], b: PAL_B[ci],
-        };
-      }
-
-      var streaks = [];
-      for (var i = 0; i < 10; i++) streaks.push(makeStreak());
-
-      function frame() {
-        ctx.clearRect(0, 0, W, H);
-
-        /* Draw waves */
-        waves.forEach(function(w) {
-          w.phase += w.speed;
-          ctx.beginPath();
-          for (var x = 0; x <= W; x += 3) {
-            var y = w.y
-              + Math.sin(x * w.freq + w.phase) * w.amp
-              + Math.sin(x * w.freq * 1.7 + w.phase * 0.6) * (w.amp * 0.28);
-            if (x === 0) ctx.moveTo(x, y);
-            else ctx.lineTo(x, y);
-          }
-          ctx.strokeStyle = 'rgba(' + w.r + ',' + w.g + ',' + w.b + ',' + w.alpha + ')';
-          ctx.lineWidth = 1.5;
-          ctx.stroke();
-        });
-
-        /* Draw diagonal streaks */
-        streaks.forEach(function(s) {
-          s.progress += s.speed;
-          if (s.progress >= 1) {
-            var ns = makeStreak();
-            s.startX = ns.startX; s.progress = 0; s.speed = ns.speed;
-            s.length = ns.length; s.maxAlpha = ns.maxAlpha;
-            s.r = ns.r; s.g = ns.g; s.b = ns.b;
-          }
-          var dist = s.progress * TOTAL_DIST;
-          var hx = s.startX + dist * SIN30;
-          var hy = -120 + dist * COS30;
-          var tx = hx - s.length * SIN30;
-          var ty = hy - s.length * COS30;
-          var fade = s.progress < 0.08 ? s.progress / 0.08
-                   : s.progress > 0.88 ? (1 - s.progress) / 0.12
-                   : 1;
-          var grd = ctx.createLinearGradient(tx, ty, hx, hy);
-          grd.addColorStop(0, 'rgba(' + s.r + ',' + s.g + ',' + s.b + ',0)');
-          grd.addColorStop(1, 'rgba(' + s.r + ',' + s.g + ',' + s.b + ',' + (s.maxAlpha * fade) + ')');
-          ctx.beginPath();
-          ctx.moveTo(tx, ty);
-          ctx.lineTo(hx, hy);
-          ctx.strokeStyle = grd;
-          ctx.lineWidth = 1.2;
-          ctx.stroke();
-        });
-
-        requestAnimationFrame(frame);
-      }
-
-      frame();
     })();
   </script>
 </body>

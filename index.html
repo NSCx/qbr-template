@@ -65,15 +65,71 @@
     }
 
     /* ── GLOBAL BACKGROUND ───────────────────────────────── */
+    .bg-canvas {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+    }
     .bg-grid {
       position: absolute;
       inset: 0;
       z-index: 0;
       pointer-events: none;
       background-image:
-        linear-gradient(rgba(48,115,210,0.048) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(48,115,210,0.048) 1px, transparent 1px);
+        linear-gradient(rgba(48,115,210,0.055) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(48,115,210,0.055) 1px, transparent 1px);
       background-size: 50px 50px;
+      animation: gridPulse 10s ease-in-out infinite;
+    }
+    .bg-scanline {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      pointer-events: none;
+      overflow: hidden;
+    }
+    .bg-scanline::after {
+      content: "";
+      position: absolute;
+      left: 0; right: 0;
+      top: 0;
+      height: 280px;
+      background: linear-gradient(
+        180deg,
+        transparent 0%,
+        rgba(0,210,255,0.010) 30%,
+        rgba(0,210,255,0.030) 50%,
+        rgba(0,210,255,0.010) 70%,
+        transparent 100%
+      );
+      animation: scanSweep 16s linear infinite;
+    }
+    .bg-orb {
+      position: absolute;
+      border-radius: 50%;
+      pointer-events: none;
+      filter: blur(70px);
+      z-index: 1;
+    }
+    .bg-orb-1 {
+      width: 760px; height: 560px;
+      top: -8%; left: -4%;
+      background: radial-gradient(ellipse, rgba(0,210,255,0.08) 0%, transparent 70%);
+      animation: orbDrift1 28s ease-in-out infinite;
+    }
+    .bg-orb-2 {
+      width: 680px; height: 680px;
+      bottom: -18%; right: -6%;
+      background: radial-gradient(ellipse, rgba(59,127,245,0.09) 0%, transparent 70%);
+      animation: orbDrift2 34s ease-in-out infinite;
+    }
+    .bg-orb-3 {
+      width: 440px; height: 440px;
+      top: 20%; left: 42%;
+      transform: translate(-50%,-50%);
+      background: radial-gradient(ellipse, rgba(0,230,184,0.055) 0%, transparent 70%);
+      animation: orbDrift3 22s ease-in-out infinite;
     }
     .bg-radial {
       position: absolute;
@@ -81,10 +137,32 @@
       z-index: 1;
       pointer-events: none;
       background:
-        radial-gradient(ellipse 80% 55% at 18% 14%, rgba(0,210,255,0.065), transparent 65%),
-        radial-gradient(ellipse 65% 60% at 82% 88%, rgba(59,127,245,0.085), transparent 65%),
-        radial-gradient(ellipse 50% 45% at 52% 54%, rgba(0,230,184,0.038), transparent 65%);
+        radial-gradient(ellipse 80% 55% at 18% 14%, rgba(0,210,255,0.050), transparent 65%),
+        radial-gradient(ellipse 65% 60% at 82% 88%, rgba(59,127,245,0.065), transparent 65%),
+        radial-gradient(ellipse 50% 45% at 52% 54%, rgba(0,230,184,0.030), transparent 65%);
       transition: transform .3s ease;
+    }
+    @keyframes gridPulse {
+      0%, 100% { opacity: 0.6; }
+      50%       { opacity: 1; }
+    }
+    @keyframes scanSweep {
+      0%   { transform: translateY(-280px); }
+      100% { transform: translateY(1180px); }
+    }
+    @keyframes orbDrift1 {
+      0%,100% { transform: translate(0,0)    scale(1);    opacity: 0.7; }
+      33%     { transform: translate(6%,10%) scale(1.08); opacity: 1; }
+      66%     { transform: translate(-4%,4%) scale(0.94); opacity: 0.55; }
+    }
+    @keyframes orbDrift2 {
+      0%,100% { transform: translate(0,0)       scale(1);    opacity: 0.7; }
+      40%     { transform: translate(-8%,-7%)   scale(1.12); opacity: 1; }
+      70%     { transform: translate(4%,-14%)   scale(0.88); opacity: 0.6; }
+    }
+    @keyframes orbDrift3 {
+      0%,100% { transform: translate(-50%,-50%) scale(1);    opacity: 0.4; }
+      50%     { transform: translate(-50%,-50%) scale(1.28); opacity: 0.75; }
     }
 
     /* ── SLIDES ──────────────────────────────────────────── */
@@ -626,6 +704,56 @@
       z-index: 2;
       pointer-events: none;
     }
+    .cover-ring3 {
+      position: absolute;
+      right: 7%;
+      top: 50%;
+      width: 575px;
+      height: 575px;
+      border-radius: 50%;
+      border: 1px solid rgba(0,210,255,0.045);
+      z-index: 2;
+      pointer-events: none;
+      animation: ringRotate3 44s linear infinite;
+    }
+    .cover-ring3::before {
+      content: "";
+      position: absolute;
+      top: -4px; left: calc(50% - 4px);
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: var(--cyan);
+      box-shadow: 0 0 10px 3px rgba(0,210,255,0.7);
+    }
+    .cover-ring4 {
+      position: absolute;
+      right: 7%;
+      top: 50%;
+      width: 720px;
+      height: 720px;
+      border-radius: 50%;
+      border: 1px solid rgba(59,127,245,0.030);
+      z-index: 2;
+      pointer-events: none;
+      animation: ringRotate4 68s linear infinite;
+    }
+    .cover-ring4::before {
+      content: "";
+      position: absolute;
+      bottom: -3px; left: calc(50% - 3px);
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--blue);
+      box-shadow: 0 0 8px 2px rgba(59,127,245,0.6);
+    }
+    @keyframes ringRotate3 {
+      from { transform: translateY(-50%) rotate(0deg); }
+      to   { transform: translateY(-50%) rotate(360deg); }
+    }
+    @keyframes ringRotate4 {
+      from { transform: translateY(-50%) rotate(0deg); }
+      to   { transform: translateY(-50%) rotate(-360deg); }
+    }
     .cover-dot-grid {
       position: absolute;
       right: 4%;
@@ -641,8 +769,8 @@
       pointer-events: none;
     }
     @keyframes orbPulse {
-      0%,100% { opacity: .6; transform: translateY(-50%) scale(1); }
-      50%      { opacity: .85; transform: translateY(-50%) scale(1.07); }
+      0%,100% { opacity: .55; transform: translateY(-50%) scale(1); }
+      50%      { opacity: .90; transform: translateY(-50%) scale(1.10); }
     }
 
     .cover-header {
@@ -797,14 +925,20 @@
     }
     @media (prefers-reduced-motion: reduce) {
       .reveal, .slide, .dot { transition: none !important; }
-      .cover-orb { animation: none !important; }
+      .cover-orb, .bg-grid, .bg-orb, .cover-ring3, .cover-ring4 { animation: none !important; }
+      .bg-scanline::after { animation: none !important; }
     }
   </style>
 </head>
 <body>
   <div class="deck-wrapper">
     <div class="deck" id="deck" aria-roledescription="slide deck">
+      <canvas class="bg-canvas" id="bgCanvas" aria-hidden="true"></canvas>
       <div class="bg-grid" aria-hidden="true"></div>
+      <div class="bg-scanline" aria-hidden="true"></div>
+      <div class="bg-orb bg-orb-1" aria-hidden="true"></div>
+      <div class="bg-orb bg-orb-2" aria-hidden="true"></div>
+      <div class="bg-orb bg-orb-3" aria-hidden="true"></div>
       <div class="bg-radial" id="bgRadial" aria-hidden="true"></div>
 
       <!-- ── Slide 1: Cover ──────────────────────────────── -->
@@ -812,6 +946,8 @@
         <div class="cover-orb"      aria-hidden="true"></div>
         <div class="cover-ring"     aria-hidden="true"></div>
         <div class="cover-ring2"    aria-hidden="true"></div>
+        <div class="cover-ring3"    aria-hidden="true"></div>
+        <div class="cover-ring4"    aria-hidden="true"></div>
         <div class="cover-dot-grid" aria-hidden="true"></div>
         <div class="slide-body">
           <div class="content" role="group" aria-labelledby="main-title">
@@ -1344,6 +1480,85 @@
           cell.style.color = 'var(--muted)';
         }
       });
+    })();
+    /* ── Particle field (canvas) ─────────────────────────── */
+    (function(){
+      if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+      var canvas = document.getElementById('bgCanvas');
+      if (!canvas) return;
+      var ctx = canvas.getContext('2d');
+      var W = 1600, H = 900;
+      canvas.width = W;
+      canvas.height = H;
+
+      var COLORS = [[0,210,255],[59,127,245],[0,230,184]];
+      var COUNT = 65;
+      var LINK_DIST_SQ = 160 * 160;
+
+      var ps = [];
+      for (var i = 0; i < COUNT; i++) {
+        var c = COLORS[Math.floor(Math.random() * COLORS.length)];
+        ps.push({
+          x: Math.random() * W, y: Math.random() * H,
+          vx: (Math.random() - 0.5) * 0.22, vy: (Math.random() - 0.5) * 0.22,
+          r: Math.random() * 1.2 + 0.4,
+          alpha: Math.random() * 0.35 + 0.12,
+          pulse: Math.random() * Math.PI * 2,
+          ps: 0.008 + Math.random() * 0.014,
+          r0: c[0], g0: c[1], b0: c[2]
+        });
+      }
+
+      function frame() {
+        ctx.clearRect(0, 0, W, H);
+        var i, j, p, q, dx, dy, d2, a, grd;
+
+        for (i = 0; i < COUNT; i++) {
+          p = ps[i];
+          p.x += p.vx; p.y += p.vy;
+          if (p.x < 0) p.x = W; else if (p.x > W) p.x = 0;
+          if (p.y < 0) p.y = H; else if (p.y > H) p.y = 0;
+          p.pulse += p.ps;
+        }
+
+        ctx.lineWidth = 0.5;
+        for (i = 0; i < COUNT; i++) {
+          p = ps[i];
+          for (j = i + 1; j < COUNT; j++) {
+            q = ps[j];
+            dx = p.x - q.x; dy = p.y - q.y;
+            d2 = dx*dx + dy*dy;
+            if (d2 < LINK_DIST_SQ) {
+              a = (1 - d2 / LINK_DIST_SQ) * 0.10;
+              ctx.beginPath();
+              ctx.moveTo(p.x, p.y);
+              ctx.lineTo(q.x, q.y);
+              ctx.strokeStyle = 'rgba(0,210,255,' + a + ')';
+              ctx.stroke();
+            }
+          }
+        }
+
+        for (i = 0; i < COUNT; i++) {
+          p = ps[i];
+          a = p.alpha * (0.65 + 0.35 * Math.sin(p.pulse));
+          grd = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.r * 7);
+          grd.addColorStop(0, 'rgba('+p.r0+','+p.g0+','+p.b0+','+(a*0.4)+')');
+          grd.addColorStop(1, 'rgba(0,0,0,0)');
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.r * 7, 0, Math.PI * 2);
+          ctx.fillStyle = grd;
+          ctx.fill();
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+          ctx.fillStyle = 'rgba('+p.r0+','+p.g0+','+p.b0+','+a+')';
+          ctx.fill();
+        }
+
+        requestAnimationFrame(frame);
+      }
+
+      frame();
     })();
   </script>
 </body>

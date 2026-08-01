@@ -3,7 +3,6 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <meta name="slides-format" content="viewport" />
   <title>SCORPTEC - Quarterly Business Review</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -26,74 +25,55 @@
       --teal:        #00e6b8;
       --orange:      #ff7c3d;
       --red:         #ff3f64;
-      --shadow:      0 24px 64px rgba(0,0,0,0.55);
-      --glow-cyan:   0 0 28px rgba(0,210,255,0.20);
-      --radius:      14px;
+      --radius:      8px;
       --font-ui:     "Inter", system-ui, -apple-system, sans-serif;
       --font-head:   "Space Grotesk", "Inter", system-ui, sans-serif;
     }
-
     @media (prefers-reduced-motion: reduce) { :root { --reduce-motion: 1; } }
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     html, body {
+      width: 100%;
       height: 100%;
-      background: var(--bg);
-      color: var(--text);
+      background: #020810;
       font-family: var(--font-ui);
       -webkit-font-smoothing: antialiased;
       overflow: hidden;
     }
 
-    /* ── DECK / SLIDES ──────────────────────────────────── */
-    .deck {
-      position: relative;
-      height: 100vh;
-      width: 100vw;
-      overflow: hidden;
-    }
-    @media (min-width:2400px) {
-      .deck { height: 1440px; }
-      html, body { height: 1440px; }
-    }
-
-    .slide {
-      position: absolute;
+    /* ── WRAPPER: fills viewport, centres deck ─────────── */
+    .deck-wrapper {
+      position: fixed;
       inset: 0;
+      background: #020810;
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: clamp(.8rem, 2vw, 1.8rem);
-      opacity: 0;
-      transform: translateY(14px);
-      transition: opacity .42s ease, transform .42s cubic-bezier(.2,.9,.2,1);
-      pointer-events: none;
-    }
-    .slide.active {
-      opacity: 1;
-      transform: translateY(0);
-      pointer-events: auto;
+      overflow: hidden;
     }
 
-    .content {
-      width: 100%;
-      max-width: 2000px;
+    /* ── DECK: fixed 1600×900 (16:9), scales to fit ─────── */
+    .deck {
       position: relative;
-      z-index: 6;
-      padding: 0 1.5rem;
+      width: 1600px;
+      height: 900px;
+      transform-origin: center center;
+      overflow: hidden;
+      flex-shrink: 0;
+      background: linear-gradient(145deg, #050e1c 0%, #081828 55%, #0a1e35 100%);
     }
 
-    /* ── BACKGROUND ─────────────────────────────────────── */
+    /* ── GLOBAL BACKGROUND ───────────────────────────────── */
     .bg-grid {
       position: absolute;
       inset: 0;
       z-index: 0;
       pointer-events: none;
       background-image:
-        linear-gradient(rgba(48,115,210,0.055) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(48,115,210,0.055) 1px, transparent 1px);
-      background-size: 52px 52px;
+        linear-gradient(rgba(48,115,210,0.048) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(48,115,210,0.048) 1px, transparent 1px);
+      background-size: 50px 50px;
     }
     .bg-radial {
       position: absolute;
@@ -107,14 +87,150 @@
       transition: transform .3s ease;
     }
 
+    /* ── SLIDES ──────────────────────────────────────────── */
+    .slide {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      opacity: 0;
+      transform: translateY(12px);
+      transition: opacity .42s ease, transform .42s cubic-bezier(.2,.9,.2,1);
+      pointer-events: none;
+      z-index: 2;
+    }
+    .slide.active {
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: auto;
+    }
+
+    /* ── SLIDE CHROME: header (slides 2-5) ──────────────── */
+    .slide-header {
+      position: relative;
+      z-index: 5;
+      flex-shrink: 0;
+      height: 54px;
+      display: flex;
+      align-items: center;
+      padding: 0 38px;
+      background: rgba(5,12,24,0.97);
+      border-bottom: 1px solid rgba(0,210,255,0.09);
+    }
+    /* top accent bar */
+    .slide-header::before {
+      content: "";
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--cyan) 0%, var(--blue) 55%, rgba(59,127,245,0) 100%);
+    }
+    .sh-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .sh-logo-img {
+      width: 24px;
+      height: 24px;
+      object-fit: contain;
+      opacity: 0.88;
+    }
+    .sh-brand {
+      font-family: var(--font-head);
+      font-size: 12px;
+      font-weight: 700;
+      color: #fff;
+      letter-spacing: .10em;
+    }
+    .sh-sep {
+      width: 1px;
+      height: 16px;
+      background: rgba(255,255,255,0.10);
+      margin: 0 14px;
+      flex-shrink: 0;
+    }
+    .sh-slide-title {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: .10em;
+      text-transform: uppercase;
+      color: rgba(0,210,255,0.72);
+    }
+    .sh-spacer { flex: 1; }
+    .sh-qbr {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: .13em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.22);
+    }
+
+    /* ── SLIDE BODY ──────────────────────────────────────── */
+    .slide-body {
+      flex: 1;
+      min-height: 0;
+      overflow: hidden;
+      position: relative;
+      display: flex;
+      align-items: stretch;
+      padding: 16px 36px;
+    }
+
+    /* ── SLIDE FOOTER ────────────────────────────────────── */
+    .slide-footer {
+      flex-shrink: 0;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      padding: 0 38px;
+      background: rgba(4,10,20,0.98);
+      border-top: 1px solid rgba(48,115,210,0.09);
+      z-index: 5;
+    }
+    .sf-confidential {
+      font-size: 9px;
+      font-weight: 600;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.16);
+    }
+    .sf-spacer { flex: 1; }
+    .sf-company {
+      font-size: 9.5px;
+      font-weight: 600;
+      letter-spacing: .10em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.18);
+      margin-right: 8px;
+    }
+    .sf-dot {
+      width: 3px;
+      height: 3px;
+      border-radius: 50%;
+      background: rgba(0,210,255,0.30);
+      margin-right: 8px;
+      flex-shrink: 0;
+    }
+    .sf-page {
+      font-size: 10px;
+      font-weight: 600;
+      color: rgba(0,210,255,0.40);
+    }
+
     /* ── PANEL / CARD ────────────────────────────────────── */
     .panel {
-      background: var(--surface);
+      background: rgba(10,26,50,0.82);
       border: 1px solid var(--border);
       border-radius: var(--radius);
-      padding: 1.4rem 1.6rem;
+      padding: 16px 20px;
       position: relative;
       overflow: hidden;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      backdrop-filter: blur(3px);
+      box-shadow: 0 2px 40px rgba(0,0,0,0.35);
     }
     .panel::after {
       content: "";
@@ -122,86 +238,95 @@
       top: 0; left: 0; right: 0;
       height: 1px;
       background: linear-gradient(90deg, transparent 5%, var(--cyan) 40%, transparent 95%);
-      opacity: .28;
+      opacity: .18;
       pointer-events: none;
     }
+    /* subtle right-side accent glow on panel */
+    .panel::before {
+      content: "";
+      position: absolute;
+      top: 0; right: 0; bottom: 0;
+      width: 260px;
+      background: radial-gradient(ellipse 100% 80% at 100% 50%, rgba(0,210,255,0.025), transparent 70%);
+      pointer-events: none;
+      z-index: 0;
+    }
+    .panel > * { position: relative; z-index: 1; }
 
-    /* ── TYPOGRAPHY ─────────────────────────────────────── */
+    /* ── TYPOGRAPHY ──────────────────────────────────────── */
     .slide-title {
       font-family: var(--font-head);
-      font-size: clamp(1.05rem, 2vw, 1.5rem);
+      font-size: 16px;
       font-weight: 700;
       color: var(--text);
-      letter-spacing: -.015em;
-      margin-bottom: .2rem;
+      letter-spacing: -.01em;
+      margin-bottom: 3px;
+      flex-shrink: 0;
     }
     .slide-sub {
-      font-size: clamp(.74rem, 1.1vw, .88rem);
+      font-size: 11px;
       color: var(--muted);
-      margin-bottom: 1rem;
+      margin-bottom: 10px;
       line-height: 1.5;
+      flex-shrink: 0;
     }
 
-    /* ── REVEAL ─────────────────────────────────────────── */
+    /* ── REVEAL ──────────────────────────────────────────── */
     .reveal {
       opacity: 0;
-      transform: translateY(12px);
+      transform: translateY(10px);
       transition: opacity .5s ease, transform .5s cubic-bezier(.2,.9,.2,1);
     }
     .reveal.show { opacity: 1; transform: translateY(0); }
 
-    /* ── METRIC CARDS ───────────────────────────────────── */
+    /* ── METRIC CARDS ────────────────────────────────────── */
     .metrics-row {
       display: grid;
-      gap: .7rem;
-      margin-bottom: .9rem;
+      gap: 9px;
+      margin-bottom: 10px;
+      flex-shrink: 0;
     }
     .metric-card {
       background: var(--surface2);
       border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: .75rem 1rem;
+      border-radius: 7px;
+      padding: 9px 12px;
       border-left-width: 3px;
     }
     .metric-card .m-label {
-      font-size: .7rem;
+      font-size: 9px;
       font-weight: 600;
-      letter-spacing: .1em;
+      letter-spacing: .10em;
       text-transform: uppercase;
       color: var(--muted);
-      margin-bottom: .22rem;
+      margin-bottom: 3px;
     }
     .metric-card .m-val {
       font-family: var(--font-head);
-      font-size: clamp(1.15rem, 2.2vw, 1.5rem);
+      font-size: 21px;
       font-weight: 700;
       line-height: 1.1;
     }
-    .metric-card .m-sub { font-size: .75rem; color: var(--muted); margin-top: .12rem; }
-    .mc-green { border-left-color: var(--teal); }
-    .mc-green .m-val { color: var(--teal); }
-    .mc-blue  { border-left-color: var(--blue); }
-    .mc-blue  .m-val { color: var(--blue); }
-    .mc-orange { border-left-color: var(--orange); }
-    .mc-orange .m-val { color: var(--orange); }
-    .mc-red   { border-left-color: var(--red); }
-    .mc-red   .m-val { color: var(--red); }
-    .mc-cyan  { border-left-color: var(--cyan); }
-    .mc-cyan  .m-val { color: var(--cyan); }
+    .metric-card .m-sub { font-size: 10.5px; color: var(--muted); margin-top: 2px; }
+    .mc-green  { border-left-color: var(--teal);   } .mc-green  .m-val { color: var(--teal); }
+    .mc-blue   { border-left-color: var(--blue);   } .mc-blue   .m-val { color: var(--blue); }
+    .mc-orange { border-left-color: var(--orange); } .mc-orange .m-val { color: var(--orange); }
+    .mc-red    { border-left-color: var(--red);    } .mc-red    .m-val { color: var(--red); }
+    .mc-cyan   { border-left-color: var(--cyan);   } .mc-cyan   .m-val { color: var(--cyan); }
 
-    /* ── DATA TABLE ─────────────────────────────────────── */
+    /* ── DATA TABLE ──────────────────────────────────────── */
     .table-wrap {
       overflow: auto;
-      max-height: 60vh;
+      flex: 1;
+      min-height: 0;
       border: 1px solid var(--border);
-      border-radius: 10px;
+      border-radius: 7px;
       background: var(--bg2);
     }
     .data-table {
       width: 100%;
       border-collapse: collapse;
-      font-size: clamp(.75rem, 1.05vw, .88rem);
-      min-width: 800px;
+      font-size: 11.5px;
       font-variant-numeric: tabular-nums;
     }
     .data-table thead th {
@@ -210,9 +335,9 @@
       background: #091a2e;
       z-index: 3;
       text-align: right;
-      padding: .6rem .8rem;
+      padding: 6px 9px;
       border-bottom: 1px solid var(--border);
-      font-size: .68rem;
+      font-size: 9px;
       font-weight: 600;
       letter-spacing: .09em;
       text-transform: uppercase;
@@ -225,15 +350,15 @@
       left: 0;
       z-index: 4;
       background: #091a2e;
-      min-width: 105px;
+      min-width: 82px;
     }
     .data-table tbody tr {
-      border-bottom: 1px solid rgba(48,115,210,0.09);
+      border-bottom: 1px solid rgba(48,115,210,0.08);
       transition: background .13s;
     }
     .data-table tbody tr:hover { background: rgba(0,210,255,0.042); }
     .data-table tbody td {
-      padding: .48rem .8rem;
+      padding: 4.5px 9px;
       text-align: right;
       color: var(--text);
     }
@@ -257,46 +382,47 @@
     .cell-neg  { color: var(--red)   !important; font-weight: 700; }
     .cell-zero { color: var(--muted) !important; font-weight: 600; }
 
-    /* ── INSIGHT CARDS (exec summary) ───────────────────── */
+    /* ── INSIGHT CARDS ───────────────────────────────────── */
     .insight-card {
       background: var(--surface2);
       border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: .85rem 1rem;
+      border-radius: 7px;
+      padding: 11px 13px;
     }
     .insight-card .i-label {
-      font-size: .68rem;
+      font-size: 9px;
       font-weight: 600;
-      letter-spacing: .1em;
+      letter-spacing: .10em;
       text-transform: uppercase;
       color: var(--muted);
-      margin-bottom: .18rem;
+      margin-bottom: 3px;
     }
     .insight-card .i-val {
       font-family: var(--font-head);
-      font-size: clamp(.95rem, 1.8vw, 1.3rem);
+      font-size: 17px;
       font-weight: 700;
       line-height: 1.2;
     }
     .insight-card .i-sub {
-      font-size: .76rem;
+      font-size: 10.5px;
       color: var(--muted);
-      margin-top: .18rem;
+      margin-top: 3px;
       line-height: 1.45;
     }
 
-    /* ── EXEC TABLE ─────────────────────────────────────── */
+    /* ── EXEC TABLE ──────────────────────────────────────── */
     .exec-table-wrap {
       overflow: auto;
-      max-height: 46vh;
+      flex: 1;
+      min-height: 0;
       border: 1px solid var(--border);
-      border-radius: 10px;
+      border-radius: 7px;
       background: var(--bg2);
     }
     .exec-table {
       width: 100%;
       border-collapse: collapse;
-      font-size: clamp(.74rem, 1.05vw, .87rem);
+      font-size: 11.5px;
     }
     .exec-table thead th {
       position: sticky;
@@ -304,22 +430,22 @@
       background: #091a2e;
       z-index: 2;
       text-align: left;
-      padding: .6rem .75rem;
+      padding: 6px 9px;
       border-bottom: 1px solid var(--border);
-      font-size: .68rem;
+      font-size: 9px;
       font-weight: 600;
-      letter-spacing: .1em;
+      letter-spacing: .10em;
       text-transform: uppercase;
       color: var(--muted);
       white-space: nowrap;
     }
     .exec-table tbody tr {
-      border-bottom: 1px solid rgba(48,115,210,0.09);
+      border-bottom: 1px solid rgba(48,115,210,0.08);
       transition: background .13s;
     }
     .exec-table tbody tr:hover { background: rgba(0,210,255,0.038); }
     .exec-table tbody td {
-      padding: .55rem .75rem;
+      padding: 7px 9px;
       color: var(--text);
       vertical-align: top;
       line-height: 1.5;
@@ -329,25 +455,28 @@
     .kpi-chip {
       display: inline-flex;
       align-items: center;
-      padding: .22rem .55rem;
+      padding: 3px 7px;
       background: rgba(0,230,184,0.10);
       border: 1px solid rgba(0,230,184,0.22);
       border-radius: 4px;
       font-weight: 700;
-      font-size: .8rem;
+      font-size: 10.5px;
       color: var(--teal);
       line-height: 1.45;
     }
     .kpi-chip strong { color: var(--teal); }
 
-    /* ── ACTION PLAN CARDS ──────────────────────────────── */
+    /* ── ACTION PLAN CARDS ───────────────────────────────── */
     .priority-card {
       background: var(--surface);
       border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: .95rem 1.1rem;
+      border-radius: 7px;
+      padding: 12px 14px;
       position: relative;
-      padding-left: 1.3rem;
+      padding-left: 18px;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
     }
     .priority-card::before {
       content: "";
@@ -356,229 +485,97 @@
       width: 3px;
       border-radius: 3px 0 0 3px;
     }
-    .pc-red    { }  .pc-red::before    { background: var(--red); }
-    .pc-orange { }  .pc-orange::before { background: var(--orange); }
-    .pc-blue   { }  .pc-blue::before   { background: var(--blue); }
-    .pc-teal   { }  .pc-teal::before   { background: var(--teal); }
-
+    .pc-red::before    { background: var(--red); }
+    .pc-orange::before { background: var(--orange); }
+    .pc-blue::before   { background: var(--blue); }
+    .pc-teal::before   { background: var(--teal); }
     .p-head {
       display: flex;
       align-items: center;
-      gap: .45rem;
-      margin-bottom: .4rem;
+      gap: 7px;
+      margin-bottom: 5px;
     }
     .p-badge {
-      font-size: .66rem;
+      font-size: 9px;
       font-weight: 700;
       letter-spacing: .12em;
       text-transform: uppercase;
-      padding: .2rem .52rem;
-      border-radius: 4px;
+      padding: 2px 6px;
+      border-radius: 3px;
     }
-    .pc-red    .p-badge { background: rgba(255,63,100,0.14); color: var(--red); }
-    .pc-orange .p-badge { background: rgba(255,124,61,0.14); color: var(--orange); }
-    .pc-blue   .p-badge { background: rgba(59,127,245,0.14); color: var(--blue); }
-    .pc-teal   .p-badge { background: rgba(0,230,184,0.11);  color: var(--teal); }
-    .p-days { margin-left: auto; font-size: .66rem; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+    .pc-red    .p-badge { background: rgba(255,63,100,0.14);  color: var(--red); }
+    .pc-orange .p-badge { background: rgba(255,124,61,0.14);  color: var(--orange); }
+    .pc-blue   .p-badge { background: rgba(59,127,245,0.14);  color: var(--blue); }
+    .pc-teal   .p-badge { background: rgba(0,230,184,0.11);   color: var(--teal); }
+    .p-days { margin-left: auto; font-size: 9px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
     .p-title {
       font-family: var(--font-head);
-      font-size: clamp(.85rem, 1.3vw, 1rem);
+      font-size: 13px;
       font-weight: 700;
       color: var(--text);
-      margin-bottom: .28rem;
+      margin-bottom: 5px;
     }
     .p-list {
       list-style: none;
       padding: 0;
-      margin: 0 0 .45rem 0;
+      margin: 0 0 6px 0;
       display: flex;
       flex-direction: column;
-      gap: .2rem;
+      gap: 3px;
+      flex: 1;
     }
     .p-list li {
       display: flex;
       align-items: flex-start;
-      gap: .35rem;
-      font-size: clamp(.74rem, 1.05vw, .85rem);
+      gap: 5px;
+      font-size: 11px;
       color: var(--muted);
-      line-height: 1.5;
+      line-height: 1.45;
     }
-    .p-list li::before { content: "›"; flex-shrink: 0; margin-top: .02em; }
+    .p-list li::before { content: "›"; flex-shrink: 0; }
     .p-target {
-      font-size: clamp(.72rem, .95vw, .82rem);
+      font-size: 10px;
       font-weight: 700;
-      padding: .28rem .58rem;
-      border-radius: 6px;
+      padding: 4px 8px;
+      border-radius: 5px;
       line-height: 1.4;
+      flex-shrink: 0;
     }
-    .pc-red    .p-target { background: rgba(255,63,100,0.10); color: var(--red); }
-    .pc-orange .p-target { background: rgba(255,124,61,0.10); color: var(--orange); }
-    .pc-blue   .p-target { background: rgba(59,127,245,0.10); color: var(--blue); }
-    .pc-teal   .p-target { background: rgba(0,230,184,0.08);  color: var(--teal); }
+    .pc-red    .p-target { background: rgba(255,63,100,0.10);  color: var(--red); }
+    .pc-orange .p-target { background: rgba(255,124,61,0.10);  color: var(--orange); }
+    .pc-blue   .p-target { background: rgba(59,127,245,0.10);  color: var(--blue); }
+    .pc-teal   .p-target { background: rgba(0,230,184,0.08);   color: var(--teal); }
 
-    /* ── COVER SLIDE (slide-1) ──────────────────────────── */
+    /* ── COVER SLIDE ─────────────────────────────────────── */
     #slide-1 {
-      align-items: stretch;
-      justify-content: stretch;
-      padding: 0;
-      overflow: hidden;
       background:
         radial-gradient(ellipse 80% 60% at 85% 52%, rgba(0,180,255,0.13), transparent 58%),
         radial-gradient(ellipse 65% 75% at 12% 82%, rgba(59,127,245,0.15), transparent 60%),
         radial-gradient(ellipse 50% 50% at 50% 10%, rgba(0,210,255,0.07), transparent 55%),
         linear-gradient(140deg, #030a14 0%, #051322 32%, #08213e 64%, #061830 100%);
     }
+    /* cover top accent bar */
+    #slide-1::before {
+      content: "";
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, var(--cyan) 0%, var(--blue) 55%, rgba(59,127,245,0) 100%);
+      z-index: 10;
+    }
+    #slide-1 .slide-body {
+      padding: 0;
+    }
     #slide-1 .content {
-      max-width: none;
       width: 100%;
       height: 100%;
-      padding: clamp(1.4rem,3vw,3rem) clamp(1.5rem,4vw,4rem);
+      padding: 46px 64px 42px;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
       position: relative;
       z-index: 3;
     }
-    .cover-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-    .cover-brand-pill {
-      display: inline-flex;
-      align-items: center;
-      gap: .75rem;
-      padding: .45rem .8rem .45rem .45rem;
-      background: rgba(255,255,255,0.05);
-      border: 1px solid rgba(255,255,255,0.10);
-      border-radius: 12px;
-      backdrop-filter: blur(12px);
-    }
-    .cover-logo-box {
-      width: 48px; height: 48px;
-      border-radius: 9px;
-      background: rgba(255,255,255,0.08);
-      border: 1px solid rgba(255,255,255,0.13);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      overflow: hidden;
-      flex-shrink: 0;
-    }
-    .cover-logo-box img { width: 80%; height: 80%; object-fit: contain; }
-    .cover-brand-name {
-      font-family: var(--font-head);
-      font-size: .92rem;
-      font-weight: 700;
-      color: #fff;
-      letter-spacing: .01em;
-    }
-    .cover-brand-tag {
-      font-size: .67rem;
-      font-weight: 600;
-      letter-spacing: .1em;
-      text-transform: uppercase;
-      color: rgba(255,255,255,0.46);
-    }
-    .cover-confidential {
-      font-size: .68rem;
-      font-weight: 600;
-      letter-spacing: .14em;
-      text-transform: uppercase;
-      color: rgba(255,255,255,0.24);
-      border: 1px solid rgba(255,255,255,0.1);
-      padding: .3rem .65rem;
-      border-radius: 6px;
-    }
-
-    .cover-center {
-      display: flex;
-      flex-direction: column;
-      gap: .9rem;
-      max-width: min(860px, 82%);
-    }
-    .cover-eyebrow {
-      display: inline-flex;
-      align-items: center;
-      gap: .5rem;
-      font-size: .7rem;
-      font-weight: 700;
-      letter-spacing: .16em;
-      text-transform: uppercase;
-      color: var(--cyan);
-    }
-    .cover-eyebrow::before {
-      content: "";
-      width: 20px; height: 2px;
-      background: var(--cyan);
-      border-radius: 2px;
-      flex-shrink: 0;
-    }
-    .cover-title {
-      font-family: var(--font-head);
-      font-size: clamp(2.2rem, 5.2vw, 5rem);
-      font-weight: 700;
-      line-height: 1.05;
-      color: #fff;
-      letter-spacing: -.025em;
-    }
-    .cover-title .hl { color: var(--cyan); }
-    .cover-desc {
-      font-size: clamp(.86rem, 1.4vw, 1.1rem);
-      color: rgba(255,255,255,0.56);
-      max-width: 46ch;
-      line-height: 1.65;
-    }
-    .cover-pills {
-      display: flex;
-      gap: .55rem;
-      flex-wrap: wrap;
-      margin-top: .3rem;
-    }
-    .cover-pill {
-      display: inline-flex;
-      align-items: center;
-      gap: .38rem;
-      padding: .38rem .8rem;
-      background: rgba(0,210,255,0.08);
-      border: 1px solid rgba(0,210,255,0.20);
-      border-radius: 999px;
-      font-size: .76rem;
-      font-weight: 600;
-      color: var(--cyan);
-    }
-    .cover-pill::before {
-      content: "";
-      width: 5px; height: 5px;
-      border-radius: 50%;
-      background: var(--cyan);
-      flex-shrink: 0;
-    }
-
-    .cover-footer {
-      display: flex;
-      align-items: center;
-      gap: 1.8rem;
-      flex-wrap: wrap;
-      padding-top: 1.1rem;
-      border-top: 1px solid rgba(255,255,255,0.07);
-    }
-    .cover-stat { display: flex; flex-direction: column; gap: .12rem; }
-    .cover-stat .s-val {
-      font-family: var(--font-head);
-      font-size: clamp(1.3rem, 2.6vw, 2rem);
-      font-weight: 700;
-      color: #fff;
-      line-height: 1.1;
-    }
-    .cover-stat .s-key {
-      font-size: .66rem;
-      font-weight: 600;
-      letter-spacing: .1em;
-      text-transform: uppercase;
-      color: rgba(255,255,255,0.38);
-    }
-    .cover-divider { width: 1px; height: 36px; background: rgba(255,255,255,0.1); flex-shrink: 0; }
 
     /* Cover ambient decoration */
     .cover-orb {
@@ -586,8 +583,8 @@
       right: 7%;
       top: 50%;
       transform: translateY(-50%);
-      width: min(28vw, 400px);
-      aspect-ratio: 1;
+      width: 310px;
+      height: 310px;
       border-radius: 50%;
       background: radial-gradient(circle at 40% 36%, rgba(0,210,255,0.26), rgba(59,127,245,0.16) 36%, transparent 68%);
       filter: blur(44px);
@@ -600,8 +597,8 @@
       right: 7%;
       top: 50%;
       transform: translateY(-50%);
-      width: min(28vw, 400px);
-      aspect-ratio: 1;
+      width: 310px;
+      height: 310px;
       border-radius: 50%;
       border: 1px solid rgba(0,210,255,0.13);
       z-index: 2;
@@ -612,8 +609,8 @@
       right: 7%;
       top: 50%;
       transform: translateY(-50%);
-      width: min(36vw, 520px);
-      aspect-ratio: 1;
+      width: 430px;
+      height: 430px;
       border-radius: 50%;
       border: 1px solid rgba(0,210,255,0.065);
       z-index: 2;
@@ -622,12 +619,11 @@
     .cover-dot-grid {
       position: absolute;
       right: 4%;
-      bottom: 7%;
-      width: min(32vw, 460px);
-      height: min(26vw, 320px);
+      bottom: 8%;
+      width: 400px;
+      height: 270px;
       border-radius: 20px;
-      background:
-        radial-gradient(circle, rgba(0,210,255,0.25) 1px, transparent 1px);
+      background: radial-gradient(circle, rgba(0,210,255,0.25) 1px, transparent 1px);
       background-size: 22px 22px;
       mask-image: radial-gradient(ellipse 80% 80% at 60% 60%, rgba(0,0,0,.9), transparent);
       opacity: .18;
@@ -639,31 +635,170 @@
       50%      { opacity: .85; transform: translateY(-50%) scale(1.07); }
     }
 
-    /* ── NAV CONTROLS ───────────────────────────────────── */
+    .cover-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .cover-brand-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 7px 14px 7px 7px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.10);
+      border-radius: 12px;
+      backdrop-filter: blur(12px);
+    }
+    .cover-logo-box {
+      width: 40px; height: 40px;
+      border-radius: 8px;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.13);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+    .cover-logo-box img { width: 80%; height: 80%; object-fit: contain; }
+    .cover-brand-name {
+      font-family: var(--font-head);
+      font-size: 14px;
+      font-weight: 700;
+      color: #fff;
+      letter-spacing: .02em;
+    }
+    .cover-brand-tag {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: .10em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.46);
+    }
+    .cover-confidential {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.24);
+      border: 1px solid rgba(255,255,255,0.1);
+      padding: 5px 10px;
+      border-radius: 6px;
+    }
+    .cover-center {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      max-width: 800px;
+    }
+    .cover-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: var(--cyan);
+    }
+    .cover-eyebrow::before {
+      content: "";
+      width: 20px; height: 2px;
+      background: var(--cyan);
+      border-radius: 2px;
+      flex-shrink: 0;
+    }
+    .cover-title {
+      font-family: var(--font-head);
+      font-size: 82px;
+      font-weight: 700;
+      line-height: 1.0;
+      color: #fff;
+      letter-spacing: -.03em;
+    }
+    .cover-title .hl { color: var(--cyan); }
+    .cover-desc {
+      font-size: 16px;
+      color: rgba(255,255,255,0.56);
+      max-width: 48ch;
+      line-height: 1.65;
+    }
+    .cover-pills {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 2px;
+    }
+    .cover-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 14px;
+      background: rgba(0,210,255,0.08);
+      border: 1px solid rgba(0,210,255,0.20);
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--cyan);
+    }
+    .cover-pill::before {
+      content: "";
+      width: 5px; height: 5px;
+      border-radius: 50%;
+      background: var(--cyan);
+      flex-shrink: 0;
+    }
+    .cover-footer {
+      display: flex;
+      align-items: center;
+      gap: 28px;
+      flex-wrap: wrap;
+      padding-top: 18px;
+      border-top: 1px solid rgba(255,255,255,0.07);
+    }
+    .cover-stat { display: flex; flex-direction: column; gap: 2px; }
+    .cover-stat .s-val {
+      font-family: var(--font-head);
+      font-size: 32px;
+      font-weight: 700;
+      color: #fff;
+      line-height: 1.05;
+    }
+    .cover-stat .s-key {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: .10em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.38);
+    }
+    .cover-divider { width: 1px; height: 36px; background: rgba(255,255,255,0.1); flex-shrink: 0; }
+
+    /* ── NAV CONTROLS (inside deck, scales with it) ───────── */
     .nav-controls {
-      position: fixed;
+      position: absolute;
       left: 50%;
       transform: translateX(-50%);
-      bottom: 18px;
+      bottom: 14px;
       z-index: 100;
       display: flex;
       align-items: center;
-      gap: 9px;
-      background: rgba(8,22,40,0.88);
+      gap: 7px;
+      background: rgba(8,22,40,0.90);
       border: 1px solid rgba(48,115,210,0.24);
-      padding: 5px 9px;
+      padding: 4px 8px;
       border-radius: 999px;
       backdrop-filter: blur(16px);
-      box-shadow: 0 8px 32px rgba(0,0,0,0.5), 0 0 0 1px rgba(0,210,255,0.05);
+      box-shadow: 0 6px 24px rgba(0,0,0,0.5), 0 0 0 1px rgba(0,210,255,0.05);
     }
     .nav-btn {
-      width: 36px; height: 36px;
+      width: 30px; height: 30px;
       border-radius: 50%;
       border: none;
       background: transparent;
       color: var(--cyan);
       cursor: pointer;
-      font-size: 1.05rem;
+      font-size: 13px;
       font-weight: 700;
       display: flex;
       align-items: center;
@@ -671,9 +806,9 @@
       transition: background .14s;
     }
     .nav-btn:hover { background: rgba(0,210,255,0.10); }
-    .slide-dots { display: flex; gap: 7px; align-items: center; }
+    .slide-dots { display: flex; gap: 6px; align-items: center; }
     .dot {
-      width: 6px; height: 6px;
+      width: 5px; height: 5px;
       border-radius: 999px;
       background: rgba(255,255,255,0.18);
       cursor: pointer;
@@ -682,30 +817,18 @@
       transition: background .2s, width .22s, box-shadow .22s;
     }
     .dot.active {
-      width: 20px;
+      width: 18px;
       background: var(--cyan);
-      box-shadow: 0 0 10px rgba(0,210,255,0.5);
+      box-shadow: 0 0 8px rgba(0,210,255,0.5);
     }
     .slide-counter {
-      font-size: .76rem;
+      font-size: 11px;
       font-weight: 600;
       color: var(--muted);
-      min-width: 40px;
+      min-width: 34px;
       text-align: center;
     }
 
-    /* ── RESPONSIVE ─────────────────────────────────────── */
-    @media (max-width:820px) {
-      #slide-3 .exec-grid { grid-template-columns: 1fr !important; }
-      .cover-center { max-width: 100%; }
-      .cover-orb, .cover-ring, .cover-ring2, .cover-dot-grid { display: none; }
-      #slide-1 .content { padding: 1.2rem; }
-    }
-    @media (max-width:520px) {
-      .content { padding: 0 .7rem; }
-      .nav-controls { left: 10px; transform: none; }
-      .nav-btn { width: 32px; height: 32px; }
-    }
     @media (prefers-reduced-motion: reduce) {
       .reveal, .slide, .dot { transition: none !important; }
       .cover-orb { animation: none !important; }
@@ -713,385 +836,467 @@
   </style>
 </head>
 <body>
-  <div class="deck" id="deck" aria-roledescription="slide deck">
-    <div class="bg-grid" aria-hidden="true"></div>
-    <div class="bg-radial" id="bgRadial" aria-hidden="true"></div>
+  <div class="deck-wrapper">
+    <div class="deck" id="deck" aria-roledescription="slide deck">
+      <div class="bg-grid" aria-hidden="true"></div>
+      <div class="bg-radial" id="bgRadial" aria-hidden="true"></div>
 
-    <!-- ─── Slide 1: Cover ─────────────────────────────────── -->
-    <section class="slide active" data-slide="1" id="slide-1" aria-label="Title slide">
-      <div class="cover-orb"      aria-hidden="true"></div>
-      <div class="cover-ring"     aria-hidden="true"></div>
-      <div class="cover-ring2"    aria-hidden="true"></div>
-      <div class="cover-dot-grid" aria-hidden="true"></div>
-      <div class="content" role="group" aria-labelledby="main-title">
+      <!-- ── Slide 1: Cover ──────────────────────────────── -->
+      <section class="slide active" data-slide="1" id="slide-1" aria-label="Title slide">
+        <div class="cover-orb"      aria-hidden="true"></div>
+        <div class="cover-ring"     aria-hidden="true"></div>
+        <div class="cover-ring2"    aria-hidden="true"></div>
+        <div class="cover-dot-grid" aria-hidden="true"></div>
+        <div class="slide-body">
+          <div class="content" role="group" aria-labelledby="main-title">
 
-        <header class="cover-header reveal">
-          <div class="cover-brand-pill" aria-label="Scorptec branding">
-            <div class="cover-logo-box">
-              <img src="logo.png" alt="Scorptec logo" />
-            </div>
-            <div>
-              <div class="cover-brand-name">SCORPTEC</div>
-              <div class="cover-brand-tag">Technology Partner</div>
-            </div>
-          </div>
-          <div class="cover-confidential" aria-label="Confidential document">CONFIDENTIAL</div>
-        </header>
-
-        <div class="cover-center">
-          <div class="cover-eyebrow reveal">QBR 2026 &mdash; First Half</div>
-          <h1 id="main-title" class="cover-title reveal">Quarterly<br/>Business <span class="hl">Review</span></h1>
-          <p class="cover-desc reveal">Performance, key wins, and next-quarter priorities for 2026 1H &mdash; Synnex brand portfolio.</p>
-          <div class="cover-pills reveal" aria-label="Review highlights">
-            <span class="cover-pill">2026 1H Review</span>
-            <span class="cover-pill">Performance Snapshot</span>
-            <span class="cover-pill">Growth &amp; Recovery Focus</span>
-          </div>
-        </div>
-
-        <footer class="cover-footer reveal" aria-label="Key metrics">
-          <div class="cover-stat">
-            <span class="s-val">$40.3M</span>
-            <span class="s-key">2026 1H Revenue</span>
-          </div>
-          <div class="cover-divider" aria-hidden="true"></div>
-          <div class="cover-stat">
-            <span class="s-val">+47%</span>
-            <span class="s-key">YoY Growth</span>
-          </div>
-          <div class="cover-divider" aria-hidden="true"></div>
-          <div class="cover-stat">
-            <span class="s-val">39</span>
-            <span class="s-key">Brands Tracked</span>
-          </div>
-          <div class="cover-divider" aria-hidden="true"></div>
-          <div class="cover-stat">
-            <span class="s-val">+$12.9M</span>
-            <span class="s-key">Revenue Added</span>
-          </div>
-        </footer>
-
-      </div>
-    </section>
-
-    <!-- ─── Slide 2: Brand Performance ───────────────────── -->
-    <section class="slide" data-slide="2" id="slide-2" aria-label="Synnex YoY Brand Performance">
-      <div class="content">
-        <div class="panel reveal">
-          <h2 class="slide-title">Scorptec at Synnex &mdash; Brand Performance</h2>
-          <p class="slide-sub">2025 vs 2026 (1H) &mdash; Revenue growth and year-over-year comparison across all brands</p>
-
-          <div class="table-wrap">
-            <table class="data-table">
-              <thead>
-                <tr>
-                  <th>Brand</th>
-                  <th>2025 (1H)</th>
-                  <th>2026 (1H)</th>
-                  <th>Rev Growth (1H)</th>
-                  <th>YoY</th>
-                </tr>
-              </thead>
-              <tbody id="brandYoyBody">
-                <tr><td>ASUS</td><td>$4,858,672.60</td><td>$10,709,708.29</td><td class="cell-pos">$5,851,035.69</td><td class="yoy-cell cell-pos" data-yoy="120">120%</td></tr>
-                <tr><td>LENOV</td><td>$&ndash;</td><td>$3,129,483.72</td><td class="cell-pos">$3,129,483.72</td><td class="yoy-cell cell-zero" data-yoy="">#DIV/0!</td></tr>
-                <tr><td>PNY</td><td>$98,250.00</td><td>$3,073,493.66</td><td class="cell-pos">$2,975,243.66</td><td class="yoy-cell cell-pos" data-yoy="3028">3028%</td></tr>
-                <tr><td>KINGS</td><td>$1,049,489.79</td><td>$2,598,967.46</td><td class="cell-pos">$1,549,477.67</td><td class="yoy-cell cell-pos" data-yoy="148">148%</td></tr>
-                <tr><td>GIGA</td><td>$4,195,068.51</td><td>$5,544,352.13</td><td class="cell-pos">$1,349,283.62</td><td class="yoy-cell cell-pos" data-yoy="32">32%</td></tr>
-                <tr><td>LG</td><td>$1,177,819.55</td><td>$2,053,641.63</td><td class="cell-pos">$875,822.08</td><td class="yoy-cell cell-pos" data-yoy="74">74%</td></tr>
-                <tr><td>WD</td><td>$461,512.10</td><td>$1,205,345.87</td><td class="cell-pos">$743,833.77</td><td class="yoy-cell cell-pos" data-yoy="161">161%</td></tr>
-                <tr><td>SAPHR</td><td>$162,148.00</td><td>$898,856.52</td><td class="cell-pos">$736,708.52</td><td class="yoy-cell cell-pos" data-yoy="454">454%</td></tr>
-                <tr><td>SEAGA</td><td>$1,095,483.94</td><td>$1,685,232.08</td><td class="cell-pos">$589,748.14</td><td class="yoy-cell cell-pos" data-yoy="54">54%</td></tr>
-                <tr><td>TEAM</td><td>$743,283.37</td><td>$1,184,552.00</td><td class="cell-pos">$441,268.63</td><td class="yoy-cell cell-pos" data-yoy="59">59%</td></tr>
-                <tr><td>MAXSN</td><td>$67,624.00</td><td>$115,040.00</td><td class="cell-pos">$47,416.00</td><td class="yoy-cell cell-pos" data-yoy="70">70%</td></tr>
-                <tr><td>RAZER</td><td>$503,551.95</td><td>$540,450.83</td><td class="cell-pos">$36,898.88</td><td class="yoy-cell cell-pos" data-yoy="7">7%</td></tr>
-                <tr><td>NINTD</td><td>$&ndash;</td><td>$3,022.50</td><td class="cell-pos">$3,022.50</td><td class="yoy-cell cell-zero" data-yoy="">#DIV/0!</td></tr>
-                <tr><td>EPOS</td><td>-$408.80</td><td>$&ndash;</td><td class="cell-pos">$408.80</td><td class="yoy-cell cell-neg" data-yoy="-100">-100%</td></tr>
-                <tr><td>HMM</td><td>$25,485.00</td><td>$25,698.00</td><td class="cell-pos">$213.00</td><td class="yoy-cell cell-pos" data-yoy="1">1%</td></tr>
-                <tr><td>ACER</td><td>$528,782.32</td><td>$528,966.65</td><td class="cell-pos">$184.33</td><td class="yoy-cell cell-zero" data-yoy="0">0%</td></tr>
-                <tr><td>FRCTL</td><td>-$155.00</td><td>$&ndash;</td><td class="cell-pos">$155.00</td><td class="yoy-cell cell-neg" data-yoy="-100">-100%</td></tr>
-                <tr><td>OTTER</td><td>$&ndash;</td><td>$&ndash;</td><td class="cell-zero">$&ndash;</td><td class="yoy-cell cell-zero" data-yoy="">#DIV/0!</td></tr>
-                <tr><td>SNLOG</td><td>$&ndash;</td><td>$&ndash;</td><td class="cell-zero">$&ndash;</td><td class="yoy-cell cell-zero" data-yoy="">#DIV/0!</td></tr>
-                <tr><td>ADATA</td><td>$200.00</td><td>$&ndash;</td><td class="cell-neg">-$200.00</td><td class="yoy-cell cell-neg" data-yoy="-100">-100%</td></tr>
-                <tr><td>STM</td><td>$891.07</td><td>$&ndash;</td><td class="cell-neg">-$891.07</td><td class="yoy-cell cell-neg" data-yoy="-100">-100%</td></tr>
-                <tr><td>GALAX</td><td>$33,700.00</td><td>$31,900.00</td><td class="cell-neg">-$1,800.00</td><td class="yoy-cell cell-neg" data-yoy="-5">-5%</td></tr>
-                <tr><td>ALOGI</td><td>$5,182.12</td><td>$533.68</td><td class="cell-neg">-$4,648.44</td><td class="yoy-cell cell-neg" data-yoy="-90">-90%</td></tr>
-                <tr><td>EPSON</td><td>$4,939.28</td><td>$&ndash;</td><td class="cell-neg">-$4,939.28</td><td class="yoy-cell cell-neg" data-yoy="-100">-100%</td></tr>
-                <tr><td>NVIDI</td><td>$49,160.00</td><td>$42,197.00</td><td class="cell-neg">-$6,963.00</td><td class="yoy-cell cell-neg" data-yoy="-14">-14%</td></tr>
-                <tr><td>LACIE</td><td>$66,523.60</td><td>$40,674.21</td><td class="cell-neg">-$25,849.39</td><td class="yoy-cell cell-neg" data-yoy="-39">-39%</td></tr>
-                <tr><td>AMD</td><td>$52,650.00</td><td>$22,850.00</td><td class="cell-neg">-$29,800.00</td><td class="yoy-cell cell-neg" data-yoy="-57">-57%</td></tr>
-                <tr><td>BRTHR</td><td>$36,498.72</td><td>$4,030.06</td><td class="cell-neg">-$32,468.66</td><td class="yoy-cell cell-neg" data-yoy="-89">-89%</td></tr>
-                <tr><td>LOGI</td><td>$1,577,550.21</td><td>$1,532,439.89</td><td class="cell-neg">-$45,110.32</td><td class="yoy-cell cell-neg" data-yoy="-3">-3%</td></tr>
-                <tr><td>MSOFT</td><td>$129,815.16</td><td>$75,075.48</td><td class="cell-neg">-$54,739.68</td><td class="yoy-cell cell-neg" data-yoy="-42">-42%</td></tr>
-                <tr><td>APPLE</td><td>$215,258.08</td><td>$131,791.66</td><td class="cell-neg">-$83,466.42</td><td class="yoy-cell cell-neg" data-yoy="-39">-39%</td></tr>
-                <tr><td>HTC</td><td>$285,869.08</td><td>$106,806.60</td><td class="cell-neg">-$179,062.48</td><td class="yoy-cell cell-neg" data-yoy="-63">-63%</td></tr>
-                <tr><td>NETGR</td><td>$531,569.93</td><td>$268,029.64</td><td class="cell-neg">-$263,540.29</td><td class="yoy-cell cell-neg" data-yoy="-50">-50%</td></tr>
-                <tr><td>COOLM</td><td>$327,557.50</td><td>-$2,913.00</td><td class="cell-neg">-$330,470.50</td><td class="yoy-cell cell-neg" data-yoy="-101">-101%</td></tr>
-                <tr><td>SANDS</td><td>$502,752.28</td><td>$71,115.14</td><td class="cell-neg">-$431,637.14</td><td class="yoy-cell cell-neg" data-yoy="-86">-86%</td></tr>
-                <tr><td>SAM</td><td>$2,659,395.70</td><td>$2,166,736.42</td><td class="cell-neg">-$492,659.28</td><td class="yoy-cell cell-neg" data-yoy="-19">-19%</td></tr>
-                <tr><td>CRSAR</td><td>$2,601,491.27</td><td>$1,648,272.00</td><td class="cell-neg">-$953,219.27</td><td class="yoy-cell cell-neg" data-yoy="-37">-37%</td></tr>
-                <tr><td>HP</td><td>$1,302,502.54</td><td>$141,059.25</td><td class="cell-neg">-$1,161,443.29</td><td class="yoy-cell cell-neg" data-yoy="-89">-89%</td></tr>
-                <tr><td>INTEL</td><td>$2,020,215.02</td><td>$703,421.62</td><td class="cell-neg">-$1,316,793.40</td><td class="yoy-cell cell-neg" data-yoy="-65">-65%</td></tr>
-                <tr class="total-row"><td>Grand Total</td><td>$27,370,328.89</td><td>$40,280,830.98</td><td class="cell-pos">$12,910,502.09</td><td class="yoy-cell cell-pos" data-yoy="47">47%</td></tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ─── Slide 3: Executive Summary ───────────────────── -->
-    <section class="slide" data-slide="3" id="slide-3" aria-label="Executive Summary - Areas to Improve">
-      <div class="content">
-        <div class="panel reveal" style="padding:1.2rem 1.5rem;">
-          <h2 class="slide-title">Executive Summary &mdash; Areas to Improve</h2>
-          <p class="slide-sub">2026 1H performance review vs 2025 1H &mdash; focus: corrective actions for next quarter</p>
-
-          <div class="exec-grid" style="display:grid;grid-template-columns:repeat(3,minmax(190px,1fr));gap:.7rem;margin-bottom:.9rem;">
-            <div class="insight-card">
-              <div class="i-label">Portfolio Concentration Risk</div>
-              <div class="i-val" style="color:var(--orange);">High</div>
-              <div class="i-sub">Growth is concentrated in a few brands while multiple strategic brands declined sharply.</div>
-            </div>
-            <div class="insight-card">
-              <div class="i-label">Largest Absolute Decline</div>
-              <div class="i-val" style="color:var(--red);">INTEL &minus;$1.32M</div>
-              <div class="i-sub">Followed by HP (&minus;$1.16M) and CRSAR (&minus;$0.95M).</div>
-            </div>
-            <div class="insight-card">
-              <div class="i-label">Largest Relative Contraction</div>
-              <div class="i-val" style="color:var(--red);">COOLM &minus;101%</div>
-              <div class="i-sub">Also severe: ADATA/STM/EPSON (&minus;100%), BRTHR (&minus;89%), HP (&minus;89%), SANDS (&minus;86%).</div>
-            </div>
-          </div>
-
-          <div class="exec-table-wrap">
-            <table class="exec-table">
-              <thead>
-                <tr>
-                  <th style="min-width:155px;">Priority Area</th>
-                  <th style="min-width:250px;">What the Data Says</th>
-                  <th style="min-width:235px;">Execution Focus (Next 90 Days)</th>
-                  <th style="min-width:195px;">Target KPI</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>Recover Tier-1 Decliners</td>
-                  <td>Biggest YoY value erosion from <strong>INTEL (&minus;$1.32M)</strong>, <strong>HP (&minus;$1.16M)</strong>, <strong>CRSAR</strong>, and other major brands.</td>
-                  <td>Joint QBRs with vendor + sales leaders, account-level win/loss review, weekly deal-recovery pipeline, promo and pricing interventions.</td>
-                  <td><span class="kpi-chip">Recover <strong>25&ndash;35%</strong> of lost revenue in top 4 decliners by next quarter.</span></td>
-                </tr>
-                <tr>
-                  <td>Stabilize Margin-Leaking / Negative Lines</td>
-                  <td><strong>COOLM</strong> moved to negative sales (<strong>&minus;$2.9K</strong>), with several brands at near-zero run-rates or fully inactive.</td>
-                  <td>SKU rationalization, return/credit root-cause checks, floor-price governance, discontinue non-performing listings.</td>
-                  <td><span class="kpi-chip">Eliminate negative net sales; restore all active lines to positive monthly run-rate.</span></td>
-                </tr>
-                <tr>
-                  <td>Reduce Concentration Risk</td>
-                  <td>Growth is led by a small cluster (ASUS, LENOV, PNY, KINGS, GIGA), while many brands shrink.</td>
-                  <td>Diversification plan across mid-tier brands (LG, WD, SAPHR, TEAM, SEAGA) with bundled offers and channel-specific plays.</td>
-                  <td><span class="kpi-chip">Increase non-top-5 share of growth by <strong>+10 pts</strong>.</span></td>
-                </tr>
-                <tr>
-                  <td>Re-energize Developing Brand Portfolio</td>
-                  <td>Several developing brands recorded softer YoY outcomes this half (e.g., BRTHR, NETGR, HTC, APPLE).</td>
-                  <td>Segment portfolio into defend / incubate / accelerate; assign owner per brand; apply minimum quarterly revenue thresholds.</td>
-                  <td><span class="kpi-chip">Improve aggregate YoY across developing brands by <strong>+15 pts</strong>.</span></td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-
-          <div class="slide-sub" style="margin-top:.65rem;margin-bottom:0;">
-            Executive focus: <strong style="color:var(--text);font-weight:700;">protect gains</strong> from fast-growing brands while executing a structured recovery plan on high-value decliners.
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ─── Slide 4: Key Wins ─────────────────────────────── -->
-    <section class="slide" data-slide="4" id="slide-4" aria-label="Key Wins and Top Performers">
-      <div class="content">
-        <div class="panel reveal" style="padding:1.2rem 1.5rem;">
-          <h2 class="slide-title">Key Wins &amp; Top Performers</h2>
-          <p class="slide-sub">2026 1H standout results vs 2025 1H &mdash; revenue growth leaders driving portfolio expansion</p>
-
-          <div class="metrics-row" style="grid-template-columns:repeat(3,1fr);">
-            <div class="metric-card mc-green">
-              <div class="m-label">Total Portfolio Growth</div>
-              <div class="m-val">+47% YoY</div>
-              <div class="m-sub">$27.4M &rarr; $40.3M &nbsp;(+$12.9M)</div>
-            </div>
-            <div class="metric-card mc-blue">
-              <div class="m-label">Top Growth Brand (Absolute)</div>
-              <div class="m-val">ASUS +$5.85M</div>
-              <div class="m-sub">$4.86M &rarr; $10.71M &nbsp;(+120%)</div>
-            </div>
-            <div class="metric-card mc-orange">
-              <div class="m-label">Top Growth Brand (Relative)</div>
-              <div class="m-val">PNY +3028%</div>
-              <div class="m-sub">$98K &rarr; $3.07M &nbsp;(+$2.98M)</div>
-            </div>
-          </div>
-
-          <div class="table-wrap">
-            <table class="data-table">
-              <thead>
-                <tr>
-                  <th>Brand</th>
-                  <th>2025 1H</th>
-                  <th>2026 1H</th>
-                  <th>Growth ($)</th>
-                  <th>YoY</th>
-                  <th style="text-align:left;min-width:175px;">Why It Matters</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>ASUS</td><td>$4,858,673</td><td>$10,709,708</td>
-                  <td class="cell-pos">+$5,851,036</td><td class="cell-pos">+120%</td>
-                  <td style="text-align:left;color:var(--muted);">Largest absolute contributor; now #1 brand at Synnex for Scorptec.</td>
-                </tr>
-                <tr>
-                  <td>LENOV</td><td style="color:var(--muted);">&mdash;</td><td>$3,129,484</td>
-                  <td class="cell-pos">+$3,129,484</td><td class="cell-pos">New</td>
-                  <td style="text-align:left;color:var(--muted);">New brand onboarded this half; immediate top-3 position.</td>
-                </tr>
-                <tr>
-                  <td>PNY</td><td>$98,250</td><td>$3,073,494</td>
-                  <td class="cell-pos">+$2,975,244</td><td class="cell-pos">+3028%</td>
-                  <td style="text-align:left;color:var(--muted);">Breakout growth; strongest relative performer in the portfolio.</td>
-                </tr>
-                <tr>
-                  <td>KINGS</td><td>$1,049,490</td><td>$2,598,967</td>
-                  <td class="cell-pos">+$1,549,478</td><td class="cell-pos">+148%</td>
-                  <td style="text-align:left;color:var(--muted);">Consistent accelerator; solid momentum into 2H.</td>
-                </tr>
-                <tr>
-                  <td>GIGA</td><td>$4,195,069</td><td>$5,544,352</td>
-                  <td class="cell-pos">+$1,349,284</td><td class="cell-pos">+32%</td>
-                  <td style="text-align:left;color:var(--muted);">High-volume brand sustaining strong double-digit growth.</td>
-                </tr>
-                <tr>
-                  <td>WD</td><td>$461,512</td><td>$1,205,346</td>
-                  <td class="cell-pos">+$743,834</td><td class="cell-pos">+161%</td>
-                  <td style="text-align:left;color:var(--muted);">Storage category revival; well-positioned for 2H expansion.</td>
-                </tr>
-                <tr>
-                  <td>SAPHR</td><td>$162,148</td><td>$898,857</td>
-                  <td class="cell-pos">+$736,709</td><td class="cell-pos">+454%</td>
-                  <td style="text-align:left;color:var(--muted);">Rapid scale-up; approaching $1M run-rate milestone.</td>
-                </tr>
-                <tr>
-                  <td>LG</td><td>$1,177,820</td><td>$2,053,642</td>
-                  <td class="cell-pos">+$875,822</td><td class="cell-pos">+74%</td>
-                  <td style="text-align:left;color:var(--muted);">Crossed $2M mark for first time; monitors category strength.</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-
-          <div class="slide-sub" style="margin-top:.65rem;margin-bottom:0;">
-            8 brands delivered double-digit growth &mdash; collectively adding <strong style="color:var(--text);font-weight:700;">+$17.2M</strong> in new revenue this half.
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ─── Slide 5: 90-Day Action Plan ──────────────────── -->
-    <section class="slide" data-slide="5" id="slide-5" aria-label="90-Day Action Plan">
-      <div class="content">
-        <div class="panel reveal" style="padding:1.2rem 1.5rem;">
-          <h2 class="slide-title">90-Day Action Plan &mdash; 2026 2H Priorities</h2>
-          <p class="slide-sub">Structured execution plan to protect gains, recover decliners, and drive next-quarter growth</p>
-
-          <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:.75rem;">
-
-            <div style="display:flex;flex-direction:column;gap:.65rem;">
-              <div class="priority-card pc-red">
-                <div class="p-head">
-                  <span class="p-badge">Priority 1</span>
-                  <span class="p-days">Days 1&ndash;30</span>
+            <header class="cover-header reveal">
+              <div class="cover-brand-pill" aria-label="Scorptec branding">
+                <div class="cover-logo-box">
+                  <img src="logo.png" alt="Scorptec logo" />
                 </div>
-                <div class="p-title">Recover Tier-1 Decliners</div>
-                <ul class="p-list">
-                  <li>Joint QBRs with INTEL, HP, CRSAR, SAM vendor teams</li>
-                  <li>Account-level win/loss analysis per decliner</li>
-                  <li>Weekly deal-recovery pipeline reviews</li>
-                  <li>Targeted promo and pricing interventions</li>
-                </ul>
-                <div class="p-target">Target: Recover 25&ndash;35% of lost revenue in top 4 decliners</div>
+                <div>
+                  <div class="cover-brand-name">SCORPTEC</div>
+                  <div class="cover-brand-tag">Technology Partner</div>
+                </div>
               </div>
+              <div class="cover-confidential" aria-label="Confidential document">CONFIDENTIAL</div>
+            </header>
 
-              <div class="priority-card pc-orange">
-                <div class="p-head">
-                  <span class="p-badge">Priority 2</span>
-                  <span class="p-days">Days 15&ndash;45</span>
-                </div>
-                <div class="p-title">Stabilise Negative &amp; Zero Lines</div>
-                <ul class="p-list">
-                  <li>SKU rationalisation and listing audit (COOLM, ADATA, STM, EPSON)</li>
-                  <li>Root-cause review for credits and returns</li>
-                  <li>Floor-price governance enforcement</li>
-                  <li>Discontinue non-performing listings</li>
-                </ul>
-                <div class="p-target">Target: Eliminate negative net sales; restore all active lines to positive</div>
+            <div class="cover-center">
+              <div class="cover-eyebrow reveal">QBR 2026 &mdash; First Half</div>
+              <h1 id="main-title" class="cover-title reveal">Quarterly<br/>Business <span class="hl">Review</span></h1>
+              <p class="cover-desc reveal">Performance, key wins, and next-quarter priorities for 2026 1H &mdash; Synnex brand portfolio.</p>
+              <div class="cover-pills reveal" aria-label="Review highlights">
+                <span class="cover-pill">2026 1H Review</span>
+                <span class="cover-pill">Performance Snapshot</span>
+                <span class="cover-pill">Growth &amp; Recovery Focus</span>
               </div>
             </div>
 
-            <div style="display:flex;flex-direction:column;gap:.65rem;">
-              <div class="priority-card pc-blue">
-                <div class="p-head">
-                  <span class="p-badge">Priority 3</span>
-                  <span class="p-days">Days 30&ndash;60</span>
-                </div>
-                <div class="p-title">Reduce Concentration Risk</div>
-                <ul class="p-list">
-                  <li>Diversification plan across mid-tier brands (LG, WD, SAPHR, TEAM, SEAGA)</li>
-                  <li>Bundled offers and channel-specific plays</li>
-                  <li>Mid-tier brand co-op and marketing investment</li>
-                  <li>Monthly brand growth scorecard introduced</li>
-                </ul>
-                <div class="p-target">Target: Increase non-top-5 share of growth by +10 pts</div>
+            <footer class="cover-footer reveal" aria-label="Key metrics">
+              <div class="cover-stat">
+                <span class="s-val">$40.3M</span>
+                <span class="s-key">2026 1H Revenue</span>
               </div>
+              <div class="cover-divider" aria-hidden="true"></div>
+              <div class="cover-stat">
+                <span class="s-val">+47%</span>
+                <span class="s-key">YoY Growth</span>
+              </div>
+              <div class="cover-divider" aria-hidden="true"></div>
+              <div class="cover-stat">
+                <span class="s-val">39</span>
+                <span class="s-key">Brands Tracked</span>
+              </div>
+              <div class="cover-divider" aria-hidden="true"></div>
+              <div class="cover-stat">
+                <span class="s-val">+$12.9M</span>
+                <span class="s-key">Revenue Added</span>
+              </div>
+            </footer>
 
-              <div class="priority-card pc-teal">
-                <div class="p-head">
-                  <span class="p-badge">Priority 4</span>
-                  <span class="p-days">Days 45&ndash;90</span>
-                </div>
-                <div class="p-title">Re-energise Developing Portfolio</div>
-                <ul class="p-list">
-                  <li>Segment brands into Defend / Incubate / Accelerate tiers</li>
-                  <li>Assign brand owner and set minimum quarterly revenue thresholds</li>
-                  <li>Structured recovery plan for NETGR, HTC, APPLE, BRTHR</li>
-                  <li>2H QBR checkpoint: review brand tier assignments</li>
-                </ul>
-                <div class="p-target">Target: Improve aggregate YoY across developing brands by +15 pts</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ── Slide 2: Brand Performance ─────────────────── -->
+      <section class="slide" data-slide="2" id="slide-2" aria-label="Synnex YoY Brand Performance">
+        <div class="slide-header reveal">
+          <div class="sh-logo">
+            <img src="logo.png" class="sh-logo-img" alt="" aria-hidden="true" />
+            <span class="sh-brand">SCORPTEC</span>
+          </div>
+          <div class="sh-sep"></div>
+          <span class="sh-slide-title">Brand Performance</span>
+          <div class="sh-spacer"></div>
+          <span class="sh-qbr">QBR 2026 &middot; 1H</span>
+        </div>
+        <div class="slide-body">
+          <div class="panel reveal">
+            <h2 class="slide-title">Scorptec at Synnex &mdash; Brand Performance</h2>
+            <p class="slide-sub">2025 vs 2026 (1H) &mdash; Revenue growth and year-over-year comparison across all brands</p>
+            <div class="table-wrap">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Brand</th>
+                    <th>2025 (1H)</th>
+                    <th>2026 (1H)</th>
+                    <th>Rev Growth (1H)</th>
+                    <th>YoY</th>
+                  </tr>
+                </thead>
+                <tbody id="brandYoyBody">
+                  <tr><td>ASUS</td><td>$4,858,672.60</td><td>$10,709,708.29</td><td class="cell-pos">$5,851,035.69</td><td class="yoy-cell cell-pos" data-yoy="120">120%</td></tr>
+                  <tr><td>LENOV</td><td>$&ndash;</td><td>$3,129,483.72</td><td class="cell-pos">$3,129,483.72</td><td class="yoy-cell cell-zero" data-yoy="">#DIV/0!</td></tr>
+                  <tr><td>PNY</td><td>$98,250.00</td><td>$3,073,493.66</td><td class="cell-pos">$2,975,243.66</td><td class="yoy-cell cell-pos" data-yoy="3028">3028%</td></tr>
+                  <tr><td>KINGS</td><td>$1,049,489.79</td><td>$2,598,967.46</td><td class="cell-pos">$1,549,477.67</td><td class="yoy-cell cell-pos" data-yoy="148">148%</td></tr>
+                  <tr><td>GIGA</td><td>$4,195,068.51</td><td>$5,544,352.13</td><td class="cell-pos">$1,349,283.62</td><td class="yoy-cell cell-pos" data-yoy="32">32%</td></tr>
+                  <tr><td>LG</td><td>$1,177,819.55</td><td>$2,053,641.63</td><td class="cell-pos">$875,822.08</td><td class="yoy-cell cell-pos" data-yoy="74">74%</td></tr>
+                  <tr><td>WD</td><td>$461,512.10</td><td>$1,205,345.87</td><td class="cell-pos">$743,833.77</td><td class="yoy-cell cell-pos" data-yoy="161">161%</td></tr>
+                  <tr><td>SAPHR</td><td>$162,148.00</td><td>$898,856.52</td><td class="cell-pos">$736,708.52</td><td class="yoy-cell cell-pos" data-yoy="454">454%</td></tr>
+                  <tr><td>SEAGA</td><td>$1,095,483.94</td><td>$1,685,232.08</td><td class="cell-pos">$589,748.14</td><td class="yoy-cell cell-pos" data-yoy="54">54%</td></tr>
+                  <tr><td>TEAM</td><td>$743,283.37</td><td>$1,184,552.00</td><td class="cell-pos">$441,268.63</td><td class="yoy-cell cell-pos" data-yoy="59">59%</td></tr>
+                  <tr><td>MAXSN</td><td>$67,624.00</td><td>$115,040.00</td><td class="cell-pos">$47,416.00</td><td class="yoy-cell cell-pos" data-yoy="70">70%</td></tr>
+                  <tr><td>RAZER</td><td>$503,551.95</td><td>$540,450.83</td><td class="cell-pos">$36,898.88</td><td class="yoy-cell cell-pos" data-yoy="7">7%</td></tr>
+                  <tr><td>NINTD</td><td>$&ndash;</td><td>$3,022.50</td><td class="cell-pos">$3,022.50</td><td class="yoy-cell cell-zero" data-yoy="">#DIV/0!</td></tr>
+                  <tr><td>EPOS</td><td>-$408.80</td><td>$&ndash;</td><td class="cell-pos">$408.80</td><td class="yoy-cell cell-neg" data-yoy="-100">-100%</td></tr>
+                  <tr><td>HMM</td><td>$25,485.00</td><td>$25,698.00</td><td class="cell-pos">$213.00</td><td class="yoy-cell cell-pos" data-yoy="1">1%</td></tr>
+                  <tr><td>ACER</td><td>$528,782.32</td><td>$528,966.65</td><td class="cell-pos">$184.33</td><td class="yoy-cell cell-zero" data-yoy="0">0%</td></tr>
+                  <tr><td>FRCTL</td><td>-$155.00</td><td>$&ndash;</td><td class="cell-pos">$155.00</td><td class="yoy-cell cell-neg" data-yoy="-100">-100%</td></tr>
+                  <tr><td>OTTER</td><td>$&ndash;</td><td>$&ndash;</td><td class="cell-zero">$&ndash;</td><td class="yoy-cell cell-zero" data-yoy="">#DIV/0!</td></tr>
+                  <tr><td>SNLOG</td><td>$&ndash;</td><td>$&ndash;</td><td class="cell-zero">$&ndash;</td><td class="yoy-cell cell-zero" data-yoy="">#DIV/0!</td></tr>
+                  <tr><td>ADATA</td><td>$200.00</td><td>$&ndash;</td><td class="cell-neg">-$200.00</td><td class="yoy-cell cell-neg" data-yoy="-100">-100%</td></tr>
+                  <tr><td>STM</td><td>$891.07</td><td>$&ndash;</td><td class="cell-neg">-$891.07</td><td class="yoy-cell cell-neg" data-yoy="-100">-100%</td></tr>
+                  <tr><td>GALAX</td><td>$33,700.00</td><td>$31,900.00</td><td class="cell-neg">-$1,800.00</td><td class="yoy-cell cell-neg" data-yoy="-5">-5%</td></tr>
+                  <tr><td>ALOGI</td><td>$5,182.12</td><td>$533.68</td><td class="cell-neg">-$4,648.44</td><td class="yoy-cell cell-neg" data-yoy="-90">-90%</td></tr>
+                  <tr><td>EPSON</td><td>$4,939.28</td><td>$&ndash;</td><td class="cell-neg">-$4,939.28</td><td class="yoy-cell cell-neg" data-yoy="-100">-100%</td></tr>
+                  <tr><td>NVIDI</td><td>$49,160.00</td><td>$42,197.00</td><td class="cell-neg">-$6,963.00</td><td class="yoy-cell cell-neg" data-yoy="-14">-14%</td></tr>
+                  <tr><td>LACIE</td><td>$66,523.60</td><td>$40,674.21</td><td class="cell-neg">-$25,849.39</td><td class="yoy-cell cell-neg" data-yoy="-39">-39%</td></tr>
+                  <tr><td>AMD</td><td>$52,650.00</td><td>$22,850.00</td><td class="cell-neg">-$29,800.00</td><td class="yoy-cell cell-neg" data-yoy="-57">-57%</td></tr>
+                  <tr><td>BRTHR</td><td>$36,498.72</td><td>$4,030.06</td><td class="cell-neg">-$32,468.66</td><td class="yoy-cell cell-neg" data-yoy="-89">-89%</td></tr>
+                  <tr><td>LOGI</td><td>$1,577,550.21</td><td>$1,532,439.89</td><td class="cell-neg">-$45,110.32</td><td class="yoy-cell cell-neg" data-yoy="-3">-3%</td></tr>
+                  <tr><td>MSOFT</td><td>$129,815.16</td><td>$75,075.48</td><td class="cell-neg">-$54,739.68</td><td class="yoy-cell cell-neg" data-yoy="-42">-42%</td></tr>
+                  <tr><td>APPLE</td><td>$215,258.08</td><td>$131,791.66</td><td class="cell-neg">-$83,466.42</td><td class="yoy-cell cell-neg" data-yoy="-39">-39%</td></tr>
+                  <tr><td>HTC</td><td>$285,869.08</td><td>$106,806.60</td><td class="cell-neg">-$179,062.48</td><td class="yoy-cell cell-neg" data-yoy="-63">-63%</td></tr>
+                  <tr><td>NETGR</td><td>$531,569.93</td><td>$268,029.64</td><td class="cell-neg">-$263,540.29</td><td class="yoy-cell cell-neg" data-yoy="-50">-50%</td></tr>
+                  <tr><td>COOLM</td><td>$327,557.50</td><td>-$2,913.00</td><td class="cell-neg">-$330,470.50</td><td class="yoy-cell cell-neg" data-yoy="-101">-101%</td></tr>
+                  <tr><td>SANDS</td><td>$502,752.28</td><td>$71,115.14</td><td class="cell-neg">-$431,637.14</td><td class="yoy-cell cell-neg" data-yoy="-86">-86%</td></tr>
+                  <tr><td>SAM</td><td>$2,659,395.70</td><td>$2,166,736.42</td><td class="cell-neg">-$492,659.28</td><td class="yoy-cell cell-neg" data-yoy="-19">-19%</td></tr>
+                  <tr><td>CRSAR</td><td>$2,601,491.27</td><td>$1,648,272.00</td><td class="cell-neg">-$953,219.27</td><td class="yoy-cell cell-neg" data-yoy="-37">-37%</td></tr>
+                  <tr><td>HP</td><td>$1,302,502.54</td><td>$141,059.25</td><td class="cell-neg">-$1,161,443.29</td><td class="yoy-cell cell-neg" data-yoy="-89">-89%</td></tr>
+                  <tr><td>INTEL</td><td>$2,020,215.02</td><td>$703,421.62</td><td class="cell-neg">-$1,316,793.40</td><td class="yoy-cell cell-neg" data-yoy="-65">-65%</td></tr>
+                  <tr class="total-row"><td>Grand Total</td><td>$27,370,328.89</td><td>$40,280,830.98</td><td class="cell-pos">$12,910,502.09</td><td class="yoy-cell cell-pos" data-yoy="47">47%</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        <div class="slide-footer">
+          <span class="sf-confidential">Confidential</span>
+          <div class="sf-spacer"></div>
+          <span class="sf-company">Scorptec &times; Synnex</span>
+          <div class="sf-dot"></div>
+          <span class="sf-page">2 / 5</span>
+        </div>
+      </section>
+
+      <!-- ── Slide 3: Executive Summary ─────────────────── -->
+      <section class="slide" data-slide="3" id="slide-3" aria-label="Executive Summary - Areas to Improve">
+        <div class="slide-header reveal">
+          <div class="sh-logo">
+            <img src="logo.png" class="sh-logo-img" alt="" aria-hidden="true" />
+            <span class="sh-brand">SCORPTEC</span>
+          </div>
+          <div class="sh-sep"></div>
+          <span class="sh-slide-title">Executive Summary</span>
+          <div class="sh-spacer"></div>
+          <span class="sh-qbr">QBR 2026 &middot; 1H</span>
+        </div>
+        <div class="slide-body">
+          <div class="panel reveal">
+            <h2 class="slide-title">Executive Summary &mdash; Areas to Improve</h2>
+            <p class="slide-sub">2026 1H performance review vs 2025 1H &mdash; focus: corrective actions for next quarter</p>
+
+            <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-bottom:10px;flex-shrink:0;">
+              <div class="insight-card">
+                <div class="i-label">Portfolio Concentration Risk</div>
+                <div class="i-val" style="color:var(--orange);">High</div>
+                <div class="i-sub">Growth is concentrated in a few brands while multiple strategic brands declined sharply.</div>
+              </div>
+              <div class="insight-card">
+                <div class="i-label">Largest Absolute Decline</div>
+                <div class="i-val" style="color:var(--red);">INTEL &minus;$1.32M</div>
+                <div class="i-sub">Followed by HP (&minus;$1.16M) and CRSAR (&minus;$0.95M).</div>
+              </div>
+              <div class="insight-card">
+                <div class="i-label">Largest Relative Contraction</div>
+                <div class="i-val" style="color:var(--red);">COOLM &minus;101%</div>
+                <div class="i-sub">Also severe: ADATA/STM/EPSON (&minus;100%), BRTHR (&minus;89%), HP (&minus;89%), SANDS (&minus;86%).</div>
               </div>
             </div>
 
-          </div>
+            <div class="exec-table-wrap">
+              <table class="exec-table">
+                <thead>
+                  <tr>
+                    <th style="min-width:140px;">Priority Area</th>
+                    <th style="min-width:230px;">What the Data Says</th>
+                    <th style="min-width:220px;">Execution Focus (Next 90 Days)</th>
+                    <th style="min-width:185px;">Target KPI</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Recover Tier-1 Decliners</td>
+                    <td>Biggest YoY value erosion from <strong>INTEL (&minus;$1.32M)</strong>, <strong>HP (&minus;$1.16M)</strong>, <strong>CRSAR</strong>, and other major brands.</td>
+                    <td>Joint QBRs with vendor + sales leaders, account-level win/loss review, weekly deal-recovery pipeline, promo and pricing interventions.</td>
+                    <td><span class="kpi-chip">Recover <strong>25&ndash;35%</strong> of lost revenue in top 4 decliners by next quarter.</span></td>
+                  </tr>
+                  <tr>
+                    <td>Stabilize Margin-Leaking / Negative Lines</td>
+                    <td><strong>COOLM</strong> moved to negative sales (<strong>&minus;$2.9K</strong>), with several brands at near-zero run-rates or fully inactive.</td>
+                    <td>SKU rationalization, return/credit root-cause checks, floor-price governance, discontinue non-performing listings.</td>
+                    <td><span class="kpi-chip">Eliminate negative net sales; restore all active lines to positive monthly run-rate.</span></td>
+                  </tr>
+                  <tr>
+                    <td>Reduce Concentration Risk</td>
+                    <td>Growth is led by a small cluster (ASUS, LENOV, PNY, KINGS, GIGA), while many brands shrink.</td>
+                    <td>Diversification plan across mid-tier brands (LG, WD, SAPHR, TEAM, SEAGA) with bundled offers and channel-specific plays.</td>
+                    <td><span class="kpi-chip">Increase non-top-5 share of growth by <strong>+10 pts</strong>.</span></td>
+                  </tr>
+                  <tr>
+                    <td>Re-energize Developing Brand Portfolio</td>
+                    <td>Several developing brands recorded softer YoY outcomes this half (e.g., BRTHR, NETGR, HTC, APPLE).</td>
+                    <td>Segment portfolio into defend / incubate / accelerate; assign owner per brand; apply minimum quarterly revenue thresholds.</td>
+                    <td><span class="kpi-chip">Improve aggregate YoY across developing brands by <strong>+15 pts</strong>.</span></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
 
-          <div class="slide-sub" style="margin-top:.8rem;margin-bottom:0;">
-            Next review checkpoint: <strong style="color:var(--text);font-weight:700;">2026 2H QBR</strong> &mdash; track recovery rates, brand-tier progress, and concentration metrics against these targets.
+            <div class="slide-sub" style="margin-top:8px;margin-bottom:0;flex-shrink:0;">
+              Executive focus: <strong style="color:var(--text);font-weight:700;">protect gains</strong> from fast-growing brands while executing a structured recovery plan on high-value decliners.
+            </div>
           </div>
         </div>
+        <div class="slide-footer">
+          <span class="sf-confidential">Confidential</span>
+          <div class="sf-spacer"></div>
+          <span class="sf-company">Scorptec &times; Synnex</span>
+          <div class="sf-dot"></div>
+          <span class="sf-page">3 / 5</span>
+        </div>
+      </section>
+
+      <!-- ── Slide 4: Key Wins ───────────────────────────── -->
+      <section class="slide" data-slide="4" id="slide-4" aria-label="Key Wins and Top Performers">
+        <div class="slide-header reveal">
+          <div class="sh-logo">
+            <img src="logo.png" class="sh-logo-img" alt="" aria-hidden="true" />
+            <span class="sh-brand">SCORPTEC</span>
+          </div>
+          <div class="sh-sep"></div>
+          <span class="sh-slide-title">Key Wins</span>
+          <div class="sh-spacer"></div>
+          <span class="sh-qbr">QBR 2026 &middot; 1H</span>
+        </div>
+        <div class="slide-body">
+          <div class="panel reveal">
+            <h2 class="slide-title">Key Wins &amp; Top Performers</h2>
+            <p class="slide-sub">2026 1H standout results vs 2025 1H &mdash; revenue growth leaders driving portfolio expansion</p>
+
+            <div class="metrics-row" style="grid-template-columns:repeat(3,1fr);">
+              <div class="metric-card mc-green">
+                <div class="m-label">Total Portfolio Growth</div>
+                <div class="m-val">+47% YoY</div>
+                <div class="m-sub">$27.4M &rarr; $40.3M &nbsp;(+$12.9M)</div>
+              </div>
+              <div class="metric-card mc-blue">
+                <div class="m-label">Top Growth Brand (Absolute)</div>
+                <div class="m-val">ASUS +$5.85M</div>
+                <div class="m-sub">$4.86M &rarr; $10.71M &nbsp;(+120%)</div>
+              </div>
+              <div class="metric-card mc-orange">
+                <div class="m-label">Top Growth Brand (Relative)</div>
+                <div class="m-val">PNY +3028%</div>
+                <div class="m-sub">$98K &rarr; $3.07M &nbsp;(+$2.98M)</div>
+              </div>
+            </div>
+
+            <div class="table-wrap">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Brand</th>
+                    <th>2025 1H</th>
+                    <th>2026 1H</th>
+                    <th>Growth ($)</th>
+                    <th>YoY</th>
+                    <th style="text-align:left;min-width:170px;">Why It Matters</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>ASUS</td><td>$4,858,673</td><td>$10,709,708</td>
+                    <td class="cell-pos">+$5,851,036</td><td class="cell-pos">+120%</td>
+                    <td style="text-align:left;color:var(--muted);">Largest absolute contributor; now #1 brand at Synnex for Scorptec.</td>
+                  </tr>
+                  <tr>
+                    <td>LENOV</td><td style="color:var(--muted);">&mdash;</td><td>$3,129,484</td>
+                    <td class="cell-pos">+$3,129,484</td><td class="cell-pos">New</td>
+                    <td style="text-align:left;color:var(--muted);">New brand onboarded this half; immediate top-3 position.</td>
+                  </tr>
+                  <tr>
+                    <td>PNY</td><td>$98,250</td><td>$3,073,494</td>
+                    <td class="cell-pos">+$2,975,244</td><td class="cell-pos">+3028%</td>
+                    <td style="text-align:left;color:var(--muted);">Breakout growth; strongest relative performer in the portfolio.</td>
+                  </tr>
+                  <tr>
+                    <td>KINGS</td><td>$1,049,490</td><td>$2,598,967</td>
+                    <td class="cell-pos">+$1,549,478</td><td class="cell-pos">+148%</td>
+                    <td style="text-align:left;color:var(--muted);">Consistent accelerator; solid momentum into 2H.</td>
+                  </tr>
+                  <tr>
+                    <td>GIGA</td><td>$4,195,069</td><td>$5,544,352</td>
+                    <td class="cell-pos">+$1,349,284</td><td class="cell-pos">+32%</td>
+                    <td style="text-align:left;color:var(--muted);">High-volume brand sustaining strong double-digit growth.</td>
+                  </tr>
+                  <tr>
+                    <td>WD</td><td>$461,512</td><td>$1,205,346</td>
+                    <td class="cell-pos">+$743,834</td><td class="cell-pos">+161%</td>
+                    <td style="text-align:left;color:var(--muted);">Storage category revival; well-positioned for 2H expansion.</td>
+                  </tr>
+                  <tr>
+                    <td>SAPHR</td><td>$162,148</td><td>$898,857</td>
+                    <td class="cell-pos">+$736,709</td><td class="cell-pos">+454%</td>
+                    <td style="text-align:left;color:var(--muted);">Rapid scale-up; approaching $1M run-rate milestone.</td>
+                  </tr>
+                  <tr>
+                    <td>LG</td><td>$1,177,820</td><td>$2,053,642</td>
+                    <td class="cell-pos">+$875,822</td><td class="cell-pos">+74%</td>
+                    <td style="text-align:left;color:var(--muted);">Crossed $2M mark for first time; monitors category strength.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="slide-sub" style="margin-top:8px;margin-bottom:0;flex-shrink:0;">
+              8 brands delivered double-digit growth &mdash; collectively adding <strong style="color:var(--text);font-weight:700;">+$17.2M</strong> in new revenue this half.
+            </div>
+          </div>
+        </div>
+        <div class="slide-footer">
+          <span class="sf-confidential">Confidential</span>
+          <div class="sf-spacer"></div>
+          <span class="sf-company">Scorptec &times; Synnex</span>
+          <div class="sf-dot"></div>
+          <span class="sf-page">4 / 5</span>
+        </div>
+      </section>
+
+      <!-- ── Slide 5: 90-Day Action Plan ────────────────── -->
+      <section class="slide" data-slide="5" id="slide-5" aria-label="90-Day Action Plan">
+        <div class="slide-header reveal">
+          <div class="sh-logo">
+            <img src="logo.png" class="sh-logo-img" alt="" aria-hidden="true" />
+            <span class="sh-brand">SCORPTEC</span>
+          </div>
+          <div class="sh-sep"></div>
+          <span class="sh-slide-title">Action Plan</span>
+          <div class="sh-spacer"></div>
+          <span class="sh-qbr">QBR 2026 &middot; 1H</span>
+        </div>
+        <div class="slide-body">
+          <div class="panel reveal">
+            <h2 class="slide-title">90-Day Action Plan &mdash; 2026 2H Priorities</h2>
+            <p class="slide-sub">Structured execution plan to protect gains, recover decliners, and drive next-quarter growth</p>
+
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;flex:1;min-height:0;">
+              <div style="display:flex;flex-direction:column;gap:9px;">
+                <div class="priority-card pc-red">
+                  <div class="p-head">
+                    <span class="p-badge">Priority 1</span>
+                    <span class="p-days">Days 1&ndash;30</span>
+                  </div>
+                  <div class="p-title">Recover Tier-1 Decliners</div>
+                  <ul class="p-list">
+                    <li>Joint QBRs with INTEL, HP, CRSAR, SAM vendor teams</li>
+                    <li>Account-level win/loss analysis per decliner</li>
+                    <li>Weekly deal-recovery pipeline reviews</li>
+                    <li>Targeted promo and pricing interventions</li>
+                  </ul>
+                  <div class="p-target">Target: Recover 25&ndash;35% of lost revenue in top 4 decliners</div>
+                </div>
+
+                <div class="priority-card pc-orange">
+                  <div class="p-head">
+                    <span class="p-badge">Priority 2</span>
+                    <span class="p-days">Days 15&ndash;45</span>
+                  </div>
+                  <div class="p-title">Stabilise Negative &amp; Zero Lines</div>
+                  <ul class="p-list">
+                    <li>SKU rationalisation and listing audit (COOLM, ADATA, STM, EPSON)</li>
+                    <li>Root-cause review for credits and returns</li>
+                    <li>Floor-price governance enforcement</li>
+                    <li>Discontinue non-performing listings</li>
+                  </ul>
+                  <div class="p-target">Target: Eliminate negative net sales; restore all active lines to positive</div>
+                </div>
+              </div>
+
+              <div style="display:flex;flex-direction:column;gap:9px;">
+                <div class="priority-card pc-blue">
+                  <div class="p-head">
+                    <span class="p-badge">Priority 3</span>
+                    <span class="p-days">Days 30&ndash;60</span>
+                  </div>
+                  <div class="p-title">Reduce Concentration Risk</div>
+                  <ul class="p-list">
+                    <li>Diversification plan across mid-tier brands (LG, WD, SAPHR, TEAM, SEAGA)</li>
+                    <li>Bundled offers and channel-specific plays</li>
+                    <li>Mid-tier brand co-op and marketing investment</li>
+                    <li>Monthly brand growth scorecard introduced</li>
+                  </ul>
+                  <div class="p-target">Target: Increase non-top-5 share of growth by +10 pts</div>
+                </div>
+
+                <div class="priority-card pc-teal">
+                  <div class="p-head">
+                    <span class="p-badge">Priority 4</span>
+                    <span class="p-days">Days 45&ndash;90</span>
+                  </div>
+                  <div class="p-title">Re-energise Developing Portfolio</div>
+                  <ul class="p-list">
+                    <li>Segment brands into Defend / Incubate / Accelerate tiers</li>
+                    <li>Assign brand owner and set minimum quarterly revenue thresholds</li>
+                    <li>Structured recovery plan for NETGR, HTC, APPLE, BRTHR</li>
+                    <li>2H QBR checkpoint: review brand tier assignments</li>
+                  </ul>
+                  <div class="p-target">Target: Improve aggregate YoY across developing brands by +15 pts</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="slide-sub" style="margin-top:8px;margin-bottom:0;flex-shrink:0;">
+              Next review checkpoint: <strong style="color:var(--text);font-weight:700;">2026 2H QBR</strong> &mdash; track recovery rates, brand-tier progress, and concentration metrics against these targets.
+            </div>
+          </div>
+        </div>
+        <div class="slide-footer">
+          <span class="sf-confidential">Confidential</span>
+          <div class="sf-spacer"></div>
+          <span class="sf-company">Scorptec &times; Synnex</span>
+          <div class="sf-dot"></div>
+          <span class="sf-page">5 / 5</span>
+        </div>
+      </section>
+
+      <!-- ── Navigation (inside deck so it scales) ─────── -->
+      <div class="nav-controls" role="navigation" aria-label="Slide navigation">
+        <button class="nav-btn" id="prevBtn" aria-label="Previous slide" title="Previous (&larr;)">&larr;</button>
+        <div class="slide-dots" id="dotsContainer" role="tablist" aria-label="Slide dots"></div>
+        <div id="slideCounter" class="slide-counter" aria-live="polite">1 / 5</div>
+        <button class="nav-btn" id="nextBtn" aria-label="Next slide" title="Next (&rarr;)">&rarr;</button>
       </div>
-    </section>
 
-  </div><!-- /.deck -->
-
-  <div class="nav-controls" role="navigation" aria-label="Slide navigation">
-    <button class="nav-btn" id="prevBtn" aria-label="Previous slide" title="Previous (&larr;)">&larr;</button>
-    <div class="slide-dots" id="dotsContainer" role="tablist" aria-label="Slide dots"></div>
-    <div id="slideCounter" class="slide-counter" aria-live="polite">1 / 5</div>
-    <button class="nav-btn" id="nextBtn" aria-label="Next slide" title="Next (&rarr;)">&rarr;</button>
-  </div>
+    </div><!-- /.deck -->
+  </div><!-- /.deck-wrapper -->
 
   <script>
+    /* ── 16:9 scale-to-fit (all resolutions) ─────────────── */
+    (function(){
+      var deck = document.getElementById('deck');
+      var W = 1600, H = 900;
+      function fit() {
+        var s = Math.min(window.innerWidth / W, window.innerHeight / H);
+        deck.style.transform = 'scale(' + s + ')';
+      }
+      window.addEventListener('resize', fit);
+      fit();
+    })();
+
     /* ── Slide navigation ─────────────────────────────────── */
     (function(){
       const slides = Array.from(document.querySelectorAll('.slide'));

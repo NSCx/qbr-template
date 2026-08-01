@@ -665,112 +665,124 @@
       z-index: 3;
     }
 
-    /* Cover ambient decoration */
-    .cover-orb {
+    /* Cover ambient decoration — diamond grid */
+    .cover-diamond-outer {
       position: absolute;
       right: 7%;
       top: 50%;
-      transform: translateY(-50%);
-      width: 310px;
-      height: 310px;
-      border-radius: 50%;
-      background: radial-gradient(circle at 40% 36%, rgba(0,210,255,0.26), rgba(59,127,245,0.16) 36%, transparent 68%);
-      filter: blur(44px);
+      transform: translateY(-50%) rotate(45deg);
+      width: 500px;
+      height: 500px;
+      border: 1px solid rgba(0,210,255,0.045);
       z-index: 1;
       pointer-events: none;
-      animation: orbPulse 9s ease-in-out infinite;
     }
-    .cover-ring {
+    .cover-diamond {
       position: absolute;
       right: 7%;
       top: 50%;
-      transform: translateY(-50%);
-      width: 310px;
-      height: 310px;
-      border-radius: 50%;
+      transform: translateY(-50%) rotate(45deg);
+      width: 340px;
+      height: 340px;
       border: 1px solid rgba(0,210,255,0.13);
-      z-index: 2;
+      background: linear-gradient(
+        135deg,
+        rgba(0,210,255,0.028) 0%,
+        rgba(59,127,245,0.055) 50%,
+        rgba(0,230,184,0.018) 100%
+      );
+      z-index: 1;
       pointer-events: none;
+      animation: diamondPulse 11s ease-in-out infinite;
     }
-    .cover-ring2 {
-      position: absolute;
-      right: 7%;
-      top: 50%;
-      transform: translateY(-50%);
-      width: 430px;
-      height: 430px;
-      border-radius: 50%;
-      border: 1px solid rgba(0,210,255,0.065);
-      z-index: 2;
-      pointer-events: none;
-    }
-    .cover-ring3 {
-      position: absolute;
-      right: 7%;
-      top: 50%;
-      width: 575px;
-      height: 575px;
-      border-radius: 50%;
-      border: 1px solid rgba(0,210,255,0.045);
-      z-index: 2;
-      pointer-events: none;
-      animation: ringRotate3 44s linear infinite;
-    }
-    .cover-ring3::before {
+    .cover-diamond::before {
       content: "";
       position: absolute;
       top: -4px; left: calc(50% - 4px);
       width: 8px; height: 8px;
       border-radius: 50%;
       background: var(--cyan);
-      box-shadow: 0 0 10px 3px rgba(0,210,255,0.7);
+      box-shadow: 0 0 10px 4px rgba(0,210,255,0.75);
     }
-    .cover-ring4 {
+    .cover-diamond::after {
+      content: "";
+      position: absolute;
+      bottom: -4px; left: calc(50% - 4px);
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: var(--blue);
+      box-shadow: 0 0 10px 4px rgba(59,127,245,0.75);
+    }
+    .cover-diamond-inner {
       position: absolute;
       right: 7%;
       top: 50%;
-      width: 720px;
-      height: 720px;
-      border-radius: 50%;
-      border: 1px solid rgba(59,127,245,0.030);
+      transform: translateY(-50%) rotate(45deg);
+      width: 190px;
+      height: 190px;
+      border: 1px solid rgba(0,210,255,0.08);
+      background: radial-gradient(ellipse at center, rgba(0,210,255,0.045), transparent 70%);
       z-index: 2;
       pointer-events: none;
-      animation: ringRotate4 68s linear infinite;
+      animation: diamondPulse 11s ease-in-out infinite 2.5s;
     }
-    .cover-ring4::before {
-      content: "";
+    .cover-h-line {
       position: absolute;
-      bottom: -3px; left: calc(50% - 3px);
-      width: 6px; height: 6px;
-      border-radius: 50%;
-      background: var(--blue);
-      box-shadow: 0 0 8px 2px rgba(59,127,245,0.6);
-    }
-    @keyframes ringRotate3 {
-      from { transform: translateY(-50%) rotate(0deg); }
-      to   { transform: translateY(-50%) rotate(360deg); }
-    }
-    @keyframes ringRotate4 {
-      from { transform: translateY(-50%) rotate(0deg); }
-      to   { transform: translateY(-50%) rotate(-360deg); }
-    }
-    .cover-dot-grid {
-      position: absolute;
-      right: 4%;
-      bottom: 8%;
-      width: 400px;
-      height: 270px;
-      border-radius: 20px;
-      background: radial-gradient(circle, rgba(0,210,255,0.25) 1px, transparent 1px);
-      background-size: 22px 22px;
-      mask-image: radial-gradient(ellipse 80% 80% at 60% 60%, rgba(0,0,0,.9), transparent);
-      opacity: .18;
+      right: 0;
+      height: 1px;
+      background: linear-gradient(270deg, rgba(0,210,255,0.28) 0%, rgba(0,210,255,0.07) 40%, transparent 80%);
       z-index: 1;
       pointer-events: none;
     }
-    @keyframes orbPulse {
-      0%,100% { opacity: .55; transform: translateY(-50%) scale(1); }
-      50%      { opacity: .90; transform: translateY(-50%) scale(1.10); }
+    .cover-h-line-1 { top: 20%; width: 540px; animation: hLineFade 9s ease-in-out infinite; }
+    .cover-h-line-2 { top: 50%; width: 400px; animation: hLineFade 9s ease-in-out infinite 3s; }
+    .cover-h-line-3 { top: 80%; width: 480px; animation: hLineFade 9s ease-in-out infinite 6s; }
+    .cover-dot-grid {
+      position: absolute;
+      top: 5%;
+      right: 2%;
+      width: 360px;
+      height: 240px;
+      background: radial-gradient(circle, rgba(0,210,255,0.30) 1px, transparent 1px);
+      background-size: 24px 24px;
+      mask-image: radial-gradient(ellipse 80% 80% at 80% 20%, rgba(0,0,0,.85), transparent);
+      opacity: .16;
+      z-index: 1;
+      pointer-events: none;
+    }
+    .cover-vert-glow {
+      position: absolute;
+      right: 3%;
+      top: 14%;
+      bottom: 14%;
+      width: 1px;
+      background: linear-gradient(
+        180deg,
+        transparent 0%,
+        rgba(0,210,255,0.45) 28%,
+        rgba(0,210,255,0.70) 50%,
+        rgba(0,210,255,0.45) 72%,
+        transparent 100%
+      );
+      z-index: 2;
+      pointer-events: none;
+    }
+    .cover-vert-glow::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      left: -5px; right: -5px;
+      background: inherit;
+      filter: blur(5px);
+      opacity: .5;
+    }
+    @keyframes diamondPulse {
+      0%,100% { opacity: 0.55; }
+      50%      { opacity: 1; }
+    }
+    @keyframes hLineFade {
+      0%,100% { opacity: 0.4; transform: scaleX(0.88); transform-origin: right; }
+      50%      { opacity: 1;   transform: scaleX(1);    transform-origin: right; }
     }
 
     .cover-header {
@@ -925,7 +937,7 @@
     }
     @media (prefers-reduced-motion: reduce) {
       .reveal, .slide, .dot { transition: none !important; }
-      .cover-orb, .bg-grid, .bg-orb, .cover-ring3, .cover-ring4 { animation: none !important; }
+      .cover-diamond, .cover-diamond-inner, .cover-h-line, .bg-grid, .bg-orb { animation: none !important; }
       .bg-scanline::after { animation: none !important; }
     }
   </style>
@@ -943,12 +955,14 @@
 
       <!-- ── Slide 1: Cover ──────────────────────────────── -->
       <section class="slide active" data-slide="1" id="slide-1" aria-label="Title slide">
-        <div class="cover-orb"      aria-hidden="true"></div>
-        <div class="cover-ring"     aria-hidden="true"></div>
-        <div class="cover-ring2"    aria-hidden="true"></div>
-        <div class="cover-ring3"    aria-hidden="true"></div>
-        <div class="cover-ring4"    aria-hidden="true"></div>
-        <div class="cover-dot-grid" aria-hidden="true"></div>
+        <div class="cover-diamond-outer" aria-hidden="true"></div>
+        <div class="cover-diamond"       aria-hidden="true"></div>
+        <div class="cover-diamond-inner" aria-hidden="true"></div>
+        <div class="cover-h-line cover-h-line-1" aria-hidden="true"></div>
+        <div class="cover-h-line cover-h-line-2" aria-hidden="true"></div>
+        <div class="cover-h-line cover-h-line-3" aria-hidden="true"></div>
+        <div class="cover-dot-grid"      aria-hidden="true"></div>
+        <div class="cover-vert-glow"     aria-hidden="true"></div>
         <div class="slide-body">
           <div class="content" role="group" aria-labelledby="main-title">
 

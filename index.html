@@ -296,6 +296,19 @@
     .perf-table .cell-neg{ color:#b91c1c; font-weight:700; }
     .perf-table .cell-zero{ color:#6b7280; font-weight:700; }
 
+    .slide-logo{
+      position:absolute;
+      top:clamp(1rem,2vw,1.8rem);
+      left:clamp(1rem,2.5vw,2.2rem);
+      z-index:4;
+      width:clamp(88px, 10vw, 150px);
+      height:auto;
+      object-fit:contain;
+      filter:drop-shadow(0 10px 24px rgba(0,0,0,.22));
+      pointer-events:none;
+      user-select:none;
+    }
+
     @media (prefers-reduced-motion: reduce){
       .blob,#particleCanvas,.title .gradient-text,.card:hover,#slide-1::before,#slide-1 .cover-wave{animation:none!important;transition:none!important}
     }
@@ -304,6 +317,7 @@
       #slide-1 .content{padding:1.1rem 1.1rem 1.6rem 1.1rem}
       .cover-copy{max-width:95%;margin:0 0 2.6rem 0}
       #slide-1 .subtitle{font-size:1.05rem}
+      .slide-logo{width:92px}
     }
     @media (max-width:520px){
       .content{padding:0 .75rem}
@@ -326,6 +340,7 @@
     <!-- Slide 1 -->
     <section class="slide active" data-slide="1" id="slide-1" aria-label="Title slide">
       <div class="cover-wave" aria-hidden="true"></div>
+      <img class="slide-logo" src="logo.png" alt="Scorptec logo" />
       <div class="content" role="group" aria-labelledby="main-title">
         <div class="cover-copy">
           <h1 id="main-title" class="title reveal"><span class="gradient-text">SCORPTEC - Quarterly Business Review</span></h1>
@@ -438,26 +453,26 @@
               <tbody>
                 <tr>
                   <td style="padding:.6rem;border-bottom:1px solid var(--glass-border);font-weight:700;">Recover Tier-1 Decliners</td>
-                  <td style="padding:.6rem;border-bottom:1px solid var(--glass-border);">Biggest YoY value erosion from <strong>INTEL (-$1.32M)</strong>, <strong>HP (-$1.16M)</strong>, <strong>CRSAR ([...]</strong></td>
-                  <td style="padding:.6rem;border-bottom:1px solid var(--glass-border);">Joint QBRs with vendor + sales leaders, account-level win/loss review, weekly deal-recovery pipeline, promo and[...]</td>
+                  <td style="padding:.6rem;border-bottom:1px solid var(--glass-border);">Biggest YoY value erosion from <strong>INTEL (-$1.32M)</strong>, <strong>HP (-$1.16M)</strong>, <strong>CRSAR (-$0.95M)</strong>.</td>
+                  <td style="padding:.6rem;border-bottom:1px solid var(--glass-border);">Joint QBRs with vendor + sales leaders, account-level win/loss review, weekly deal-recovery pipeline, promo and inventory fixes.</td>
                   <td style="padding:.6rem;border-bottom:1px solid var(--glass-border);">Recover <strong>25–35%</strong> of lost revenue in top 4 decliners by next quarter.</td>
                 </tr>
                 <tr>
                   <td style="padding:.6rem;border-bottom:1px solid var(--glass-border);font-weight:700;">Stabilize Margin-Leaking / Negative Lines</td>
-                  <td style="padding:.6rem;border-bottom:1px solid var(--glass-border);"><strong>COOLM</strong> moved to negative sales (<strong>-$2.9K</strong>), with several brands at near-zero run-[...]</td>
-                  <td style="padding:.6rem;border-bottom:1px solid var(--glass-border);">SKU rationalization, return/credit root-cause checks, floor-price governance, discontinue non-performing listin[...]</td>
+                  <td style="padding:.6rem;border-bottom:1px solid var(--glass-border);"><strong>COOLM</strong> moved to negative sales (<strong>-$2.9K</strong>), with several brands at near-zero run-rate or active decline.</td>
+                  <td style="padding:.6rem;border-bottom:1px solid var(--glass-border);">SKU rationalization, return/credit root-cause checks, floor-price governance, discontinue non-performing listings.</td>
                   <td style="padding:.6rem;border-bottom:1px solid var(--glass-border);">Eliminate negative net sales; restore all active lines to positive monthly run-rate.</td>
                 </tr>
                 <tr>
                   <td style="padding:.6rem;border-bottom:1px solid var(--glass-border);font-weight:700;">Reduce Concentration Risk</td>
                   <td style="padding:.6rem;border-bottom:1px solid var(--glass-border);">Growth is led by a small cluster (ASUS, LENOV, PNY, KINGS, GIGA), while many brands shrink.</td>
-                  <td style="padding:.6rem;border-bottom:1px solid var(--glass-border);">Diversification plan across mid-tier brands (LG, WD, SAPHR, TEAM, SEAGA) with bundled offers and channel-specif[...]</td>
+                  <td style="padding:.6rem;border-bottom:1px solid var(--glass-border);">Diversification plan across mid-tier brands (LG, WD, SAPHR, TEAM, SEAGA) with bundled offers and channel-specific campaigns.</td>
                   <td style="padding:.6rem;border-bottom:1px solid var(--glass-border);">Increase non-top-5 share of growth by <strong>+10 pts</strong>.</td>
                 </tr>
                 <tr>
                   <td style="padding:.6rem;border-bottom:1px solid var(--glass-border);font-weight:700;">Re-energize Developing Brand Portfolio</td>
                   <td style="padding:.6rem;border-bottom:1px solid var(--glass-border);">Several developing brands recorded softer YoY outcomes this half (e.g., BRTHR, NETGR, HTC, APPLE).</td>
-                  <td style="padding:.6rem;border-bottom:1px solid var(--glass-border);">Segment portfolio into defend / incubate / accelerate; assign owner per brand; apply minimum quarterly revenue [...]</td>
+                  <td style="padding:.6rem;border-bottom:1px solid var(--glass-border);">Segment portfolio into defend / incubate / accelerate; assign owner per brand; apply minimum quarterly revenue thresholds.</td>
                   <td style="padding:.6rem;border-bottom:1px solid var(--glass-border);">Improve aggregate YoY across developing brands by <strong>+15 pts</strong>.</td>
                 </tr>
               </tbody>

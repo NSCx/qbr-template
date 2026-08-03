@@ -774,6 +774,43 @@
       max-width: 48ch;
       line-height: 1.65;
     }
+    .cover-org-chart {
+      margin-top: 4px;
+      max-width: 760px;
+      padding: 10px 12px;
+      border-radius: 10px;
+      border: 1px solid rgba(0,210,255,0.22);
+      background: rgba(7,20,36,0.70);
+    }
+    .cover-org-title {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.72);
+      text-align: center;
+    }
+    .cover-org-chart-line {
+      width: 1px;
+      height: 12px;
+      margin: 6px auto;
+      background: rgba(0,210,255,0.55);
+    }
+    .cover-org-team {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0,1fr));
+      gap: 8px;
+    }
+    .cover-org-member {
+      border: 1px solid rgba(255,255,255,0.14);
+      border-radius: 8px;
+      background: rgba(255,255,255,0.04);
+      padding: 7px 8px;
+      font-size: 11px;
+      font-weight: 600;
+      text-align: center;
+      color: rgba(238,247,255,0.92);
+    }
     .cover-pills {
       display: flex;
       gap: 8px;
@@ -1045,6 +1082,15 @@
               <div class="cover-eyebrow reveal">QBR 2026 &mdash; First Half</div>
               <h1 id="main-title" class="cover-title reveal">Scorptec<br/><span class="qbr-line"><span class="hl">Quarterly</span> <span class="hl">Business Review</span></span></h1>
               <p class="cover-desc reveal">Performance, key wins, and next-quarter priorities for 2026 Synnex brand portfolio.</p>
+              <div class="cover-org-chart reveal" aria-label="Supporting team org chart">
+                <div class="cover-org-title">Supporting Team</div>
+                <div class="cover-org-chart-line" aria-hidden="true"></div>
+                <div class="cover-org-team">
+                  <div class="cover-org-member">Veronica Lu</div>
+                  <div class="cover-org-member">Eugene Ng</div>
+                  <div class="cover-org-member">Christina Chu</div>
+                </div>
+              </div>
               <div class="cover-pills reveal" aria-label="Review highlights">
                 <span class="cover-pill">2026 1H Review</span>
                 <span class="cover-pill">Performance Snapshot</span>

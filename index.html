@@ -452,6 +452,40 @@
     .cell-pos  { color: var(--teal)  !important; font-weight: 700; }
     .cell-neg  { color: var(--red)   !important; font-weight: 700; }
     .cell-zero { color: var(--muted) !important; font-weight: 600; }
+    .stacked-table-section {
+      display: grid;
+      gap: 10px;
+      flex: 1;
+      min-height: 0;
+    }
+    .table-section-title {
+      font-size: 9px;
+      font-weight: 600;
+      letter-spacing: .10em;
+      text-transform: uppercase;
+      color: rgba(0,210,255,0.72);
+      margin-bottom: 5px;
+    }
+    .table-wrap.compact-wrap {
+      flex: 0 0 auto;
+      max-height: 180px;
+    }
+    .table-wrap.compact-wrap .data-table {
+      font-size: 11px;
+    }
+    .table-wrap.compact-wrap .data-table tbody td {
+      padding: 4px 9px;
+    }
+    .analysis-note {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 9px;
+      flex-shrink: 0;
+      margin-top: 8px;
+    }
+    .analysis-note .insight-card {
+      padding: 9px 11px;
+    }
 
     /* ── INSIGHT CARDS ───────────────────────────────────── */
     .insight-card {
@@ -1017,65 +1051,109 @@
               </div>
             </div>
 
-            <div class="table-wrap">
-              <table class="data-table">
-                <thead>
-                  <tr>
-                    <th>Brand</th>
-                    <th>2025 1H</th>
-                    <th>2026 1H</th>
-                    <th>Growth ($)</th>
-                    <th>YoY</th>
-                    <th style="text-align:left;min-width:170px;">Why It Matters</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td>ASUS</td><td>$4,858,673</td><td>$10,709,708</td>
-                    <td class="cell-pos">+$5,851,036</td><td class="cell-pos">+120%</td>
-                    <td style="text-align:left;color:var(--muted);">Largest absolute contributor; now #1 brand at Synnex for Scorptec.</td>
-                  </tr>
-                  <tr>
-                    <td>LENOV</td><td style="color:var(--muted);">&mdash;</td><td>$3,129,484</td>
-                    <td class="cell-pos">+$3,129,484</td><td class="cell-pos">New</td>
-                    <td style="text-align:left;color:var(--muted);">New brand onboarded this half; immediate top-3 position.</td>
-                  </tr>
-                  <tr>
-                    <td>PNY</td><td>$98,250</td><td>$3,073,494</td>
-                    <td class="cell-pos">+$2,975,244</td><td class="cell-pos">+3028%</td>
-                    <td style="text-align:left;color:var(--muted);">Breakout growth; strongest relative performer in the portfolio.</td>
-                  </tr>
-                  <tr>
-                    <td>KINGS</td><td>$1,049,490</td><td>$2,598,967</td>
-                    <td class="cell-pos">+$1,549,478</td><td class="cell-pos">+148%</td>
-                    <td style="text-align:left;color:var(--muted);">Consistent accelerator; solid momentum into 2H.</td>
-                  </tr>
-                  <tr>
-                    <td>GIGA</td><td>$4,195,069</td><td>$5,544,352</td>
-                    <td class="cell-pos">+$1,349,284</td><td class="cell-pos">+32%</td>
-                    <td style="text-align:left;color:var(--muted);">High-volume brand sustaining strong double-digit growth.</td>
-                  </tr>
-                  <tr>
-                    <td>WD</td><td>$461,512</td><td>$1,205,346</td>
-                    <td class="cell-pos">+$743,834</td><td class="cell-pos">+161%</td>
-                    <td style="text-align:left;color:var(--muted);">Storage category revival; well-positioned for 2H expansion.</td>
-                  </tr>
-                  <tr>
-                    <td>SAPHR</td><td>$162,148</td><td>$898,857</td>
-                    <td class="cell-pos">+$736,709</td><td class="cell-pos">+454%</td>
-                    <td style="text-align:left;color:var(--muted);">Rapid scale-up; approaching $1M run-rate milestone.</td>
-                  </tr>
-                  <tr>
-                    <td>LG</td><td>$1,177,820</td><td>$2,053,642</td>
-                    <td class="cell-pos">+$875,822</td><td class="cell-pos">+74%</td>
-                    <td style="text-align:left;color:var(--muted);">Crossed $2M mark for first time; monitors category strength.</td>
-                  </tr>
-                </tbody>
-              </table>
+            <div class="stacked-table-section">
+              <div>
+                <div class="table-section-title">Top growth leaders</div>
+                <div class="table-wrap compact-wrap">
+                  <table class="data-table">
+                    <thead>
+                      <tr>
+                        <th>Brand</th>
+                        <th>2025 1H</th>
+                        <th>2026 1H</th>
+                        <th>Growth ($)</th>
+                        <th>YoY</th>
+                        <th style="text-align:left;min-width:170px;">Why It Matters</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>ASUS</td><td>$4,858,673</td><td>$10,709,708</td>
+                        <td class="cell-pos">+$5,851,036</td><td class="cell-pos">+120%</td>
+                        <td style="text-align:left;color:var(--muted);">Largest absolute contributor; now #1 brand at Synnex for Scorptec.</td>
+                      </tr>
+                      <tr>
+                        <td>LENOV</td><td style="color:var(--muted);">&mdash;</td><td>$3,129,484</td>
+                        <td class="cell-pos">+$3,129,484</td><td class="cell-pos">New</td>
+                        <td style="text-align:left;color:var(--muted);">New brand onboarded this half; immediate top-3 position.</td>
+                      </tr>
+                      <tr>
+                        <td>PNY</td><td>$98,250</td><td>$3,073,494</td>
+                        <td class="cell-pos">+$2,975,244</td><td class="cell-pos">+3028%</td>
+                        <td style="text-align:left;color:var(--muted);">Breakout growth; strongest relative performer in the portfolio.</td>
+                      </tr>
+                      <tr>
+                        <td>KINGS</td><td>$1,049,490</td><td>$2,598,967</td>
+                        <td class="cell-pos">+$1,549,478</td><td class="cell-pos">+148%</td>
+                        <td style="text-align:left;color:var(--muted);">Consistent accelerator; solid momentum into 2H.</td>
+                      </tr>
+                      <tr>
+                        <td>GIGA</td><td>$4,195,069</td><td>$5,544,352</td>
+                        <td class="cell-pos">+$1,349,284</td><td class="cell-pos">+32%</td>
+                        <td style="text-align:left;color:var(--muted);">High-volume brand sustaining strong double-digit growth.</td>
+                      </tr>
+                      <tr>
+                        <td>WD</td><td>$461,512</td><td>$1,205,346</td>
+                        <td class="cell-pos">+$743,834</td><td class="cell-pos">+161%</td>
+                        <td style="text-align:left;color:var(--muted);">Storage category revival; well-positioned for 2H expansion.</td>
+                      </tr>
+                      <tr>
+                        <td>SAPHR</td><td>$162,148</td><td>$898,857</td>
+                        <td class="cell-pos">+$736,709</td><td class="cell-pos">+454%</td>
+                        <td style="text-align:left;color:var(--muted);">Rapid scale-up; approaching $1M run-rate milestone.</td>
+                      </tr>
+                      <tr>
+                        <td>LG</td><td>$1,177,820</td><td>$2,053,642</td>
+                        <td class="cell-pos">+$875,822</td><td class="cell-pos">+74%</td>
+                        <td style="text-align:left;color:var(--muted);">Crossed $2M mark for first time; monitors category strength.</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              <div>
+                <div class="table-section-title">ASUS business mix</div>
+                <div class="table-wrap compact-wrap" style="max-height:174px;">
+                  <table class="data-table">
+                    <thead>
+                      <tr>
+                        <th style="min-width:132px;">ASUS Business</th>
+                        <th>2025</th>
+                        <th>2026</th>
+                        <th>ASUS YoY</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr><td>CE</td><td>637,460.63</td><td>1,935,692.00</td><td class="cell-pos">+70%</td></tr>
+                      <tr><td>Commercial System</td><td>470,135.57</td><td>564,419.77</td><td class="cell-pos">+20%</td></tr>
+                      <tr><td>Consumer System</td><td>1,743,541.80</td><td>1,918,180.60</td><td class="cell-pos">+10%</td></tr>
+                      <tr><td>Network</td><td>37,962.60</td><td>53,840.20</td><td class="cell-pos">+42%</td></tr>
+                      <tr><td>PC Component</td><td>2,198,577.20</td><td>7,667,085.00</td><td class="cell-pos">+249%</td></tr>
+                      <tr><td>Peripheral</td><td>3,046.00</td><td>2,264.00</td><td class="cell-neg">-26%</td></tr>
+                      <tr class="total-row"><td>Grand Total</td><td>4,858,672.60</td><td>10,709,708.29</td><td class="cell-pos">+120%</td></tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
             </div>
 
-            <div class="slide-sub" style="margin-top:8px;margin-bottom:0;flex-shrink:0;">
-              8 brands delivered double-digit growth &mdash; collectively adding <strong style="color:var(--text);font-weight:700;">+$17.2M</strong> in new revenue this half.
+            <div class="analysis-note">
+              <div class="insight-card">
+                <div class="i-label">Primary driver</div>
+                <div class="i-val" style="color:var(--teal);">PC Component +249%</div>
+                <div class="i-sub">PC Component added about <strong>$5.47M</strong>, contributing the clear majority of ASUS's total YoY uplift.</div>
+              </div>
+              <div class="insight-card">
+                <div class="i-label">Secondary momentum</div>
+                <div class="i-val" style="color:var(--blue);">CE +70%</div>
+                <div class="i-sub">CE delivered another <strong>$1.30M</strong> in growth, while Network and commercial lines also remained positive.</div>
+              </div>
+              <div class="insight-card">
+                <div class="i-label">Watchpoint</div>
+                <div class="i-val" style="color:var(--orange);">Peripheral -26%</div>
+                <div class="i-sub">Consumer and Commercial Systems grew only <strong>10%&ndash;20%</strong>, so 2H upside depends on broadening growth beyond components.</div>
+              </div>
             </div>
           </div>
         </div>

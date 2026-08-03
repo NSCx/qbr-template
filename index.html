@@ -799,6 +799,75 @@
       background: var(--cyan);
       flex-shrink: 0;
     }
+    .cover-snapshot {
+      margin-top: 10px;
+      padding: 12px;
+      border-radius: 10px;
+      border: 1px solid rgba(0,210,255,0.22);
+      background: rgba(7,20,36,0.72);
+      max-width: 760px;
+    }
+    .cover-snapshot-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 8px;
+      flex-wrap: wrap;
+    }
+    .cover-snapshot-title {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.72);
+    }
+    .cover-mix {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .mix-chip {
+      display: inline-flex;
+      align-items: baseline;
+      gap: 6px;
+      padding: 5px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.14);
+      background: rgba(255,255,255,0.04);
+    }
+    .mix-chip strong {
+      font-family: var(--font-head);
+      font-size: 15px;
+      color: #fff;
+      line-height: 1;
+    }
+    .mix-chip span {
+      font-size: 10px;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.58);
+    }
+    .mix-chip.primary {
+      border-color: rgba(0,230,184,0.36);
+      background: rgba(0,230,184,0.10);
+    }
+    .mix-chip.secondary {
+      border-color: rgba(59,127,245,0.36);
+      background: rgba(59,127,245,0.12);
+    }
+    .cover-snapshot img {
+      width: 100%;
+      border-radius: 8px;
+      border: 1px solid rgba(255,255,255,0.10);
+      display: block;
+    }
+    .cover-snapshot-note {
+      margin-top: 7px;
+      font-size: 11px;
+      color: rgba(255,255,255,0.56);
+      line-height: 1.45;
+    }
     .cover-footer {
       display: flex;
       align-items: center;
@@ -908,6 +977,17 @@
                 <span class="cover-pill">2026 1H Review</span>
                 <span class="cover-pill">Performance Snapshot</span>
                 <span class="cover-pill">Growth &amp; Recovery Focus</span>
+              </div>
+              <div class="cover-snapshot reveal" aria-label="Business mix snapshot">
+                <div class="cover-snapshot-head">
+                  <div class="cover-snapshot-title">Business mix snapshot</div>
+                  <div class="cover-mix">
+                    <div class="mix-chip primary"><strong>62.2%</strong><span>Top 7 brands</span></div>
+                    <div class="mix-chip secondary"><strong>22.6%</strong><span>Next 3 brands</span></div>
+                  </div>
+                </div>
+                <img src="https://github.com/user-attachments/assets/3bfa0537-bbd5-4b47-b331-fc9454c1d6d3" alt="2025 vs 2026 H1 performance table snapshot with brand ranking and business share highlights" />
+                <div class="cover-snapshot-note">Top 7 ranked brands drive <strong style="color:#fff;">62.2%</strong> of total business, while ranks 8&ndash;10 contribute another <strong style="color:#fff;">22.6%</strong>.</div>
               </div>
             </div>
 

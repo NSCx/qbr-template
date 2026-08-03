@@ -913,6 +913,24 @@
       line-height: 1.35;
       color: rgba(225,238,255,0.66);
     }
+    .mix-brand-list {
+      margin-top: 6px;
+      display: grid;
+      gap: 2px;
+      font-size: 9px;
+      line-height: 1.2;
+      color: rgba(232,243,255,0.82);
+    }
+    .mix-brand {
+      display: flex;
+      justify-content: space-between;
+      gap: 6px;
+    }
+    .mix-brand strong {
+      font-weight: 600;
+      letter-spacing: 0.03em;
+      color: rgba(244,251,255,0.92);
+    }
     .mix-breakdown-item.core { border-color: rgba(0,230,184,0.30); }
     .mix-breakdown-item.growth { border-color: rgba(110,166,255,0.32); }
     .mix-breakdown-item.tail { border-color: rgba(151,177,212,0.24); }
@@ -1051,11 +1069,25 @@
                       <div class="k">Core (Ranks 1&ndash;7)</div>
                       <div class="v">62.2%</div>
                       <div class="sub">Primary revenue engine across the portfolio.</div>
+                      <div class="mix-brand-list" aria-label="Top 7 brands share within core cluster">
+                        <div class="mix-brand"><span>ASUS</span><strong>37.8%</strong></div>
+                        <div class="mix-brand"><span>GIGA</span><strong>19.6%</strong></div>
+                        <div class="mix-brand"><span>LENOV</span><strong>11.1%</strong></div>
+                        <div class="mix-brand"><span>PNY</span><strong>10.9%</strong></div>
+                        <div class="mix-brand"><span>KINGS</span><strong>9.2%</strong></div>
+                        <div class="mix-brand"><span>LG</span><strong>7.3%</strong></div>
+                        <div class="mix-brand"><span>WD</span><strong>4.3%</strong></div>
+                      </div>
                     </div>
                     <div class="mix-breakdown-item growth">
                       <div class="k">Growth band (Ranks 8&ndash;10)</div>
                       <div class="v">22.6%</div>
                       <div class="sub">Strong secondary block with expansion potential.</div>
+                      <div class="mix-brand-list" aria-label="Top 3 brands share within growth cluster">
+                        <div class="mix-brand"><span>SEAGA</span><strong>44.7%</strong></div>
+                        <div class="mix-brand"><span>TEAM</span><strong>31.4%</strong></div>
+                        <div class="mix-brand"><span>SAPHR</span><strong>23.8%</strong></div>
+                      </div>
                     </div>
                     <div class="mix-breakdown-item tail">
                       <div class="k">Long tail (Other brands)</div>
@@ -1064,7 +1096,7 @@
                     </div>
                   </div>
                 </div>
-                <div class="cover-snapshot-note">Top 7 ranked brands drive <strong style="color:#fff;">62.2%</strong> of total business, while ranks 8&ndash;10 contribute another <strong style="color:#fff;">22.6%</strong>.</div>
+                <div class="cover-snapshot-note">Top 7 ranked brands drive <strong style="color:#fff;">62.2%</strong> of total business, while ranks 8&ndash;10 contribute another <strong style="color:#fff;">22.6%</strong>; each cluster now includes brand-level share of cluster.</div>
               </div>
             </div>
 

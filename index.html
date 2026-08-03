@@ -856,47 +856,66 @@
       border-color: rgba(59,127,245,0.36);
       background: rgba(59,127,245,0.12);
     }
-    .cover-snapshot-table-wrap {
+    .cover-snapshot-visual {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      padding: 10px;
       border-radius: 8px;
       border: 1px solid rgba(255,255,255,0.10);
-      overflow: hidden;
       background: rgba(9,26,46,0.95);
     }
-    .cover-snapshot-table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 10.5px;
+    .mix-bar {
+      display: flex;
+      height: 18px;
+      border-radius: 999px;
+      overflow: hidden;
+      background: rgba(255,255,255,0.06);
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,0.08);
+    }
+    .mix-segment {
+      height: 100%;
+      position: relative;
+    }
+    .mix-segment.top7 { width: 62.2%; background: linear-gradient(90deg, rgba(0,230,184,0.96), rgba(0,210,255,0.88)); }
+    .mix-segment.next3 { width: 22.6%; background: linear-gradient(90deg, rgba(110,166,255,0.95), rgba(59,127,245,0.92)); }
+    .mix-segment.tail { width: 15.2%; background: rgba(125,153,190,0.58); }
+    .mix-breakdown {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0,1fr));
+      gap: 8px;
       font-variant-numeric: tabular-nums;
     }
-    .cover-snapshot-table th,
-    .cover-snapshot-table td {
-      padding: 5px 8px;
-      border-bottom: 1px solid rgba(48,115,210,0.14);
-      text-align: right;
-      color: rgba(235,244,255,0.92);
+    .mix-breakdown-item {
+      border: 1px solid rgba(255,255,255,0.10);
+      border-radius: 8px;
+      padding: 7px 8px;
+      background: rgba(255,255,255,0.03);
+      min-height: 58px;
     }
-    .cover-snapshot-table th {
-      background: rgba(6,18,34,0.92);
-      font-size: 8.5px;
+    .mix-breakdown-item .k {
+      font-size: 9px;
       letter-spacing: .08em;
       text-transform: uppercase;
-      color: rgba(175,199,226,0.80);
-      font-weight: 600;
+      color: rgba(180,205,236,0.70);
     }
-    .cover-snapshot-table th:first-child,
-    .cover-snapshot-table td:first-child {
-      text-align: left;
-    }
-    .cover-snapshot-table tbody tr:last-child td {
-      border-bottom: none;
-    }
-    .cover-snapshot-table .band-top7 td:first-child { color: rgba(0,230,184,0.95); }
-    .cover-snapshot-table .band-next3 td:first-child { color: rgba(110,166,255,0.95); }
-    .cover-snapshot-table .total-row td {
+    .mix-breakdown-item .v {
+      margin-top: 3px;
+      font-family: var(--font-head);
+      font-size: 18px;
       font-weight: 700;
-      background: rgba(0,210,255,0.10);
+      line-height: 1;
       color: #fff;
     }
+    .mix-breakdown-item .sub {
+      margin-top: 4px;
+      font-size: 9.5px;
+      line-height: 1.35;
+      color: rgba(225,238,255,0.66);
+    }
+    .mix-breakdown-item.core { border-color: rgba(0,230,184,0.30); }
+    .mix-breakdown-item.growth { border-color: rgba(110,166,255,0.32); }
+    .mix-breakdown-item.tail { border-color: rgba(151,177,212,0.24); }
     .cover-snapshot-note {
       margin-top: 7px;
       font-size: 11px;
@@ -1021,29 +1040,29 @@
                     <div class="mix-chip secondary"><strong>22.6%</strong><span>Next 3 brands</span></div>
                   </div>
                 </div>
-                <div class="cover-snapshot-table-wrap" role="img" aria-label="Business mix table by rank showing top 7 at 62.2 percent and ranks 8 to 10 at 22.6 percent.">
-                  <table class="cover-snapshot-table">
-                    <thead>
-                      <tr>
-                        <th>Rank band</th>
-                        <th>Business share</th>
-                        <th>Cumulative</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr class="band-top7"><td>Rank 1</td><td>12.4%</td><td>12.4%</td></tr>
-                      <tr class="band-top7"><td>Rank 2</td><td>10.3%</td><td>22.7%</td></tr>
-                      <tr class="band-top7"><td>Rank 3</td><td>9.5%</td><td>32.2%</td></tr>
-                      <tr class="band-top7"><td>Rank 4</td><td>8.8%</td><td>41.0%</td></tr>
-                      <tr class="band-top7"><td>Rank 5</td><td>7.6%</td><td>48.6%</td></tr>
-                      <tr class="band-top7"><td>Rank 6</td><td>7.0%</td><td>55.6%</td></tr>
-                      <tr class="band-top7"><td>Rank 7</td><td>6.6%</td><td>62.2%</td></tr>
-                      <tr class="band-next3"><td>Rank 8</td><td>8.4%</td><td>70.6%</td></tr>
-                      <tr class="band-next3"><td>Rank 9</td><td>7.5%</td><td>78.1%</td></tr>
-                      <tr class="band-next3"><td>Rank 10</td><td>6.7%</td><td>84.8%</td></tr>
-                      <tr class="total-row"><td>All other brands</td><td>15.2%</td><td>100.0%</td></tr>
-                    </tbody>
-                  </table>
+                <div class="cover-snapshot-visual" role="img" aria-label="Business mix distribution showing top 7 brands at 62.2 percent, ranks 8 to 10 at 22.6 percent, and other brands at 15.2 percent.">
+                  <div class="mix-bar" aria-hidden="true">
+                    <div class="mix-segment top7"></div>
+                    <div class="mix-segment next3"></div>
+                    <div class="mix-segment tail"></div>
+                  </div>
+                  <div class="mix-breakdown">
+                    <div class="mix-breakdown-item core">
+                      <div class="k">Core (Ranks 1&ndash;7)</div>
+                      <div class="v">62.2%</div>
+                      <div class="sub">Primary revenue engine across the portfolio.</div>
+                    </div>
+                    <div class="mix-breakdown-item growth">
+                      <div class="k">Growth band (Ranks 8&ndash;10)</div>
+                      <div class="v">22.6%</div>
+                      <div class="sub">Strong secondary block with expansion potential.</div>
+                    </div>
+                    <div class="mix-breakdown-item tail">
+                      <div class="k">Long tail (Other brands)</div>
+                      <div class="v">15.2%</div>
+                      <div class="sub">Diversification layer supporting stability.</div>
+                    </div>
+                  </div>
                 </div>
                 <div class="cover-snapshot-note">Top 7 ranked brands drive <strong style="color:#fff;">62.2%</strong> of total business, while ranks 8&ndash;10 contribute another <strong style="color:#fff;">22.6%</strong>.</div>
               </div>
